@@ -1,212 +1,766 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop Fire 🔥</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+<title>Shop Fire 🔥 | Boutique Gaming</title>
+<meta name="description" content="Shop Fire - Boutique gaming. Découvrez nos offres Clash of Clans et Brawl Stars.">
 
-        body {
-            font-family: Arial, sans-serif;
-            background: #0b0b0f;
-            color: white;
-        }
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        header {
-            text-align: center;
-            padding: 60px 20px;
-            background: linear-gradient(135deg, #15151f, #24100a);
-        }
+html {
+    scroll-behavior: smooth;
+}
 
-        header h1 {
-            font-size: 48px;
-            margin-bottom: 15px;
-        }
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background:
+        radial-gradient(circle at 20% 10%, rgba(255, 80, 20, 0.15), transparent 30%),
+        radial-gradient(circle at 80% 30%, rgba(255, 140, 0, 0.10), transparent 30%),
+        #070709;
+    color: #fff;
+    overflow-x: hidden;
+}
 
-        header p {
-            color: #bbb;
-            font-size: 18px;
-        }
+/* ===== LUMIÈRES ===== */
 
-        .shop {
-            max-width: 1100px;
-            margin: 50px auto;
-            padding: 20px;
-        }
+body::before,
+body::after {
+    content: "";
+    position: fixed;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.12;
+    pointer-events: none;
+    z-index: -1;
+}
 
-        .shop h2 {
-            text-align: center;
-            font-size: 32px;
-            margin-bottom: 35px;
-        }
+body::before {
+    background: #ff4b16;
+    top: -150px;
+    left: -150px;
+}
 
-        .products {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 25px;
-        }
+body::after {
+    background: #ff8a00;
+    bottom: -150px;
+    right: -150px;
+}
 
-        .card {
-            background: #15151c;
-            border: 1px solid #292936;
-            border-radius: 18px;
-            padding: 25px;
-            text-align: center;
-            transition: 0.2s;
-        }
+/* ===== HEADER ===== */
 
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: #ff5a1f;
-        }
+header {
+    min-height: 650px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 80px 20px;
+    position: relative;
+    overflow: hidden;
+}
 
-        .card .icon {
-            font-size: 45px;
-            margin-bottom: 15px;
-        }
+.hero-glow {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: #ff4d00;
+    filter: blur(180px);
+    opacity: 0.10;
+    border-radius: 50%;
+}
 
-        .card h3 {
-            font-size: 21px;
-            margin-bottom: 12px;
-        }
+.hero {
+    position: relative;
+    z-index: 2;
+    max-width: 850px;
+}
 
-        .card p {
-            color: #aaa;
-            min-height: 45px;
-            margin-bottom: 20px;
-        }
+.badge {
+    display: inline-block;
+    padding: 9px 18px;
+    border: 1px solid rgba(255, 95, 30, 0.5);
+    background: rgba(255, 70, 20, 0.08);
+    border-radius: 999px;
+    color: #ff8a55;
+    font-size: 14px;
+    margin-bottom: 25px;
+    box-shadow: 0 0 25px rgba(255, 80, 20, 0.15);
+}
 
-        .price {
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
+.hero h1 {
+    font-size: clamp(48px, 8vw, 90px);
+    font-weight: 900;
+    letter-spacing: -4px;
+    margin-bottom: 20px;
+}
 
-        .buy {
-            display: inline-block;
-            width: 100%;
-            padding: 13px;
-            border: none;
-            border-radius: 10px;
-            background: #ff5a1f;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+.fire-text {
+    color: #ff5a1f;
+    text-shadow:
+        0 0 10px rgba(255, 70, 20, 0.7),
+        0 0 40px rgba(255, 70, 20, 0.3);
+}
 
-        .buy:hover {
-            background: #ff713d;
-        }
+.hero p {
+    color: #aaa;
+    font-size: 20px;
+    line-height: 1.7;
+    max-width: 700px;
+    margin: auto;
+}
 
-        .discord {
-            text-align: center;
-            padding: 50px 20px;
-            background: #111118;
-            margin-top: 40px;
-        }
+.hero-buttons {
+    margin-top: 35px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
 
-        .discord a {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 14px 25px;
-            border-radius: 10px;
-            background: #5865F2;
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
+.btn {
+    display: inline-block;
+    padding: 15px 25px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.25s;
+}
 
-        footer {
-            text-align: center;
-            padding: 25px;
-            color: #777;
-        }
-    </style>
+.btn-primary {
+    background: linear-gradient(135deg, #ff4b12, #ff7a21);
+    color: white;
+    box-shadow: 0 0 30px rgba(255, 70, 20, 0.25);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 45px rgba(255, 70, 20, 0.45);
+}
+
+.btn-discord {
+    background: #5865f2;
+    color: white;
+}
+
+.btn-discord:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 30px rgba(88, 101, 242, 0.35);
+}
+
+/* ===== SECTIONS ===== */
+
+section {
+    max-width: 1200px;
+    margin: auto;
+    padding: 90px 25px;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 55px;
+}
+
+.section-title h2 {
+    font-size: 38px;
+    margin-bottom: 12px;
+}
+
+.section-title p {
+    color: #888;
+    font-size: 17px;
+}
+
+/* ===== PRODUITS ===== */
+
+.products {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 24px;
+}
+
+.card {
+    position: relative;
+    background: linear-gradient(
+        145deg,
+        rgba(25, 25, 31, 0.95),
+        rgba(12, 12, 16, 0.95)
+    );
+    border: 1px solid #27272e;
+    border-radius: 20px;
+    padding: 30px;
+    overflow: hidden;
+    transition: 0.3s;
+}
+
+.card::before {
+    content: "";
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    background: #ff4d16;
+    filter: blur(90px);
+    opacity: 0;
+    top: -80px;
+    right: -80px;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(255, 85, 25, 0.6);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+}
+
+.card:hover::before {
+    opacity: 0.15;
+}
+
+.card-icon {
+    font-size: 45px;
+    margin-bottom: 20px;
+}
+
+.card h3 {
+    font-size: 21px;
+    margin-bottom: 12px;
+}
+
+.card p {
+    color: #999;
+    line-height: 1.6;
+    min-height: 55px;
+}
+
+.price {
+    font-size: 32px;
+    font-weight: 900;
+    margin: 22px 0;
+}
+
+.buy {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 11px;
+    background: linear-gradient(135deg, #ff4b12, #ff751f);
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.buy:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 25px rgba(255, 75, 18, 0.35);
+}
+
+/* ===== CONFIANCE ===== */
+
+.trust {
+    max-width: 1200px;
+    margin: auto;
+    padding: 30px 25px 90px;
+}
+
+.trust-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.trust-card {
+    padding: 30px;
+    background: #111116;
+    border: 1px solid #24242b;
+    border-radius: 18px;
+    text-align: center;
+}
+
+.trust-icon {
+    font-size: 35px;
+    margin-bottom: 15px;
+}
+
+.trust-card h3 {
+    margin-bottom: 10px;
+}
+
+.trust-card p {
+    color: #888;
+    line-height: 1.5;
+}
+
+/* ===== AVIS ===== */
+
+.reviews {
+    max-width: 1100px;
+    margin: auto;
+    padding: 0 25px 90px;
+}
+
+.review-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 20px;
+}
+
+.review {
+    background: #111116;
+    border: 1px solid #24242b;
+    border-radius: 18px;
+    padding: 25px;
+}
+
+.stars {
+    color: #ffad33;
+    margin-bottom: 15px;
+    letter-spacing: 3px;
+}
+
+.review p {
+    color: #aaa;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.review strong {
+    color: white;
+}
+
+/* ===== DISCORD ===== */
+
+.discord-section {
+    max-width: 1100px;
+    margin: 0 auto 80px;
+    padding: 70px 25px;
+    text-align: center;
+    border-radius: 25px;
+    background:
+        radial-gradient(circle at center, rgba(88,101,242,0.15), transparent 55%),
+        #101015;
+    border: 1px solid #252530;
+}
+
+.discord-section h2 {
+    font-size: 38px;
+    margin-bottom: 15px;
+}
+
+.discord-section p {
+    color: #999;
+    margin-bottom: 25px;
+}
+
+/* ===== FOOTER ===== */
+
+footer {
+    border-top: 1px solid #202027;
+    padding: 35px 20px;
+    text-align: center;
+    color: #666;
+    background: #050507;
+}
+
+footer strong {
+    color: #ff5a1f;
+}
+
+/* ===== MOBILE ===== */
+
+@media (max-width: 600px) {
+
+    .hero h1 {
+        letter-spacing: -2px;
+    }
+
+    .hero p {
+        font-size: 17px;
+    }
+
+    section {
+        padding: 65px 18px;
+    }
+
+    .section-title h2 {
+        font-size: 30px;
+    }
+
+    .card {
+        padding: 24px;
+    }
+}
+</style>
 </head>
 
 <body>
 
+<!-- ===== HERO ===== -->
+
 <header>
-    <h1>🔥 Shop Fire</h1>
-    <p>La boutique officielle de Fire</p>
+
+    <div class="hero-glow"></div>
+
+    <div class="hero">
+
+        <div class="badge">
+            🔥 SHOP FIRE • BOUTIQUE GAMING
+        </div>
+
+        <h1>
+            SHOP <span class="fire-text">FIRE</span> 🔥
+        </h1>
+
+        <p>
+            Découvre nos offres gaming et nos services pour
+            Clash of Clans et Brawl Stars.
+            Commande simplement et retrouve-nous sur Discord.
+        </p>
+
+        <div class="hero-buttons">
+
+            <a href="#boutique" class="btn btn-primary">
+                🛒 Voir la boutique
+            </a>
+
+            <a
+                href="https://discord.gg/2XUNQeCU8H"
+                target="_blank"
+                class="btn btn-discord"
+            >
+                💬 Notre Discord
+            </a>
+
+        </div>
+
+    </div>
+
 </header>
 
-<section class="shop">
 
-    <h2>🛒 Nos offres</h2>
+<!-- ===== BOUTIQUE ===== -->
+
+<section id="boutique">
+
+    <div class="section-title">
+
+        <h2>🛒 Nos offres</h2>
+
+        <p>
+            Choisis l'offre qui te correspond.
+        </p>
+
+    </div>
+
 
     <div class="products">
 
         <div class="card">
-            <div class="icon">⚔️</div>
+
+            <div class="card-icon">⚔️</div>
+
             <h3>Pass Clash of Clans</h3>
-            <p>Découvre notre offre pour Clash of Clans.</p>
+
+            <p>
+                Découvre notre offre dédiée à Clash of Clans.
+            </p>
+
             <div class="price">5 €</div>
-            <button class="buy">Acheter</button>
+
+            <button class="buy">
+                Acheter
+            </button>
+
         </div>
 
+
         <div class="card">
-            <div class="icon">⭐</div>
+
+            <div class="card-icon">⭐</div>
+
             <h3>Brawl Stars</h3>
-            <p>Profite de notre offre dédiée à Brawl Stars.</p>
+
+            <p>
+                Profite de notre offre dédiée à Brawl Stars.
+            </p>
+
             <div class="price">8 €</div>
-            <button class="buy">Acheter</button>
+
+            <button class="buy">
+                Acheter
+            </button>
+
         </div>
 
+
         <div class="card">
-            <div class="icon">🏠</div>
+
+            <div class="card-icon">🏠</div>
+
             <h3>Décor Clash of Clans</h3>
-            <p>Obtiens le décor proposé pour Clash of Clans.</p>
+
+            <p>
+                Découvre notre offre décor pour Clash of Clans.
+            </p>
+
             <div class="price">3 €</div>
-            <button class="buy">Acheter</button>
+
+            <button class="buy">
+                Acheter
+            </button>
+
         </div>
 
+
         <div class="card">
-            <div class="icon">🤖</div>
+
+            <div class="card-icon">🤖</div>
+
             <h3>Script demande de troupes</h3>
-            <p>Automatisation des demandes de troupes.</p>
+
+            <p>
+                Automatisation des demandes de troupes.
+            </p>
+
             <div class="price">15 €</div>
-            <button class="buy">Acheter</button>
+
+            <button class="buy">
+                Acheter
+            </button>
+
         </div>
 
+
         <div class="card">
-            <div class="icon">🎁</div>
+
+            <div class="card-icon">🎁</div>
+
             <h3>Dons auto</h3>
-            <p>Automatise les dons de troupes.</p>
+
+            <p>
+                Automatisation des dons de troupes.
+            </p>
+
             <div class="price">5 €</div>
-            <button class="buy">Acheter</button>
+
+            <button class="buy">
+                Acheter
+            </button>
+
         </div>
 
+
         <div class="card">
-            <div class="icon">⛏️</div>
+
+            <div class="card-icon">⛏️</div>
+
             <h3>Farm ressources</h3>
-            <p>Automatisation du farm de ressources.</p>
+
+            <p>
+                Automatisation du farm de ressources.
+            </p>
+
             <div class="price">5 €</div>
-            <button class="buy">Acheter</button>
+
+            <button class="buy">
+                Acheter
+            </button>
+
         </div>
 
     </div>
 
 </section>
 
-<section class="discord">
-    <h2>💬 Une question ?</h2>
-    <p>Rejoins notre serveur Discord pour nous contacter.</p>
 
-    <a href="https://discord.gg/2XUNQeCU8H" target="_blank">
-        Rejoindre le Discord
+<!-- ===== CONFIANCE ===== -->
+
+<div class="trust">
+
+    <div class="section-title">
+
+        <h2>🛡️ Pourquoi Shop Fire ?</h2>
+
+        <p>
+            Une expérience simple et transparente.
+        </p>
+
+    </div>
+
+
+    <div class="trust-grid">
+
+        <div class="trust-card">
+
+            <div class="trust-icon">🔒</div>
+
+            <h3>Paiement sécurisé</h3>
+
+            <p>
+                Les paiements seront traités via PayPal
+                lorsque le système de paiement sera activé.
+            </p>
+
+        </div>
+
+
+        <div class="trust-card">
+
+            <div class="trust-icon">💬</div>
+
+            <h3>Support Discord</h3>
+
+            <p>
+                Une question concernant une commande ?
+                Contacte-nous directement sur Discord.
+            </p>
+
+        </div>
+
+
+        <div class="trust-card">
+
+            <div class="trust-icon">⚡</div>
+
+            <h3>Commande simple</h3>
+
+            <p>
+                Choisis ton offre, effectue ton paiement
+                puis suis les instructions de commande.
+            </p>
+
+        </div>
+
+
+        <div class="trust-card">
+
+            <div class="trust-icon">🧾</div>
+
+            <h3>Suivi de commande</h3>
+
+            <p>
+                Les informations importantes de ta commande
+                seront communiquées après le paiement.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ===== AVIS ===== -->
+
+<div class="reviews">
+
+    <div class="section-title">
+
+        <h2>⭐ Avis clients</h2>
+
+        <p>
+            Les avis seront ajoutés au fur et à mesure des commandes.
+        </p>
+
+    </div>
+
+
+    <div class="review-grid">
+
+        <div class="review">
+
+            <div class="stars">
+                ★★★★★
+            </div>
+
+            <p>
+                Ton avis client pourra apparaître ici après
+                une commande réussie.
+            </p>
+
+            <strong>Client Shop Fire</strong>
+
+        </div>
+
+
+        <div class="review">
+
+            <div class="stars">
+                ★★★★★
+            </div>
+
+            <p>
+                Espace réservé à un véritable avis client.
+            </p>
+
+            <strong>Client Shop Fire</strong>
+
+        </div>
+
+
+        <div class="review">
+
+            <div class="stars">
+                ★★★★★
+            </div>
+
+            <p>
+                Les vrais retours clients seront affichés
+                ici avec leur accord.
+            </p>
+
+            <strong>Client Shop Fire</strong>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ===== DISCORD ===== -->
+
+<div class="discord-section">
+
+    <h2>💬 Besoin d'aide ?</h2>
+
+    <p>
+        Rejoins notre serveur Discord pour nous contacter
+        et suivre ta commande.
+    </p>
+
+    <a
+        href="https://discord.gg/2XUNQeCU8H"
+        target="_blank"
+        class="btn btn-discord"
+    >
+        🚀 Rejoindre Shop Fire
     </a>
-</section>
+
+</div>
+
+
+<!-- ===== FOOTER ===== -->
 
 <footer>
-    © 2026 Shop Fire — Tous droits réservés.
+
+    <p>
+        © 2026 <strong>Shop Fire</strong> — Tous droits réservés.
+    </p>
+
+    <p style="margin-top:10px;">
+        Boutique gaming • Discord
+    </p>
+
 </footer>
 
 </body>
