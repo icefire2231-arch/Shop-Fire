@@ -3,9 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Shop Fire 🔥</title>
-
 <style>
 *{
     margin:0;
@@ -25,7 +23,6 @@ body{
 }
 
 /* FOND ANIMÉ */
-
 body::before{
     content:"";
     position:fixed;
@@ -51,25 +48,16 @@ body::after{
 }
 
 @keyframes bgMove{
-    from{
-        transform:translate(-5%,-5%) rotate(0deg);
-    }
-    to{
-        transform:translate(5%,5%) rotate(8deg);
-    }
+    from{ transform:translate(-5%,-5%) rotate(0deg); }
+    to{ transform:translate(5%,5%) rotate(8deg); }
 }
 
 @keyframes stars{
-    from{
-        transform:translateY(0);
-    }
-    to{
-        transform:translateY(45px);
-    }
+    from{ transform:translateY(0); }
+    to{ transform:translateY(45px); }
 }
 
 /* HEADER */
-
 header{
     position:sticky;
     top:0;
@@ -111,7 +99,6 @@ nav a:hover{
 }
 
 /* HERO */
-
 .hero{
     max-width:1200px;
     min-height:650px;
@@ -142,13 +129,7 @@ nav a:hover{
 }
 
 .fire{
-    background:linear-gradient(
-        90deg,
-        #ff1744,
-        #ff6200,
-        #007cff,
-        #ff1744
-    );
+    background:linear-gradient(90deg, #ff1744, #ff6200, #007cff, #ff1744);
     background-size:300%;
     -webkit-background-clip:text;
     color:transparent;
@@ -156,12 +137,8 @@ nav a:hover{
 }
 
 @keyframes fireText{
-    from{
-        background-position:0%;
-    }
-    to{
-        background-position:300%;
-    }
+    from{ background-position:0%; }
+    to{ background-position:300%; }
 }
 
 .hero p{
@@ -204,7 +181,6 @@ nav a:hover{
 }
 
 /* SECTIONS */
-
 section{
     max-width:1200px;
     margin:auto;
@@ -224,7 +200,6 @@ section{
 }
 
 /* CATÉGORIES */
-
 .category{
     margin-bottom:90px;
 }
@@ -245,7 +220,6 @@ section{
 }
 
 /* PRODUITS */
-
 .products{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
@@ -255,11 +229,7 @@ section{
 .card{
     position:relative;
     overflow:hidden;
-    background:linear-gradient(
-        145deg,
-        rgba(255,255,255,.09),
-        rgba(255,255,255,.025)
-    );
+    background:linear-gradient(145deg, rgba(255,255,255,.09), rgba(255,255,255,.025));
     border:1px solid rgba(255,255,255,.1);
     border-radius:24px;
     padding:20px;
@@ -272,9 +242,7 @@ section{
 .card:hover{
     transform:translateY(-10px);
     border-color:rgba(255,40,80,.5);
-    box-shadow:
-        0 15px 60px rgba(0,0,0,.5),
-        0 0 35px rgba(255,20,60,.18);
+    box-shadow:0 15px 60px rgba(0,0,0,.5), 0 0 35px rgba(255,20,60,.18);
 }
 
 .product-image{
@@ -295,7 +263,7 @@ section{
 .card p{
     color:rgba(255,255,255,.6);
     line-height:1.5;
-    flex-grow:1;
+    flex-grow:1; /* Permet d'aligner parfaitement le bas des cartes */
 }
 
 .price-row{
@@ -328,19 +296,13 @@ section{
 }
 
 /* APRÈS PAIEMENT */
-
 .after-payment{
     max-width:900px;
     margin:auto;
     padding:40px 30px;
     text-align:center;
     border-radius:28px;
-    background:
-        linear-gradient(
-            135deg,
-            rgba(0,100,255,.13),
-            rgba(255,0,60,.13)
-        );
+    background:linear-gradient(135deg, rgba(0,100,255,.13), rgba(255,0,60,.13));
     border:1px solid rgba(255,255,255,.12);
 }
 
@@ -389,7 +351,6 @@ section{
 }
 
 /* SÉCURITÉ */
-
 .trust{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
@@ -426,7 +387,6 @@ section{
 }
 
 /* FOOTER */
-
 footer{
     text-align:center;
     padding:50px 20px;
@@ -435,569 +395,195 @@ footer{
 }
 
 /* MOBILE */
-
 @media(max-width:700px){
-
-    nav{
-        display:none;
-    }
-
-    .hero h1{
-        letter-spacing:-3px;
-    }
-
-    .category-title{
-        font-size:25px;
-    }
-
-    .steps{
-        grid-template-columns:1fr;
-    }
-
-    .after-payment{
-        padding:30px 18px;
-    }
+    nav{ display:none; }
+    .hero h1{ letter-spacing:-3px; }
+    .category-title{ font-size:25px; }
+    .steps{ grid-template-columns:1fr; }
+    .after-payment{ padding:30px 18px; }
 }
 </style>
 </head>
-
 <body>
 
 <header>
-
-<div class="nav">
-
-    <div class="logo">
-        SHOP <span>FIRE</span> 🔥
+    <div class="nav">
+        <div class="logo">SHOP <span>FIRE</span> 🔥</div>
+        <nav>
+            <a href="#boutique">Boutique</a>
+            <a href="#apres-paiement">Après paiement</a>
+            <a href="#securite">Sécurité</a>
+            <a href="https://discord.gg/2XUNQeCU8H" target="_blank">Discord</a>
+        </nav>
     </div>
-
-    <nav>
-        <a href="#boutique">Boutique</a>
-        <a href="#apres-paiement">Après paiement</a>
-        <a href="#securite">Sécurité</a>
-        <a href="[https://discord.gg/2XUNQeCU8H](https://discord.gg/2XUNQeCU8H)" target="_blank">
-            Discord
-        </a>
-    </nav>
-
-</div>
-
 </header>
 
-
 <main>
-
-<!-- HERO -->
-
-<div class="hero">
-
-    <div class="badge">
-        🔥 SHOP GAMING • FIRE
+    <!-- HERO -->
+    <div class="hero">
+        <div class="badge">🔥 SHOP GAMING • FIRE</div>
+        <h1>SHOP <span class="fire">FIRE</span> 🔥</h1>
+        <p>Découvre nos offres et services dédiés à Clash of Clans, Brawl Stars et Clash Royale. Choisis ton offre et effectue ton paiement directement via PayPal.</p>
+        <div class="buttons">
+            <a href="#boutique" class="btn primary">🛒 Voir la boutique</a>
+            <a href="https://discord.gg/2XUNQeCU8H" target="_blank" class="btn discord">💬 Notre Discord</a>
+        </div>
     </div>
 
-    <h1>
-        SHOP
-        <span class="fire">FIRE</span>
-        🔥
-    </h1>
-
-    <p>
-        Découvre nos offres et services dédiés à
-        Clash of Clans, Brawl Stars et Clash Royale.
-        Choisis ton offre et effectue ton paiement
-        directement via PayPal.
-    </p>
-
-    <div class="buttons">
-
-        <a href="#boutique" class="btn primary">
-            🛒 Voir la boutique
-        </a>
-
-        <a
-            href="[https://discord.gg/2XUNQeCU8H](https://discord.gg/2XUNQeCU8H)"
-            target="_blank"
-            class="btn discord"
-        >
-            💬 Notre Discord
-        </a>
-
-    </div>
-
-</div>
-
-
-<!-- BOUTIQUE -->
-
-<section id="boutique">
-
-<h2 class="section-title">
-    🛒 Notre boutique
-</h2>
-
-<p class="section-subtitle">
-    Choisis ton jeu puis l'offre qui t'intéresse.
-</p>
-
-
-<!-- CLASH OF CLANS -->
-
-<div class="category">
-
-<h2 class="category-title">
-    ⚔️ Clash of Clans
-</h2>
-
-<div class="products">
-
-
-<!-- PASS COC -->
-
-<div class="card">
-
-<img
-class="product-image"
-src="[https://placehold.co/900x550/151522/ff1744?text=](https://placehold.co/900x550/151522/ff1744?text=)⚔️+PASS+CLASH+OF+CLANS"
-alt="Pass Clash of Clans">
-
-<h3>🏆 Pass Clash of Clans</h3>
-
-<p>
-Profite de notre offre dédiée au
-Pass Clash of Clans.
-</p>
-
-<div class="price-row">
-
-<div class="price">5 €</div>
-
-<a
-class="buy"
-href="[https://www.paypal.me/FireTwitch955/5](https://www.paypal.me/FireTwitch955/5)"
-target="_blank"
-rel="noopener">
-💳 Acheter
-</a>
-
-</div>
-
-</div>
-
-
-<!-- DECOR -->
-
-<div class="card">
-
-<img
-class="product-image"
-src="[https://placehold.co/900x550/151522/00a8ff?text=](https://placehold.co/900x550/151522/00a8ff?text=)🏠+DECOR+CLASH+OF+CLANS"
-alt="Décor Clash of Clans">
-
-<h3>🏠 Décor Clash of Clans</h3>
-
-<p>
-Découvre notre offre dédiée aux
-décorations Clash of Clans.
-</p>
-
-<div class="price-row">
-
-<div class="price">3 €</div>
-
-<a
-class="buy"
-href="[https://www.paypal.me/FireTwitch955/3](https://www.paypal.me/FireTwitch955/3)"
-target="_blank"
-rel="noopener">
-💳 Acheter
-</a>
-
-</div>
-
-</div>
-
-
-<!-- SCRIPT -->
-
-<div class="card">
-
-<img
-class="product-image"
-src="[https://placehold.co/900x550/151522/9b5cff?text=](https://placehold.co/900x550/151522/9b5cff?text=)🤖+SCRIPT+TROUPES"
-alt="Script demande de troupes">
-
-<h3>🤖 Script demande de troupes</h3>
-
-<p>
-Automatisation des demandes
-de troupes.
-</p>
-
-<div class="price-row">
-
-<div class="price">15 €</div>
-
-<a
-class="buy"
-href="[https://www.paypal.me/FireTwitch955/15](https://www.paypal.me/FireTwitch955/15)"
-target="_blank"
-rel="noopener">
-💳 Acheter
-</a>
-
-</div>
-
-</div>
-
-
-<!-- DONS -->
-
-<div class="card">
-
-<img
-class="product-image"
-src="[https://placehold.co/900x550/151522/ff9d00?text=](https://placehold.co/900x550/151522/ff9d00?text=)🎁+DONS+AUTO"
-alt="Dons auto">
-
-<h3>🎁 Dons auto</h3>
-
-<p>
-Automatisation des dons
-de troupes.
-</p>
-
-<div class="price-row">
-
-<div class="price">5 €</div>
-
-<a
-class="buy"
-href="[https://www.paypal.me/FireTwitch955/5](https://www.paypal.me/FireTwitch955/5)"
-target="_blank"
-rel="noopener">
-💳 Acheter
-</a>
-
-</div>
-
-</div>
-
-
-<!-- FARM -->
-
-<div class="card">
-
-<img
-class="product-image"
-src="[https://placehold.co/900x550/151522/00d084?text=](https://placehold.co/900x550/151522/00d084?text=)⛏️+FARM+RESSOURCES"
-alt="Farm ressources">
-
-<h3>⛏️ Farm ressources</h3>
-
-<p>
-Automatisation du farm
-de ressources.
-</p>
-
-<div class="price-row">
-
-<div class="price">5 €</div>
-
-<a
-class="buy"
-href="[https://www.paypal.me/FireTwitch955/5](https://www.paypal.me/FireTwitch955/5)"
-target="_blank"
-rel="noopener">
-💳 Acheter
-</a>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-
-<!-- BRAWL STARS -->
-
-<div class="category">
-
-<h2 class="category-title">
-    ⭐ Brawl Stars
-</h2>
-
-<div class="products">
-
-<div class="card">
-
-<img
-class="product-image"
-src="[https://placehold.co/900x550/151522/ffd21f?text=](https://placehold.co/900x550/151522/ffd21f?text=)⭐+BRAWL+PASS"
-alt="Pass Brawl Stars">
-
-<h3>⭐ Pass Brawl Stars</h3>
-
-<p>
-Notre offre dédiée au
-Pass Brawl Stars.
-</p>
-
-<div class="price-row">
-
-<div class="price">8 €</div>
-
-<a
-class="buy"
-href="[https://www.paypal.me/FireTwitch955/8](https://www.paypal.me/FireTwitch955/8)"
-target="_blank"
-rel="noopener">
-💳 Acheter
-</a>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-
-<!-- CLASH ROYALE -->
-
-<div class="category">
-
-<h2 class="category-title">
-    👑 Clash Royale
-</h2>
-
-<div class="products">
-
-<div class="card">
-
-<img
-class="product-image"
-src="[https://placehold.co/900x550/151522/ffd700?text=](https://placehold.co/900x550/151522/ffd700?text=)👑+PASS+ROYALE"
-alt="Pass Clash Royale">
-
-<h3>👑 Pass Clash Royale</h3>
-
-<p>
-Profite de notre offre dédiée au
-Pass Royale de Clash Royale.
-</p>
-
-<div class="price-row">
-
-<div class="price">6 €</div>
-
-<a
-class="buy"
-href="[https://www.paypal.me/FireTwitch955/6](https://www.paypal.me/FireTwitch955/6)"
-target="_blank"
-rel="noopener">
-💳 Acheter
-</a>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</section>
-
-
-<!-- APRÈS PAIEMENT -->
-
-<section id="apres-paiement">
-
-<div class="after-payment">
-
-<div class="after-icon">
-    ✅
-</div>
-
-<h3>
-    Merci pour ta commande !
-</h3>
-
-<p>
-Après ton paiement PayPal, rejoins notre Discord
-pour nous transmettre les informations nécessaires
-à ta commande.
-</p>
-
-<div class="steps">
-
-<div class="step">
-
-<div class="step-number">
-💳
-</div>
-
-<strong>1. Paiement</strong>
-
-<span>
-Effectue le paiement de ton offre
-sur PayPal.
-</span>
-
-</div>
-
-
-<div class="step">
-
-<div class="step-number">
-💬
-</div>
-
-<strong>2. Discord</strong>
-
-<span>
-Rejoins notre serveur et contacte
-le support.
-</span>
-
-</div>
-
-
-<div class="step">
-
-<div class="step-number">
-🔥
-</div>
-
-<strong>3. Commande</strong>
-
-<span>
-Indique ton offre et les informations
-nécessaires.
-</span>
-
-</div>
-
-</div>
-
-<a
-href="[https://discord.gg/2XUNQeCU8H](https://discord.gg/2XUNQeCU8H)"
-target="_blank"
-class="btn discord">
-💬 J'ai payé — Ouvrir Discord
-</a>
-
-</div>
-
-</section>
-
-
-<!-- SÉCURITÉ -->
-
-<section id="securite">
-
-<h2 class="section-title">
-    🔐 Paiement & sécurité
-</h2>
-
-<p class="section-subtitle">
-    Un processus simple et transparent.
-</p>
-
-<div class="trust">
-
-<div class="trust-card">
-
-<div class="trust-icon">
-🔒
-</div>
-
-<h3>
-Paiement PayPal
-</h3>
-
-<p>
-Le paiement est effectué directement
-sur PayPal. Aucune information bancaire
-n'est saisie sur Shop Fire.
-</p>
-
-</div>
-
-
-<div class="trust-card">
-
-<div class="trust-icon">
-🛡️
-</div>
-
-<h3>
-Paiement sécurisé
-</h3>
-
-<p>
-Tu es redirigé vers PayPal pour
-effectuer ton paiement.
-</p>
-
-</div>
-
-
-<div class="trust-card">
-
-<div class="trust-icon">
-⚡
-</div>
-
-<h3>
-Commande simple
-</h3>
-
-<p>
-Choisis ton offre, paie puis
-contacte le support Discord.
-</p>
-
-</div>
-
-
-<div class="trust-card">
-
-<div class="trust-icon">
-💬
-</div>
-
-<h3>
-Support Discord
-</h3>
-
-<p>
-Notre Discord permet de suivre
-les commandes et de contacter
-le support.
-</p>
-
-</div>
-
-</div>
-
-</section>
-
+    <!-- BOUTIQUE -->
+    <section id="boutique">
+        <h2 class="section-title">🛒 Notre boutique</h2>
+        <p class="section-subtitle">Sélectionne ton jeu puis l'offre qui t'intéresse.</p>
+
+        <!-- CLASH OF CLANS -->
+        <div class="category">
+            <h2 class="category-title">⚔️ Clash of Clans</h2>
+            <div class="products">
+                <div class="card">
+                    <img class="product-image" src="https://placehold.co/900x550/151522/ff1744?text=⚔️+PASS+CLASH+OF+CLANS" alt="Pass Clash of Clans">
+                    <h3>🏆 Pass Clash of Clans</h3>
+                    <p>Notre offre dédiée au Pass Clash of Clans.</p>
+                    <div class="price-row">
+                        <div class="price">5 €</div>
+                        <a class="buy" href="https://www.paypal.me/FireTwitch955/5" target="_blank">💳 Acheter</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <img class="product-image" src="https://placehold.co/900x550/151522/00a8ff?text=🏠+DECOR+CLASH+OF+CLANS" alt="Décor Clash of Clans">
+                    <h3>🏠 Décor Clash of Clans</h3>
+                    <p>Offre dédiée aux décorations Clash of Clans.</p>
+                    <div class="price-row">
+                        <div class="price">3 €</div>
+                        <a class="buy" href="https://www.paypal.me/FireTwitch955/3" target="_blank">💳 Acheter</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <img class="product-image" src="https://placehold.co/900x550/151522/9b5cff?text=🤖+SCRIPT+TROUPES" alt="Script demande de troupes">
+                    <h3>🤖 Script demande de troupes</h3>
+                    <p>Automatisation des demandes de troupes.</p>
+                    <div class="price-row">
+                        <div class="price">15 €</div>
+                        <a class="buy" href="https://www.paypal.me/FireTwitch955/15" target="_blank">💳 Acheter</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <img class="product-image" src="https://placehold.co/900x550/151522/ff9d00?text=🎁+DONS+AUTO" alt="Dons auto">
+                    <h3>🎁 Dons auto</h3>
+                    <p>Automatisation des dons de troupes.</p>
+                    <div class="price-row">
+                        <div class="price">5 €</div>
+                        <a class="buy" href="https://www.paypal.me/FireTwitch955/5" target="_blank">💳 Acheter</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <img class="product-image" src="https://placehold.co/900x550/151522/00d084?text=⛏️+FARM+RESSOURCES" alt="Farm ressources">
+                    <h3>⛏️ Farm ressources</h3>
+                    <p>Automatisation du farm de ressources.</p>
+                    <div class="price-row">
+                        <div class="price">5 €</div>
+                        <a class="buy" href="https://www.paypal.me/FireTwitch955/5" target="_blank">💳 Acheter</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BRAWL STARS -->
+        <div class="category">
+            <h2 class="category-title">⭐ Brawl Stars</h2>
+            <div class="products">
+                <div class="card">
+                    <img class="product-image" src="https://placehold.co/900x550/151522/ffd21f?text=⭐+BRAWL+PASS" alt="Pass Brawl Stars">
+                    <h3>⭐ Pass Brawl Stars</h3>
+                    <p>Notre offre dédiée au Pass Brawl Stars.</p>
+                    <div class="price-row">
+                        <div class="price">8 €</div>
+                        <a class="buy" href="https://www.paypal.me/FireTwitch955/8" target="_blank">💳 Acheter</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CLASH ROYALE -->
+        <div class="category">
+            <h2 class="category-title">👑 Clash Royale</h2>
+            <div class="products">
+                <div class="card">
+                    <img class="product-image" src="https://placehold.co/900x550/151522/ffd700?text=👑+PASS+ROYALE" alt="Pass Clash Royale">
+                    <h3>👑 Pass Royale</h3>
+                    <p>Notre offre dédiée au Pass Royale de Clash Royale.</p>
+                    <div class="price-row">
+                        <div class="price">6 €</div>
+                        <a class="buy" href="https://www.paypal.me/FireTwitch955/6" target="_blank">💳 Acheter</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- APRÈS PAIEMENT -->
+    <section id="apres-paiement">
+        <div class="after-payment">
+            <div class="after-icon">✅</div>
+            <h3>Merci pour ta commande !</h3>
+            <p>Après ton paiement PayPal, rejoins notre Discord pour nous transmettre les informations nécessaires à ta commande.</p>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">💳</div>
+                    <strong>1. Paiement</strong>
+                    <span>Effectue le paiement de ton offre sur PayPal.</span>
+                </div>
+                <div class="step">
+                    <div class="step-number">💬</div>
+                    <strong>2. Discord</strong>
+                    <span>Rejoins notre serveur et contacte le support.</span>
+                </div>
+                <div class="step">
+                    <div class="step-number">🔥</div>
+                    <strong>3. Commande</strong>
+                    <span>Indique ton offre et les informations nécessaires.</span>
+                </div>
+            </div>
+            <a href="https://discord.gg/2XUNQeCU8H" target="_blank" class="btn discord">💬 J'ai payé — Ouvrir Discord</a>
+        </div>
+    </section>
+
+    <!-- SÉCURITÉ -->
+    <section id="securite">
+        <h2 class="section-title">🔐 Paiement & sécurité</h2>
+        <p class="section-subtitle">Un processus simple et transparent.</p>
+        <div class="trust">
+            <div class="trust-card">
+                <div class="trust-icon">🔒</div>
+                <h3>Paiement PayPal</h3>
+                <p>Le paiement est effectué directement sur PayPal. Aucune information bancaire n'est saisie sur Shop Fire.</p>
+            </div>
+            <div class="trust-card">
+                <div class="trust-icon">🛡️</div>
+                <h3>Paiement sécurisé</h3>
+                <p>Tu es redirigé vers PayPal pour effectuer ton paiement.</p>
+            </div>
+            <div class="trust-card">
+                <div class="trust-icon">⚡</div>
+                <h3>Commande simple</h3>
+                <p>Choisis ton offre, paie puis contacte le support Discord.</p>
+            </div>
+            <div class="trust-card">
+                <div class="trust-icon">💬</div>
+                <h3>Support Discord</h3>
+                <p>Notre Discord permet de suivre les commandes et de contacter le support.</p>
+            </div>
+        </div>
+    </section>
 </main>
 
-
 <footer>
-
-🔥 <strong>Shop Fire</strong>
-
-<br><br>
-
-Paiement via PayPal • Support Discord
-
-<br><br>
-
-© 2026 Shop Fire — Tous droits réservés.
-
+    🔥 <strong>Shop Fire</strong><br><br>
+    Paiement via PayPal • Support Discord<br><br>
+    © 2026 Shop Fire — Tous droits réservés.
 </footer>
 
 </body>
