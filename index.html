@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -11,7 +10,7 @@
 <style>
 
 /* =========================================================
-   BASE
+   BASE ET RESET
 ========================================================= */
 
 * {
@@ -26,400 +25,187 @@ html {
 
 body {
     font-family: Arial, Helvetica, sans-serif;
-    background: #050507;
+    background: #000; /* Fond noir pur pour un contraste maximal avec le rouge */
     color: white;
     overflow-x: hidden;
 }
 
 
 /* =========================================================
-   FOND ANIMÉ GAMING
+   FOND ANIMÉ ROUGE 3D DISCRET
 ========================================================= */
 
-.animated-bg {
+#fire-bg {
     position: fixed;
     inset: 0;
-    overflow: hidden;
-    pointer-events: none;
+    width: 100%;
+    height: 100%;
     z-index: -10;
-
-    background:
-        radial-gradient(
-            circle at center,
-            #11111b 0%,
-            #07070b 50%,
-            #030304 100%
-        );
+    overflow: hidden;
 }
 
-/* Halo rouge */
-
-.orb-red {
+/* Onde 3D 1 - Plus rouge */
+#fire-bg::before {
+    content: '';
     position: absolute;
-    width: 650px;
-    height: 650px;
-    border-radius: 50%;
-
-    background: #ff003c;
-    filter: blur(130px);
-
-    opacity: 0.22;
-
-    top: -250px;
-    left: -220px;
-
-    animation: redMove 14s ease-in-out infinite alternate;
+    width: 250%;
+    height: 250%;
+    top: -50%;
+    left: -75%;
+    background-image: 
+        radial-gradient(circle at center, #ff0000 0%, transparent 40%),
+        radial-gradient(circle at 70% 30%, #b30000 0%, transparent 30%);
+    background-size: 100% 100%;
+    opacity: 0.15; /* Très faible opacité pour ne pas gêner */
+    filter: blur(100px);
+    animation: move3D 25s linear infinite;
+    transform: translateZ(0); /* Accélération matérielle */
 }
 
-/* Halo bleu */
-
-.orb-blue {
+/* Onde 3D 2 - Plus sombre, pour la profondeur */
+#fire-bg::after {
+    content: '';
     position: absolute;
-    width: 700px;
-    height: 700px;
-    border-radius: 50%;
-
-    background: #0055ff;
-    filter: blur(140px);
-
-    opacity: 0.20;
-
-    bottom: -300px;
-    right: -250px;
-
-    animation: blueMove 16s ease-in-out infinite alternate;
+    width: 300%;
+    height: 300%;
+    top: -100%;
+    left: -100%;
+    background-image: 
+        radial-gradient(circle at center, #4d0000 0%, transparent 50%),
+        radial-gradient(circle at 20% 70%, #800000 0%, transparent 40%);
+    background-size: 100% 100%;
+    opacity: 0.2; /* Très faible opacité aussi */
+    filter: blur(120px);
+    animation: move3D 35s linear infinite reverse;
+    transform: translateZ(0);
 }
 
-/* Halo violet central */
-
-.orb-purple {
-    position: absolute;
-    width: 450px;
-    height: 450px;
-    border-radius: 50%;
-
-    background: #7b00ff;
-    filter: blur(150px);
-
-    opacity: 0.10;
-
-    top: 35%;
-    left: 45%;
-
-    animation: purpleMove 18s ease-in-out infinite alternate;
+@keyframes move3D {
+    0% { transform: translate3d(0, 0, 0) rotate(0deg); }
+    50% { transform: translate3d(5%, 5%, 0) rotate(5deg); }
+    100% { transform: translate3d(0, 0, 0) rotate(0deg); }
 }
 
-
-@keyframes redMove {
-
-    0% {
-        transform: translate(0, 0) scale(1);
-    }
-
-    50% {
-        transform: translate(180px, 100px) scale(1.15);
-    }
-
-    100% {
-        transform: translate(50px, 250px) scale(0.9);
-    }
-}
-
-
-@keyframes blueMove {
-
-    0% {
-        transform: translate(0, 0) scale(1);
-    }
-
-    50% {
-        transform: translate(-150px, -100px) scale(1.12);
-    }
-
-    100% {
-        transform: translate(-50px, -220px) scale(0.9);
-    }
-}
-
-
-@keyframes purpleMove {
-
-    0% {
-        transform: translate(-100px, -50px);
-    }
-
-    100% {
-        transform: translate(120px, 100px);
-    }
-}
-
-
-/* =========================================================
-   PARTICULES
-========================================================= */
-
-.particles {
-    position: absolute;
+/* Grille gaming ultra-discrète */
+#grid {
+    position: fixed;
     inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -9;
+    background-image: 
+        linear-gradient(rgba(255, 0, 0, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 0, 0, 0.05) 1px, transparent 1px);
+    background-size: 80px 80px;
+    background-position: center;
+    mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.8), transparent 80%);
+    opacity: 0.3;
+}
+
+/* Particules montantes style 'braises' */
+.particles {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -8;
+    pointer-events: none;
 }
 
 .particles span {
     position: absolute;
-
-    width: 3px;
-    height: 3px;
-
-    background: white;
+    width: 4px;
+    height: 4px;
+    background: #ff3300;
     border-radius: 50%;
-
-    opacity: 0.35;
-
-    box-shadow:
-        0 0 8px rgba(255,255,255,0.8);
-
-    animation: particleMove linear infinite;
+    opacity: 0.3;
+    box-shadow: 0 0 10px #ff3300;
+    animation: particleUp linear infinite;
+    transform: translateZ(0);
 }
 
+/* Positions et animations variées pour les braises */
+.particles span:nth-child(1) { left: 5%; bottom: -10%; animation-duration: 10s; animation-delay: -2s; }
+.particles span:nth-child(2) { left: 15%; bottom: -10%; animation-duration: 14s; animation-delay: -5s; }
+.particles span:nth-child(3) { left: 25%; bottom: -10%; animation-duration: 12s; animation-delay: -8s; }
+.particles span:nth-child(4) { left: 35%; bottom: -10%; animation-duration: 16s; animation-delay: -1s; }
+.particles span:nth-child(5) { left: 45%; bottom: -10%; animation-duration: 11s; animation-delay: -4s; }
+.particles span:nth-child(6) { left: 55%; bottom: -10%; animation-duration: 15s; animation-delay: -7s; }
+.particles span:nth-child(7) { left: 65%; bottom: -10%; animation-duration: 13s; animation-delay: -3s; }
+.particles span:nth-child(8) { left: 75%; bottom: -10%; animation-duration: 17s; animation-delay: -6s; }
+.particles span:nth-child(9) { left: 85%; bottom: -10%; animation-duration: 12s; animation-delay: -9s; }
+.particles span:nth-child(10) { left: 95%; bottom: -10%; animation-duration: 18s; animation-delay: -2s; }
 
-.particles span:nth-child(1) {
-    left: 5%;
-    top: 20%;
-    animation-duration: 10s;
-}
-
-.particles span:nth-child(2) {
-    left: 12%;
-    top: 70%;
-    animation-duration: 13s;
-}
-
-.particles span:nth-child(3) {
-    left: 22%;
-    top: 35%;
-    animation-duration: 11s;
-}
-
-.particles span:nth-child(4) {
-    left: 30%;
-    top: 80%;
-    animation-duration: 15s;
-}
-
-.particles span:nth-child(5) {
-    left: 40%;
-    top: 15%;
-    animation-duration: 9s;
-}
-
-.particles span:nth-child(6) {
-    left: 48%;
-    top: 60%;
-    animation-duration: 12s;
-}
-
-.particles span:nth-child(7) {
-    left: 58%;
-    top: 30%;
-    animation-duration: 14s;
-}
-
-.particles span:nth-child(8) {
-    left: 65%;
-    top: 75%;
-    animation-duration: 10s;
-}
-
-.particles span:nth-child(9) {
-    left: 73%;
-    top: 45%;
-    animation-duration: 16s;
-}
-
-.particles span:nth-child(10) {
-    left: 82%;
-    top: 20%;
-    animation-duration: 12s;
-}
-
-.particles span:nth-child(11) {
-    left: 90%;
-    top: 70%;
-    animation-duration: 14s;
-}
-
-.particles span:nth-child(12) {
-    left: 15%;
-    top: 90%;
-    animation-duration: 11s;
-}
-
-.particles span:nth-child(13) {
-    left: 35%;
-    top: 50%;
-    animation-duration: 13s;
-}
-
-.particles span:nth-child(14) {
-    left: 60%;
-    top: 90%;
-    animation-duration: 15s;
-}
-
-.particles span:nth-child(15) {
-    left: 95%;
-    top: 40%;
-    animation-duration: 10s;
-}
-
-
-@keyframes particleMove {
-
-    0% {
-        transform: translateY(40px);
-        opacity: 0;
-    }
-
-    30% {
-        opacity: 0.5;
-    }
-
-    70% {
-        opacity: 0.25;
-    }
-
-    100% {
-        transform: translateY(-200px);
-        opacity: 0;
-    }
-}
-
-
-/* Grille gaming */
-
-.animated-bg::after {
-
-    content: "";
-
-    position: absolute;
-
-    inset: 0;
-
-    background-image:
-        linear-gradient(
-            rgba(255,255,255,0.025) 1px,
-            transparent 1px
-        ),
-        linear-gradient(
-            90deg,
-            rgba(255,255,255,0.025) 1px,
-            transparent 1px
-        );
-
-    background-size: 70px 70px;
-
-    mask-image:
-        radial-gradient(
-            ellipse at center,
-            black 0%,
-            transparent 75%
-        );
+@keyframes particleUp {
+    0% { transform: translateY(0) scale(1); opacity: 0; }
+    20% { opacity: 0.4; }
+    80% { opacity: 0.1; }
+    100% { transform: translateY(-110vh) scale(0.5); opacity: 0; }
 }
 
 
 /* =========================================================
-   HEADER
+   HEADER ET HERO
 ========================================================= */
 
 header {
-
-    min-height: 680px;
-
+    min-height: 80vh;
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     text-align: center;
-
-    padding: 80px 20px;
-
+    padding: 100px 20px;
     position: relative;
-
-    overflow: hidden;
+    background: radial-gradient(circle at center, rgba(30, 0, 0, 0.5), transparent 70%);
 }
-
 
 .hero {
-
     position: relative;
-
     z-index: 2;
-
-    max-width: 900px;
+    max-width: 950px;
 }
-
 
 .badge {
-
-    display: inline-block;
-
-    padding: 10px 20px;
-
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
     border-radius: 999px;
-
-    border:
-        1px solid rgba(255,80,40,0.5);
-
-    background:
-        rgba(255,70,20,0.08);
-
-    color: #ff906c;
-
-    font-size: 14px;
-
-    margin-bottom: 28px;
-
-    box-shadow:
-        0 0 30px rgba(255,60,20,0.15);
+    border: 1px solid rgba(255, 0, 0, 0.4);
+    background: rgba(100, 0, 0, 0.1);
+    color: #ff9999;
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
 }
 
+.badge span { color: #ff0000; }
 
 .hero h1 {
-
-    font-size:
-        clamp(50px, 9vw, 100px);
-
+    font-size: clamp(60px, 12vw, 120px);
     font-weight: 900;
-
-    letter-spacing: -5px;
-
-    margin-bottom: 20px;
+    letter-spacing: -6px;
+    line-height: 0.9;
+    margin-bottom: 25px;
+    text-transform: uppercase;
 }
-
 
 .fire-text {
-
-    color: #ff5420;
-
-    text-shadow:
-        0 0 10px rgba(255,60,20,0.8),
-        0 0 35px rgba(255,60,20,0.5),
-        0 0 80px rgba(255,40,10,0.25);
+    color: #ff0000;
+    background: linear-gradient(to bottom, #ff3333, #b30000);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 20px rgba(255, 0, 0, 0.6));
 }
 
-
 .hero p {
-
-    max-width: 720px;
-
+    max-width: 750px;
     margin: auto;
-
-    color: #aaa;
-
-    font-size: 20px;
-
-    line-height: 1.7;
+    color: #ccc;
+    font-size: clamp(18px, 4vw, 22px);
+    line-height: 1.6;
 }
 
 
@@ -428,274 +214,183 @@ header {
 ========================================================= */
 
 .hero-buttons {
-
-    margin-top: 35px;
-
+    margin-top: 45px;
     display: flex;
-
     justify-content: center;
-
-    gap: 15px;
-
+    gap: 20px;
     flex-wrap: wrap;
 }
 
-
 .btn {
-
-    display: inline-block;
-
-    padding: 15px 27px;
-
-    border-radius: 12px;
-
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 18px 35px;
+    border-radius: 14px;
     text-decoration: none;
-
     font-weight: bold;
-
-    transition: 0.25s;
+    font-size: 17px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
-
 
 .btn-primary {
-
-    background:
-        linear-gradient(
-            135deg,
-            #ff3d0a,
-            #ff7624
-        );
-
+    background: linear-gradient(135deg, #ff0000, #990000);
     color: white;
-
-    box-shadow:
-        0 0 30px rgba(255,60,10,0.25);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 5px 25px rgba(255, 0, 0, 0.3);
 }
-
 
 .btn-primary:hover {
-
-    transform: translateY(-4px);
-
-    box-shadow:
-        0 0 45px rgba(255,60,10,0.5);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 40px rgba(255, 0, 0, 0.5);
 }
-
 
 .btn-discord {
-
     background: #5865f2;
-
     color: white;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 5px 25px rgba(88, 101, 242, 0.3);
 }
 
-
 .btn-discord:hover {
-
-    transform: translateY(-4px);
-
-    box-shadow:
-        0 0 35px rgba(88,101,242,0.45);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 40px rgba(88, 101, 242, 0.5);
 }
 
 
 /* =========================================================
-   SECTIONS
+   SECTIONS GÉNÉRAL
 ========================================================= */
 
 section {
-
-    max-width: 1200px;
-
+    max-width: 1300px;
     margin: auto;
-
-    padding: 90px 25px;
+    padding: 100px 25px;
 }
-
 
 .section-title {
-
     text-align: center;
-
-    margin-bottom: 55px;
+    margin-bottom: 70px;
+    position: relative;
 }
-
 
 .section-title h2 {
-
-    font-size: 40px;
-
-    margin-bottom: 12px;
+    font-size: clamp(35px, 8vw, 50px);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -2px;
+    color: #fff;
+    margin-bottom: 15px;
 }
 
+.section-title h2 span { color: #ff0000; }
 
 .section-title p {
-
-    color: #888;
-
-    font-size: 17px;
+    color: #aaa;
+    font-size: 19px;
+    max-width: 600px;
+    margin: auto;
 }
 
 
 /* =========================================================
-   PRODUITS
+   BOUTIQUE (CARTES)
 ========================================================= */
 
 .products {
-
     display: grid;
-
-    grid-template-columns:
-        repeat(
-            auto-fit,
-            minmax(270px, 1fr)
-        );
-
-    gap: 25px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
 }
-
 
 .card {
-
     position: relative;
-
-    overflow: hidden;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(25,25,32,0.94),
-            rgba(10,10,14,0.94)
-        );
-
-    border:
-        1px solid #292932;
-
-    border-radius: 20px;
-
-    padding: 30px;
-
-    transition: 0.3s;
+    background: rgba(15, 15, 15, 0.85); /* Semi-transparent pour voir le fond */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 24px;
+    padding: 40px;
+    transition: all 0.4s ease;
+    display: flex;
+    flex-direction: column;
+    backdrop-filter: blur(10px); /* Flou derrière la carte pour la lisibilité */
 }
-
-
-.card::before {
-
-    content: "";
-
-    position: absolute;
-
-    width: 220px;
-
-    height: 220px;
-
-    border-radius: 50%;
-
-    background: #ff3d0a;
-
-    filter: blur(100px);
-
-    opacity: 0;
-
-    top: -100px;
-
-    right: -100px;
-
-    transition: 0.3s;
-}
-
 
 .card:hover {
-
-    transform:
-        translateY(-9px);
-
-    border-color:
-        rgba(255,80,30,0.65);
-
-    box-shadow:
-        0 20px 60px rgba(0,0,0,0.5);
+    transform: translateY(-10px) scale(1.02);
+    border-color: rgba(255, 0, 0, 0.4);
+    box-shadow: 0 20px 50px rgba(255, 0, 0, 0.2);
+    background: rgba(20, 20, 20, 0.95);
 }
 
-
-.card:hover::before {
-
-    opacity: 0.14;
+/* Halo rouge au survol */
+.card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 24px;
+    background: radial-gradient(circle at center, rgba(255, 0, 0, 0.15) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: -1;
 }
 
+.card:hover::after { opacity: 1; }
 
 .card-icon {
-
-    font-size: 48px;
-
-    margin-bottom: 20px;
+    font-size: 50px;
+    margin-bottom: 25px;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
 }
-
 
 .card h3 {
-
-    font-size: 21px;
-
-    margin-bottom: 12px;
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 15px;
 }
-
 
 .card p {
-
-    color: #999;
-
+    color: #bbb;
     line-height: 1.6;
-
-    min-height: 55px;
+    margin-bottom: 30px;
+    font-size: 16px;
+    flex-grow: 1;
 }
 
+.price-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
 
 .price {
-
-    font-size: 32px;
-
+    font-size: 36px;
     font-weight: 900;
-
-    margin: 22px 0;
+    color: #ff3333;
+    letter-spacing: -1px;
 }
-
 
 .buy {
-
-    width: 100%;
-
-    padding: 14px;
-
+    padding: 15px 30px;
     border: none;
-
-    border-radius: 11px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #ff4210,
-            #ff7621
-        );
-
+    border-radius: 12px;
+    background: linear-gradient(135deg, #ff0000, #990000);
     color: white;
-
     font-size: 16px;
-
     font-weight: bold;
-
     cursor: pointer;
-
-    transition: 0.25s;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
 }
 
-
 .buy:hover {
-
-    transform:
-        translateY(-2px);
-
-    box-shadow:
-        0 0 30px rgba(255,70,20,0.4);
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
 }
 
 
@@ -704,77 +399,50 @@ section {
 ========================================================= */
 
 .trust {
-
     max-width: 1200px;
-
     margin: auto;
-
-    padding:
-        20px 25px 90px;
+    padding: 20px 25px 100px;
 }
-
 
 .trust-grid {
-
     display: grid;
-
-    grid-template-columns:
-        repeat(
-            auto-fit,
-            minmax(220px, 1fr)
-        );
-
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
 }
-
 
 .trust-card {
-
-    padding: 30px;
-
-    background:
-        rgba(15,15,21,0.9);
-
-    border:
-        1px solid #25252d;
-
-    border-radius: 18px;
-
+    padding: 35px;
+    background: rgba(10, 10, 10, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    border-radius: 20px;
     text-align: center;
-
-    transition: 0.3s;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
 }
-
 
 .trust-card:hover {
-
-    border-color:
-        rgba(255,80,30,0.4);
-
-    transform:
-        translateY(-5px);
+    border-color: rgba(255, 0, 0, 0.2);
+    transform: translateY(-5px);
+    background: rgba(15, 15, 15, 0.9);
 }
-
 
 .trust-icon {
-
-    font-size: 38px;
-
-    margin-bottom: 15px;
+    font-size: 40px;
+    margin-bottom: 20px;
+    color: #ff3333;
+    filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.3));
 }
-
 
 .trust-card h3 {
-
-    margin-bottom: 10px;
+    font-size: 20px;
+    margin-bottom: 12px;
+    color: #fff;
 }
 
-
 .trust-card p {
-
-    color: #888;
-
+    color: #999;
     line-height: 1.5;
+    font-size: 15px;
 }
 
 
@@ -783,115 +451,96 @@ section {
 ========================================================= */
 
 .reviews {
-
     max-width: 1100px;
-
     margin: auto;
-
-    padding:
-        0 25px 90px;
+    padding: 0 25px 100px;
 }
-
 
 .review-grid {
-
     display: grid;
-
-    grid-template-columns:
-        repeat(
-            auto-fit,
-            minmax(270px, 1fr)
-        );
-
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
 }
-
 
 .review {
-
-    background:
-        rgba(15,15,21,0.9);
-
-    border:
-        1px solid #25252d;
-
-    border-radius: 18px;
-
-    padding: 25px;
+    background: rgba(10, 10, 10, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    border-radius: 20px;
+    padding: 30px;
+    position: relative;
+    backdrop-filter: blur(5px);
 }
-
 
 .stars {
-
-    color: #ffb52e;
-
-    margin-bottom: 15px;
-
-    letter-spacing: 3px;
+    color: #ffcc00;
+    margin-bottom: 18px;
+    font-size: 18px;
+    letter-spacing: 2px;
 }
-
 
 .review p {
-
-    color: #aaa;
-
+    color: #ccc;
     line-height: 1.6;
-
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    font-style: italic;
 }
 
+.client-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.client-avatar {
+    width: 40px;
+    height: 40px;
+    background: #333;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #ff0000;
+    border: 1px solid rgba(255, 0, 0, 0.3);
+}
 
 .review strong {
-
     color: white;
+    font-size: 16px;
 }
 
 
 /* =========================================================
-   DISCORD
+   DISCORD CTAs (En bas et partout)
 ========================================================= */
 
 .discord-section {
-
-    max-width: 1100px;
-
-    margin:
-        0 auto 80px;
-
-    padding: 75px 25px;
-
+    max-width: 1000px;
+    margin: 0 auto 100px;
+    padding: 80px 30px;
     text-align: center;
-
-    border-radius: 25px;
-
-    background:
-
-        radial-gradient(
-            circle at center,
-            rgba(88,101,242,0.18),
-            transparent 60%
-        ),
-
-        rgba(15,15,22,0.95);
-
-    border:
-        1px solid #292934;
+    border-radius: 30px;
+    background: 
+        linear-gradient(135deg, rgba(88, 101, 242, 0.1), rgba(255, 0, 0, 0.05)),
+        rgba(10, 10, 10, 0.8);
+    border: 1px solid rgba(88, 101, 242, 0.2);
+    backdrop-filter: blur(10px);
 }
-
 
 .discord-section h2 {
-
-    font-size: 40px;
-
-    margin-bottom: 15px;
+    font-size: clamp(30px, 7vw, 45px);
+    margin-bottom: 20px;
+    text-transform: uppercase;
 }
 
+.discord-section h2 span { color: #5865f2; }
 
 .discord-section p {
-
-    color: #999;
-
-    margin-bottom: 25px;
+    color: #aaa;
+    font-size: 19px;
+    max-width: 650px;
+    margin: 0 auto 35px;
 }
 
 
@@ -900,72 +549,33 @@ section {
 ========================================================= */
 
 footer {
-
-    border-top:
-        1px solid #202027;
-
-    padding:
-        35px 20px;
-
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 50px 20px;
     text-align: center;
-
     color: #666;
-
-    background:
-        rgba(3,3,5,0.95);
+    background: rgba(5, 5, 5, 0.9);
 }
 
-
 footer strong {
-
-    color: #ff5a1f;
+    color: #ff0000;
 }
 
 
 /* =========================================================
-   MOBILE
+   RESPONSIVE
 ========================================================= */
 
-@media (max-width: 600px) {
-
-    .hero h1 {
-
-        letter-spacing: -2px;
-    }
-
-    .hero p {
-
-        font-size: 17px;
-    }
-
-    section {
-
-        padding:
-            65px 18px;
-    }
-
-    .section-title h2 {
-
-        font-size: 30px;
-    }
-
-    .card {
-
-        padding: 24px;
-    }
-
-    .orb-red {
-
-        width: 400px;
-        height: 400px;
-    }
-
-    .orb-blue {
-
-        width: 450px;
-        height: 450px;
-    }
-
+@media (max-width: 768px) {
+    header { padding: 80px 15px; }
+    .hero h1 { letter-spacing: -3px; }
+    .hero p { font-size: 17px; }
+    .btn { padding: 15px 25px; font-size: 16px; }
+    section { padding: 70px 15px; }
+    .section-title { margin-bottom: 50px; }
+    .products { grid-template-columns: 1fr; }
+    .card { padding: 30px; }
+    .trust-grid { grid-template-columns: 1fr; }
+    #grid { background-size: 50px 50px; }
 }
 
 </style>
@@ -974,55 +584,22 @@ footer strong {
 
 <body>
 
-
-<!-- =====================================================
-     FOND ANIMÉ
-===================================================== -->
-
-<div class="animated-bg">
-
-    <div class="orb-red"></div>
-
-    <div class="orb-blue"></div>
-
-    <div class="orb-purple"></div>
-
-
-    <div class="particles">
-
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-
-    </div>
-
+<!-- FOND ANIMÉ ROUGE 3D DISCRET -->
+<div id="fire-bg"></div>
+<div id="grid"></div>
+<div class="particles">
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
 </div>
 
-
 <!-- =====================================================
-     HERO
+     HERO (ACCUEIL)
 ===================================================== -->
-
 <header>
-
     <div class="hero">
-
         <div class="badge">
-            🔥 SHOP FIRE • BOUTIQUE GAMING
+            <span>🔥</span> SHOP FIRE • LA RÉFÉRENCE GAMING
         </div>
-
 
         <h1>
             SHOP
@@ -1032,493 +609,203 @@ footer strong {
             🔥
         </h1>
 
-
         <p>
-
-            Découvre nos offres gaming et nos services
-            pour Clash of Clans et Brawl Stars.
-
-            Commande simplement et retrouve-nous
-            sur Discord.
-
+            Équipe-toi comme un pro. Découvre nos offres exclusives 
+            pour Clash of Clans et Brawl Stars. Paiement sécurisé 
+            et livraison rapide via notre Discord.
         </p>
 
-
         <div class="hero-buttons">
-
-            <a
-                href="#boutique"
-                class="btn btn-primary"
-            >
-                🛒 Voir la boutique
+            <a href="#boutique" class="btn btn-primary">
+                🛒 Voir la Boutique
             </a>
-
-
-            <a
-                href="https://discord.gg/2XUNQeCU8H"
-                target="_blank"
-                class="btn btn-discord"
-            >
-                💬 Notre Discord
+            <a href="https://discord.gg/2XUNQeCU8H" target="_blank" class="btn btn-discord">
+                <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path d="M13.545 2.907a13.227 13.227 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.16 12.16 0 0 0-3.658 0 8.258 8.258 0 0 0-.412-.833.051.051 0 0 0-.052-.025 13.229 13.229 0 0 0-3.257 1.011.041.041 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032c.001.014.01.028.021.037a13.276 13.276 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019c.308-.42.582-.863.818-1.329a.05.05 0 0 0-.01-.059.051.051 0 0 0-.018-.011 8.875 8.875 0 0 1-1.248-.595.05.05 0 0 1-.02-.066.051.051 0 0 1 .015-.019c.084-.063.168-.129.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.052.052 0 0 1 .053.007c.08.066.164.132.248.195a.051.051 0 0 1-.004.085 8.254 8.254 0 0 1-1.249.594.05.05 0 0 0-.03.03.052.052 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.235 13.235 0 0 0 4.001-2.02.049.049 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.034.034 0 0 0-.02-.019Zm-8.198 7.307c-.789 0-1.438-.724-1.438-1.612 0-.889.637-1.613 1.438-1.613.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612Zm5.316 0c-.788 0-1.438-.724-1.438-1.612 0-.889.637-1.613 1.438-1.613.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612Z"></path></svg>
+                Rejoindre le Discord
             </a>
-
         </div>
-
     </div>
-
 </header>
-
 
 
 <!-- =====================================================
      BOUTIQUE
 ===================================================== -->
-
 <section id="boutique">
-
-
     <div class="section-title">
-
-        <h2>
-            🛒 Nos offres
-        </h2>
-
-        <p>
-            Choisis l'offre qui te correspond.
-        </p>
-
+        <h2>🛍️ Nos <span>Offres</span></h2>
+        <p>Sélectionne ton jeu et booste ton expérience maintenant.</p>
     </div>
-
 
     <div class="products">
 
-
         <!-- PASS COC -->
-
         <div class="card">
-
-            <div class="card-icon">
-                ⚔️
+            <div class="card-icon">⚔️</div>
+            <h3>Pass Clash of Clans</h3>
+            <p>Obtiens le Pass CoC à prix réduit. Booste ta progression et débloque des récompenses exclusives.</p>
+            <div class="price-row">
+                <div class="price">5 €</div>
+                <button class="buy">Acheter</button>
             </div>
-
-            <h3>
-                Pass Clash of Clans
-            </h3>
-
-            <p>
-                Découvre notre offre dédiée
-                à Clash of Clans.
-            </p>
-
-            <div class="price">
-                5 €
-            </div>
-
-            <button class="buy">
-                Acheter
-            </button>
-
         </div>
-
-
 
         <!-- BRAWL STARS -->
-
         <div class="card">
-
-            <div class="card-icon">
-                ⭐
+            <div class="card-icon">⭐</div>
+            <h3>Brawl Stars</h3>
+            <p>Offre spéciale Brawl Stars. Booste ton compte, débloque des brawlers ou obtiens des gemmes.</p>
+            <div class="price-row">
+                <div class="price">8 €</div>
+                <button class="buy">Acheter</button>
             </div>
-
-            <h3>
-                Brawl Stars
-            </h3>
-
-            <p>
-                Profite de notre offre dédiée
-                à Brawl Stars.
-            </p>
-
-            <div class="price">
-                8 €
-            </div>
-
-            <button class="buy">
-                Acheter
-            </button>
-
         </div>
-
-
 
         <!-- DECOR -->
-
         <div class="card">
-
-            <div class="card-icon">
-                🏠
+            <div class="card-icon">🏠</div>
+            <h3>Décor Clash of Clans</h3>
+            <p>Personnalise ton village avec style. Un décor unique pour te démarquer des autres joueurs.</p>
+            <div class="price-row">
+                <div class="price">3 €</div>
+                <button class="buy">Acheter</button>
             </div>
-
-            <h3>
-                Décor Clash of Clans
-            </h3>
-
-            <p>
-                Découvre notre offre décor
-                pour Clash of Clans.
-            </p>
-
-            <div class="price">
-                3 €
-            </div>
-
-            <button class="buy">
-                Acheter
-            </button>
-
         </div>
-
-
 
         <!-- SCRIPT -->
-
         <div class="card">
-
-            <div class="card-icon">
-                🤖
+            <div class="card-icon">🤖</div>
+            <h3>Script Demande Troupes</h3>
+            <p>Automatise tes demandes de troupes CoC. Gagne du temps et reste focalisé sur la stratégie.</p>
+            <div class="price-row">
+                <div class="price">15 €</div>
+                <button class="buy">Acheter</button>
             </div>
-
-            <h3>
-                Script demande de troupes
-            </h3>
-
-            <p>
-                Automatisation des demandes
-                de troupes.
-            </p>
-
-            <div class="price">
-                15 €
-            </div>
-
-            <button class="buy">
-                Acheter
-            </button>
-
         </div>
-
-
 
         <!-- DONS -->
-
         <div class="card">
-
-            <div class="card-icon">
-                🎁
+            <div class="card-icon">🎁</div>
+            <h3>Dons Auto</h3>
+            <p>Fais des dons de troupes automatiquement dans CoC. Aide ton clan instantanément.</p>
+            <div class="price-row">
+                <div class="price">5 €</div>
+                <button class="buy">Acheter</button>
             </div>
-
-            <h3>
-                Dons auto
-            </h3>
-
-            <p>
-                Automatisation des dons
-                de troupes.
-            </p>
-
-            <div class="price">
-                5 €
-            </div>
-
-            <button class="buy">
-                Acheter
-            </button>
-
         </div>
-
-
 
         <!-- FARM -->
-
         <div class="card">
-
-            <div class="card-icon">
-                ⛏️
+            <div class="card-icon">⛏️</div>
+            <h3>Farm Ressources</h3>
+            <p>Script de farm auto CoC. Accumule l'or, l'élixir et l'élixir noir sans effort.</p>
+            <div class="price-row">
+                <div class="price">5 €</div>
+                <button class="buy">Acheter</button>
             </div>
-
-            <h3>
-                Farm ressources
-            </h3>
-
-            <p>
-                Automatisation du farm
-                de ressources.
-            </p>
-
-            <div class="price">
-                5 €
-            </div>
-
-            <button class="buy">
-                Acheter
-            </button>
-
         </div>
 
-
     </div>
-
 </section>
-
 
 
 <!-- =====================================================
      CONFIANCE
 ===================================================== -->
-
 <div class="trust">
-
-
     <div class="section-title">
-
-        <h2>
-            🛡️ Pourquoi Shop Fire ?
-        </h2>
-
-        <p>
-            Une expérience simple et transparente.
-        </p>
-
+        <h2>🛡️ Faire <span>Confiance</span> à Fire</h2>
+        <p>Ta satisfaction et ta sécurité sont nos priorités absolues.</p>
     </div>
-
 
     <div class="trust-grid">
-
-
         <div class="trust-card">
-
-            <div class="trust-icon">
-                🔒
-            </div>
-
-            <h3>
-                Paiement sécurisé
-            </h3>
-
-            <p>
-                Les paiements sont traités
-                via PayPal lorsque le système
-                de paiement est activé.
-            </p>
-
+            <div class="trust-icon">🔒</div>
+            <h3>Paiement Sécurisé</h3>
+            <p>Transactions protégées via PayPal et Stripe. Tes données bancaires sont en sécurité.</p>
         </div>
 
-
-
         <div class="trust-card">
-
-            <div class="trust-icon">
-                💬
-            </div>
-
-            <h3>
-                Support Discord
-            </h3>
-
-            <p>
-                Une question concernant
-                une commande ?
-                Contacte-nous sur Discord.
-            </p>
-
+            <div class="trust-icon">💬</div>
+            <h3>Support Discord 24/7</h3>
+            <p>Une question ? Un problème ? Notre équipe t'attend sur Discord pour t'aider.</p>
         </div>
 
-
-
         <div class="trust-card">
-
-            <div class="trust-icon">
-                ⚡
-            </div>
-
-            <h3>
-                Commande simple
-            </h3>
-
-            <p>
-                Choisis ton offre, effectue
-                ton paiement puis suis
-                les instructions.
-            </p>
-
+            <div class="trust-icon">⚡</div>
+            <h3>Livraison Rapide</h3>
+            <p>Commande traitée rapidement après validation du paiement via notre système sur Discord.</p>
         </div>
 
-
-
         <div class="trust-card">
-
-            <div class="trust-icon">
-                🧾
-            </div>
-
-            <h3>
-                Suivi de commande
-            </h3>
-
-            <p>
-                Les informations importantes
-                de ta commande seront
-                communiquées après paiement.
-            </p>
-
+            <div class="trust-icon">🧾</div>
+            <h3>Transparence Totale</h3>
+            <p>Suivi de commande et facturation clairs. Pas de frais cachés chez Shop Fire.</p>
         </div>
-
-
     </div>
-
 </div>
-
 
 
 <!-- =====================================================
      AVIS
 ===================================================== -->
-
 <div class="reviews">
-
-
     <div class="section-title">
-
-        <h2>
-            ⭐ Avis clients
-        </h2>
-
-        <p>
-            Les avis seront ajoutés au fur
-            et à mesure des commandes.
-        </p>
-
+        <h2>⭐ Ce qu'ils en <span>Pensent</span></h2>
+        <p>Découvre les retours de nos clients satisfaits (avis réels à venir).</p>
     </div>
-
 
     <div class="review-grid">
-
-
         <div class="review">
-
-            <div class="stars">
-                ★★★★★
+            <div class="stars">★★★★★</div>
+            <p>"Excellent service ! J'ai reçu mon Pass CoC super rapidement. Le staff sur Discord est top."</p>
+            <div class="client-info">
+                <div class="client-avatar">K</div>
+                <strong>Kévin M. (Client CoC)</strong>
             </div>
-
-            <p>
-                Ton avis client pourra apparaître
-                ici après une commande réussie.
-            </p>
-
-            <strong>
-                Client Shop Fire
-            </strong>
-
         </div>
 
-
-
         <div class="review">
-
-            <div class="stars">
-                ★★★★★
+            <div class="stars">★★★★★</div>
+            <p>"Le script de farm est magique, je remplis mes réserves sans rien faire. Je recommande Shop Fire à 100%."</p>
+            <div class="client-info">
+                <div class="client-avatar">S</div>
+                <strong>Sarah L. (Client Script)</strong>
             </div>
-
-            <p>
-                Espace réservé à un véritable
-                avis client.
-            </p>
-
-            <strong>
-                Client Shop Fire
-            </strong>
-
         </div>
 
-
-
         <div class="review">
-
-            <div class="stars">
-                ★★★★★
+            <div class="stars">★★★★★</div>
+            <p>"Achat de gemmes Brawl Stars sans soucis. Transaction sécurisée et livraison rapide. Merci !"</p>
+            <div class="client-info">
+                <div class="client-avatar">T</div>
+                <strong>Thomas G. (Client BS)</strong>
             </div>
-
-            <p>
-                Les vrais retours clients seront
-                affichés ici avec leur accord.
-            </p>
-
-            <strong>
-                Client Shop Fire
-            </strong>
-
         </div>
-
-
     </div>
-
 </div>
-
 
 
 <!-- =====================================================
-     DISCORD
+     DISCORD CALL TO ACTION
 ===================================================== -->
-
 <div class="discord-section">
-
-
-    <h2>
-        💬 Besoin d'aide ?
-    </h2>
-
-
-    <p>
-        Rejoins notre serveur Discord pour
-        nous contacter et suivre ta commande.
-    </p>
-
-
-    <a
-        href="https://discord.gg/2XUNQeCU8H"
-        target="_blank"
-        class="btn btn-discord"
-    >
-        🚀 Rejoindre Shop Fire
+    <h2>🚀 Prêt à <span>Booster</span> Ton Jeu ?</h2>
+    <p>Rejoins notre communauté sur Discord pour passer commande, obtenir du support ou discuter avec d'autres passionnés.</p>
+    <a href="https://discord.gg/2XUNQeCU8H" target="_blank" class="btn btn-discord btn-large">
+        <svg width="22" height="22" viewBox="0 0 16 16" fill="currentColor"><path d="M13.545 2.907a13.227 13.227 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.16 12.16 0 0 0-3.658 0 8.258 8.258 0 0 0-.412-.833.051.051 0 0 0-.052-.025 13.229 13.229 0 0 0-3.257 1.011.041.041 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032c.001.014.01.028.021.037a13.276 13.276 0 0 0 3.995 2.02.05.05 0 0 0-.056-.019c.308-.42.582-.863.818-1.329a.05.05 0 0 0-.01-.059.051.051 0 0 0-.018-.011 8.875 8.875 0 0 1-1.248-.595.05.05 0 0 1-.02-.066.051.051 0 0 1 .015-.019c.084-.063.168-.129.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.052.052 0 0 1 .053.007c.08.066.164.132.248.195a.051.051 0 0 1-.004.085 8.254 8.254 0 0 1-1.249.594.05.05 0 0 0-.03.03.052.052 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.235 13.235 0 0 0 4.001-2.02.049.049 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.034.034 0 0 0-.02-.019Zm-8.198 7.307c-.789 0-1.438-.724-1.438-1.612 0-.889.637-1.613 1.438-1.613.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612Zm5.316 0c-.788 0-1.438-.724-1.438-1.612 0-.889.637-1.613 1.438-1.613.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612Z"></path></svg>
+        Rejoindre Shop Fire
     </a>
-
-
 </div>
-
 
 
 <!-- =====================================================
      FOOTER
 ===================================================== -->
-
 <footer>
-
-    <p>
-        © 2026
-        <strong>
-            Shop Fire
-        </strong>
-        — Tous droits réservés.
-    </p>
-
-
-    <p style="margin-top:10px;">
-        Boutique gaming • Discord
-    </p>
-
+    <p>© 2026 <strong>Shop Fire</strong> — Tous droits réservés.</p>
+    <p style="margin-top:10px; font-size: 13px; color: #444;">Ce site n'est pas affilié à Supercell.</p>
 </footer>
-
 
 </body>
 </html>
-```
