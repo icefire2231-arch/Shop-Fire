@@ -1,11 +1,213 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Shop Fire</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop Fire 🔥</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #0b0b0f;
+            color: white;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, #15151f, #24100a);
+        }
+
+        header h1 {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        header p {
+            color: #bbb;
+            font-size: 18px;
+        }
+
+        .shop {
+            max-width: 1100px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .shop h2 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 35px;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: #15151c;
+            border: 1px solid #292936;
+            border-radius: 18px;
+            padding: 25px;
+            text-align: center;
+            transition: 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #ff5a1f;
+        }
+
+        .card .icon {
+            font-size: 45px;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            font-size: 21px;
+            margin-bottom: 12px;
+        }
+
+        .card p {
+            color: #aaa;
+            min-height: 45px;
+            margin-bottom: 20px;
+        }
+
+        .price {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .buy {
+            display: inline-block;
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 10px;
+            background: #ff5a1f;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .buy:hover {
+            background: #ff713d;
+        }
+
+        .discord {
+            text-align: center;
+            padding: 50px 20px;
+            background: #111118;
+            margin-top: 40px;
+        }
+
+        .discord a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 14px 25px;
+            border-radius: 10px;
+            background: #5865F2;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #777;
+        }
+    </style>
 </head>
+
 <body>
-  <h1>Bienvenue sur Shop Fire 🔥</h1>
-  <p>La boutique Discord arrive bientôt.</p>
+
+<header>
+    <h1>🔥 Shop Fire</h1>
+    <p>La boutique officielle de Fire</p>
+</header>
+
+<section class="shop">
+
+    <h2>🛒 Nos offres</h2>
+
+    <div class="products">
+
+        <div class="card">
+            <div class="icon">⚔️</div>
+            <h3>Pass Clash of Clans</h3>
+            <p>Découvre notre offre pour Clash of Clans.</p>
+            <div class="price">5 €</div>
+            <button class="buy">Acheter</button>
+        </div>
+
+        <div class="card">
+            <div class="icon">⭐</div>
+            <h3>Brawl Stars</h3>
+            <p>Profite de notre offre dédiée à Brawl Stars.</p>
+            <div class="price">8 €</div>
+            <button class="buy">Acheter</button>
+        </div>
+
+        <div class="card">
+            <div class="icon">🏠</div>
+            <h3>Décor Clash of Clans</h3>
+            <p>Obtiens le décor proposé pour Clash of Clans.</p>
+            <div class="price">3 €</div>
+            <button class="buy">Acheter</button>
+        </div>
+
+        <div class="card">
+            <div class="icon">🤖</div>
+            <h3>Script demande de troupes</h3>
+            <p>Automatisation des demandes de troupes.</p>
+            <div class="price">15 €</div>
+            <button class="buy">Acheter</button>
+        </div>
+
+        <div class="card">
+            <div class="icon">🎁</div>
+            <h3>Dons auto</h3>
+            <p>Automatise les dons de troupes.</p>
+            <div class="price">5 €</div>
+            <button class="buy">Acheter</button>
+        </div>
+
+        <div class="card">
+            <div class="icon">⛏️</div>
+            <h3>Farm ressources</h3>
+            <p>Automatisation du farm de ressources.</p>
+            <div class="price">5 €</div>
+            <button class="buy">Acheter</button>
+        </div>
+
+    </div>
+
+</section>
+
+<section class="discord">
+    <h2>💬 Une question ?</h2>
+    <p>Rejoins notre serveur Discord pour nous contacter.</p>
+
+    <a href="https://discord.gg/2XUNQeCU8H" target="_blank">
+        Rejoindre le Discord
+    </a>
+</section>
+
+<footer>
+    © 2026 Shop Fire — Tous droits réservés.
+</footer>
+
 </body>
 </html>
