@@ -1,8 +1,10 @@
+```html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Shop Fire 🔥</title>
 
 <style>
@@ -22,21 +24,22 @@ body {
     min-height: 100vh;
     overflow-x: hidden;
     background:
-        radial-gradient(circle at 15% 20%, rgba(255,0,50,.30), transparent 30%),
-        radial-gradient(circle at 85% 25%, rgba(0,100,255,.30), transparent 30%),
-        radial-gradient(circle at 50% 90%, rgba(150,0,255,.25), transparent 35%),
+        radial-gradient(circle at 10% 20%, rgba(255,0,60,.35), transparent 30%),
+        radial-gradient(circle at 90% 20%, rgba(0,100,255,.35), transparent 30%),
+        radial-gradient(circle at 50% 90%, rgba(120,0,255,.25), transparent 35%),
         #05050b;
 }
 
 /* FOND ANIMÉ */
+
 body::before {
     content: "";
     position: fixed;
     inset: -50%;
     z-index: -2;
     background:
-        linear-gradient(120deg, transparent 30%, rgba(255,0,50,.12), transparent 60%),
-        linear-gradient(300deg, transparent 30%, rgba(0,100,255,.12), transparent 60%);
+        linear-gradient(120deg, transparent 35%, rgba(255,0,60,.14), transparent 60%),
+        linear-gradient(300deg, transparent 35%, rgba(0,100,255,.14), transparent 60%);
     animation: backgroundMove 12s ease-in-out infinite alternate;
 }
 
@@ -46,30 +49,40 @@ body::after {
     inset: 0;
     z-index: -1;
     pointer-events: none;
-    background-image: radial-gradient(circle, rgba(255,255,255,.13) 1px, transparent 1px);
+    background-image:
+        radial-gradient(circle, rgba(255,255,255,.13) 1px, transparent 1px);
     background-size: 45px 45px;
     animation: stars 18s linear infinite;
 }
 
 @keyframes backgroundMove {
-    0% { transform: translate(-5%, -5%) rotate(0deg); }
-    100% { transform: translate(5%, 5%) rotate(8deg); }
+    from {
+        transform: translate(-5%, -5%) rotate(0deg);
+    }
+    to {
+        transform: translate(5%, 5%) rotate(8deg);
+    }
 }
 
 @keyframes stars {
-    from { transform: translateY(0); }
-    to { transform: translateY(45px); }
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(45px);
+    }
 }
 
 /* HEADER */
+
 header {
     position: sticky;
     top: 0;
     z-index: 100;
-    backdrop-filter: blur(20px);
-    background: rgba(5,5,12,.75);
-    border-bottom: 1px solid rgba(255,255,255,.08);
     padding: 18px 7%;
+    background: rgba(5,5,12,.75);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,.08);
 }
 
 .nav {
@@ -83,10 +96,14 @@ header {
 .logo {
     font-size: 24px;
     font-weight: 900;
-    text-shadow: 0 0 10px #ff1744, 0 0 30px #ff1744;
+    text-shadow:
+        0 0 10px #ff1744,
+        0 0 30px #ff1744;
 }
 
-.logo span { color: #ff1744; }
+.logo span {
+    color: #ff1744;
+}
 
 nav a {
     color: white;
@@ -96,19 +113,22 @@ nav a {
     opacity: .85;
 }
 
-nav a:hover { color: #ff1744; }
+nav a:hover {
+    color: #ff1744;
+}
 
 /* HERO */
+
 .hero {
     max-width: 1200px;
-    margin: auto;
     min-height: 650px;
+    margin: auto;
+    padding: 70px 20px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 70px 20px;
 }
 
 .badge {
@@ -116,7 +136,7 @@ nav a:hover { color: #ff1744; }
     border-radius: 50px;
     background: rgba(255,20,70,.12);
     border: 1px solid rgba(255,40,80,.45);
-    box-shadow: 0 0 20px rgba(255,0,60,.25);
+    box-shadow: 0 0 25px rgba(255,0,60,.25);
     margin-bottom: 25px;
     font-weight: bold;
 }
@@ -126,24 +146,30 @@ nav a:hover { color: #ff1744; }
     font-weight: 1000;
     letter-spacing: -5px;
     line-height: .95;
-    text-shadow: 0 0 15px rgba(255,255,255,.2), 0 0 40px rgba(255,0,50,.5);
+    text-shadow:
+        0 0 15px rgba(255,255,255,.2),
+        0 0 40px rgba(255,0,50,.5);
 }
 
 .fire {
-    background: linear-gradient(90deg, #ff1744, #ff5e00, #ff1744);
-    background-size: 200%;
+    background: linear-gradient(90deg, #ff1744, #ff5e00, #008cff, #ff1744);
+    background-size: 300%;
     -webkit-background-clip: text;
     color: transparent;
-    animation: fireText 3s linear infinite;
+    animation: fireText 4s linear infinite;
 }
 
 @keyframes fireText {
-    from { background-position: 0%; }
-    to { background-position: 200%; }
+    from {
+        background-position: 0%;
+    }
+    to {
+        background-position: 300%;
+    }
 }
 
 .hero p {
-    max-width: 650px;
+    max-width: 700px;
     margin: 30px auto;
     font-size: 18px;
     color: rgba(255,255,255,.7);
@@ -164,22 +190,24 @@ nav a:hover { color: #ff1744; }
     text-decoration: none;
     font-weight: bold;
     transition: .25s;
-    border: 1px solid rgba(255,255,255,.15);
 }
 
-.btn:hover { transform: translateY(-4px) scale(1.03); }
+.btn:hover {
+    transform: translateY(-4px) scale(1.03);
+}
 
 .primary {
     background: linear-gradient(135deg, #ff1744, #ff4d00);
-    box-shadow: 0 0 20px rgba(255,30,60,.4), 0 0 60px rgba(255,30,60,.15);
+    box-shadow: 0 0 25px rgba(255,30,60,.4);
 }
 
 .discord {
     background: #5865f2;
-    box-shadow: 0 0 25px rgba(88,101,242,.4);
+    box-shadow: 0 0 25px rgba(88,101,242,.45);
 }
 
 /* SECTIONS */
+
 section {
     max-width: 1200px;
     margin: auto;
@@ -198,8 +226,11 @@ section {
     margin-bottom: 55px;
 }
 
-/* CATEGORY */
-.category { margin-bottom: 90px; }
+/* CATÉGORIES */
+
+.category {
+    margin-bottom: 90px;
+}
 
 .category-title {
     display: flex;
@@ -216,7 +247,8 @@ section {
     background: linear-gradient(90deg, rgba(255,30,70,.8), transparent);
 }
 
-/* PRODUCTS */
+/* PRODUITS */
+
 .products {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -226,15 +258,16 @@ section {
 .card {
     position: relative;
     overflow: hidden;
-    background: linear-gradient(145deg, rgba(255,255,255,.09), rgba(255,255,255,.025));
+    background: linear-gradient(
+        145deg,
+        rgba(255,255,255,.09),
+        rgba(255,255,255,.025)
+    );
     border: 1px solid rgba(255,255,255,.1);
     border-radius: 24px;
     padding: 20px;
     backdrop-filter: blur(15px);
     transition: .35s;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
 }
 
 .card::before {
@@ -252,34 +285,19 @@ section {
 .card:hover {
     transform: translateY(-10px);
     border-color: rgba(255,40,80,.5);
-    box-shadow: 0 15px 60px rgba(0,0,0,.5), 0 0 35px rgba(255,20,60,.18);
-}
-
-.stock-tag {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    background: rgba(255, 23, 68, 0.85);
-    color: white;
-    font-size: 11px;
-    font-weight: bold;
-    padding: 5px 10px;
-    border-radius: 20px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    z-index: 2;
-    backdrop-filter: blur(5px);
+    box-shadow:
+        0 15px 60px rgba(0,0,0,.5),
+        0 0 35px rgba(255,20,60,.18);
 }
 
 .product-image {
     width: 100%;
     height: 210px;
-    object-fit: contain;
+    object-fit: cover;
     border-radius: 17px;
     margin-bottom: 20px;
     background: linear-gradient(135deg, #171725, #0c0c15);
     border: 1px solid rgba(255,255,255,.1);
-    padding: 10px;
 }
 
 .card h3 {
@@ -290,20 +308,19 @@ section {
 .card p {
     color: rgba(255,255,255,.6);
     line-height: 1.5;
-    margin-bottom: 20px;
+    min-height: 48px;
 }
 
 .price-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: auto;
+    margin-top: 25px;
 }
 
 .price {
     font-size: 30px;
     font-weight: 900;
-    color: white;
     text-shadow: 0 0 15px rgba(255,255,255,.2);
 }
 
@@ -314,20 +331,18 @@ section {
     font-weight: bold;
     padding: 13px 20px;
     border-radius: 12px;
-    background: linear-gradient(135deg, #ff1744, #ff4d00);
-    box-shadow: 0 0 20px rgba(255,30,60,.3);
+    background: linear-gradient(135deg, #0070ba, #00a8ff);
+    box-shadow: 0 0 20px rgba(0,140,255,.35);
     transition: .25s;
-    text-decoration: none;
-    display: inline-block;
-    text-align: center;
 }
 
 .buy:hover {
     transform: scale(1.08);
-    box-shadow: 0 0 30px rgba(255,30,60,.6);
+    box-shadow: 0 0 30px rgba(0,140,255,.65);
 }
 
-/* TRUST */
+/* SÉCURITÉ */
+
 .trust {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -340,13 +355,57 @@ section {
     background: rgba(255,255,255,.04);
     border: 1px solid rgba(255,255,255,.08);
     text-align: center;
+    transition: .3s;
 }
 
-.trust-icon { font-size: 35px; margin-bottom: 15px; }
-.trust-card h3 { margin-bottom: 10px; }
-.trust-card p { color: rgba(255,255,255,.55); line-height: 1.5; }
+.trust-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(0,150,255,.4);
+    box-shadow: 0 0 30px rgba(0,100,255,.12);
+}
+
+.trust-icon {
+    font-size: 35px;
+    margin-bottom: 15px;
+}
+
+.trust-card h3 {
+    margin-bottom: 10px;
+}
+
+.trust-card p {
+    color: rgba(255,255,255,.55);
+    line-height: 1.5;
+}
+
+/* APRÈS PAIEMENT */
+
+.payment-info {
+    max-width: 850px;
+    margin: 30px auto 0;
+    padding: 30px;
+    border-radius: 22px;
+    background: linear-gradient(
+        135deg,
+        rgba(0,100,255,.10),
+        rgba(255,0,60,.10)
+    );
+    border: 1px solid rgba(255,255,255,.1);
+    text-align: center;
+}
+
+.payment-info strong {
+    color: white;
+}
+
+.payment-info p {
+    color: rgba(255,255,255,.65);
+    line-height: 1.7;
+    margin-top: 10px;
+}
 
 /* FOOTER */
+
 footer {
     text-align: center;
     padding: 50px 20px;
@@ -354,15 +413,16 @@ footer {
     color: rgba(255,255,255,.45);
 }
 
-/* MODAL */
+/* MESSAGE */
+
 #message {
     position: fixed;
     bottom: 25px;
     right: 25px;
-    max-width: 350px;
-    padding: 18px 22px;
-    border-radius: 15px;
-    background: rgba(10,10,18,.95);
+    max-width: 370px;
+    padding: 20px 22px;
+    border-radius: 17px;
+    background: rgba(10,10,18,.96);
     border: 1px solid rgba(255,255,255,.15);
     box-shadow: 0 15px 50px rgba(0,0,0,.5);
     display: none;
@@ -370,9 +430,17 @@ footer {
 }
 
 @media(max-width:700px) {
-    nav { display: none; }
-    .hero h1 { letter-spacing: -3px; }
-    .category-title { font-size: 25px; }
+    nav {
+        display: none;
+    }
+
+    .hero h1 {
+        letter-spacing: -3px;
+    }
+
+    .category-title {
+        font-size: 25px;
+    }
 }
 </style>
 </head>
@@ -381,201 +449,417 @@ footer {
 
 <header>
     <div class="nav">
-        <div class="logo">SHOP <span>FIRE</span> 🔥</div>
+
+        <div class="logo">
+            SHOP <span>FIRE</span> 🔥
+        </div>
+
         <nav>
             <a href="#boutique">Boutique</a>
-            <a href="#fiabilite">Pourquoi nous ?</a>
-            <a href="https://discord.gg/2XUNQeCU8H" target="_blank">Discord</a>
+            <a href="#securite">Sécurité</a>
+            <a href="https://discord.gg/2XUNQeCU8H" target="_blank">
+                Discord
+            </a>
         </nav>
+
     </div>
 </header>
 
+
 <main>
-    <!-- HERO -->
-    <div class="hero">
-        <div class="badge">🔥 SHOP GAMING • FIRE</div>
-        <h1>SHOP <span class="fire">FIRE</span> 🔥</h1>
-        <p>Découvre nos offres et services dédiés à Brawl Stars, Clash Royale et Clash of Clans. Choisis ton produit, passe commande et retrouve-nous sur Discord.</p>
-        <div class="buttons">
-            <a href="#boutique" class="btn primary">🛒 Voir la boutique</a>
-            <a href="https://discord.gg/2XUNQeCU8H" target="_blank" class="btn discord">💬 Notre Discord</a>
-        </div>
+
+<!-- HERO -->
+
+<div class="hero">
+
+    <div class="badge">
+        🔥 SHOP GAMING • FIRE
     </div>
 
-    <!-- BOUTIQUE -->
-    <section id="boutique">
-        <h2 class="section-title">🛒 Boutique</h2>
-        <p class="section-subtitle">Choisis ton jeu et découvre nos offres.</p>
+    <h1>
+        SHOP
+        <span class="fire">FIRE</span>
+        🔥
+    </h1>
 
-        <!-- BRAWL STARS -->
-        <div class="category">
-            <h2 class="category-title">⭐ Brawl Stars</h2>
-            <div class="products">
-                <div class="card">
-                    <span class="stock-tag">⏳ Stock limité jusqu'au restock</span>
-                    <img class="product-image" src="icon_brawl_pass.png" alt="Brawl Pass">
-                    <h3>Brawl Pass</h3>
-                    <p>Obtiens le Pass Brawl Stars officiel pour débloquer toutes les récompenses de la saison.</p>
-                    <div class="price-row">
-                        <div class="price">7 €</div>
-                        <button class="buy" onclick="buyProduct('pass_brawl_stars', this)">Acheter</button>
-                    </div>
+    <p>
+        Découvre nos offres et services dédiés à
+        Clash of Clans et Brawl Stars.
+        Choisis ton offre, effectue ton paiement
+        via PayPal et retrouve-nous ensuite sur Discord.
+    </p>
+
+    <div class="buttons">
+
+        <a href="#boutique" class="btn primary">
+            🛒 Voir la boutique
+        </a>
+
+        <a
+            href="https://discord.gg/2XUNQeCU8H"
+            target="_blank"
+            class="btn discord"
+        >
+            💬 Notre Discord
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- BOUTIQUE -->
+
+<section id="boutique">
+
+    <h2 class="section-title">
+        🛒 Notre boutique
+    </h2>
+
+    <p class="section-subtitle">
+        Sélectionne ton jeu puis l'offre qui t'intéresse.
+    </p>
+
+
+    <!-- CLASH OF CLANS -->
+
+    <div class="category">
+
+        <h2 class="category-title">
+            ⚔️ Clash of Clans
+        </h2>
+
+        <div class="products">
+
+            <div class="card">
+
+                <img
+                    class="product-image"
+                    src="https://placehold.co/800x500/151522/ffffff?text=PASS+CLASH+OF+CLANS"
+                    alt="Pass Clash of Clans"
+                >
+
+                <h3>🏆 Pass Clash of Clans</h3>
+
+                <p>
+                    Notre offre dédiée au Pass
+                    Clash of Clans.
+                </p>
+
+                <div class="price-row">
+
+                    <div class="price">5 €</div>
+
+                    <a
+                        class="buy"
+                        href="https://www.paypal.me/FireTwitch955/5EUR"
+                        target="_blank"
+                        rel="noopener"
+                    >
+                        💳 Acheter
+                    </a>
+
                 </div>
+
             </div>
+
+
+            <div class="card">
+
+                <img
+                    class="product-image"
+                    src="https://placehold.co/800x500/151522/ffffff?text=DECOR+CLASH+OF+CLANS"
+                    alt="Décor Clash of Clans"
+                >
+
+                <h3>🏠 Décor Clash of Clans</h3>
+
+                <p>
+                    Offre dédiée aux décorations
+                    Clash of Clans.
+                </p>
+
+                <div class="price-row">
+
+                    <div class="price">3 €</div>
+
+                    <a
+                        class="buy"
+                        href="https://www.paypal.me/FireTwitch955/3EUR"
+                        target="_blank"
+                        rel="noopener"
+                    >
+                        💳 Acheter
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <img
+                    class="product-image"
+                    src="https://placehold.co/800x500/151522/ffffff?text=SCRIPT+TROUPES"
+                    alt="Script demande de troupes"
+                >
+
+                <h3>🤖 Script demande de troupes</h3>
+
+                <p>
+                    Automatisation des demandes
+                    de troupes.
+                </p>
+
+                <div class="price-row">
+
+                    <div class="price">15 €</div>
+
+                    <a
+                        class="buy"
+                        href="https://www.paypal.me/FireTwitch955/15EUR"
+                        target="_blank"
+                        rel="noopener"
+                    >
+                        💳 Acheter
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <img
+                    class="product-image"
+                    src="https://placehold.co/800x500/151522/ffffff?text=DONS+AUTO"
+                    alt="Dons auto"
+                >
+
+                <h3>🎁 Dons auto</h3>
+
+                <p>
+                    Automatisation des dons
+                    de troupes.
+                </p>
+
+                <div class="price-row">
+
+                    <div class="price">5 €</div>
+
+                    <a
+                        class="buy"
+                        href="https://www.paypal.me/FireTwitch955/5EUR"
+                        target="_blank"
+                        rel="noopener"
+                    >
+                        💳 Acheter
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <img
+                    class="product-image"
+                    src="https://placehold.co/800x500/151522/ffffff?text=FARM+RESSOURCES"
+                    alt="Farm ressources"
+                >
+
+                <h3>⛏️ Farm ressources</h3>
+
+                <p>
+                    Automatisation du farm
+                    de ressources.
+                </p>
+
+                <div class="price-row">
+
+                    <div class="price">5 €</div>
+
+                    <a
+                        class="buy"
+                        href="https://www.paypal.me/FireTwitch955/5EUR"
+                        target="_blank"
+                        rel="noopener"
+                    >
+                        💳 Acheter
+                    </a>
+
+                </div>
+
+            </div>
+
         </div>
 
-        <!-- CLASH ROYALE -->
-        <div class="category">
-            <h2 class="category-title">👑 Clash Royale</h2>
-            <div class="products">
-                <div class="card">
-                    <span class="stock-tag">⏳ Stock limité jusqu'au restock</span>
-                    <img class="product-image" src="icon_gold_pass.png" alt="Pass Royale Clash Royale">
-                    <h3>Pass Royale</h3>
-                    <p>Débloque les avantages exclusifs du Pass Royale pour booster ton compte rapidement.</p>
-                    <div class="price-row">
-                        <div class="price">6 €</div>
-                        <button class="buy" onclick="buyProduct('pass_clash_royale', this)">Acheter</button>
-                    </div>
+    </div>
+
+
+    <!-- BRAWL STARS -->
+
+    <div class="category">
+
+        <h2 class="category-title">
+            ⭐ Brawl Stars
+        </h2>
+
+        <div class="products">
+
+            <div class="card">
+
+                <img
+                    class="product-image"
+                    src="https://placehold.co/800x500/151522/ffffff?text=BRAWL+PASS"
+                    alt="Brawl Stars"
+                >
+
+                <h3>⭐ Brawl Stars</h3>
+
+                <p>
+                    Notre offre dédiée à
+                    Brawl Stars.
+                </p>
+
+                <div class="price-row">
+
+                    <div class="price">8 €</div>
+
+                    <a
+                        class="buy"
+                        href="https://www.paypal.me/FireTwitch955/8EUR"
+                        target="_blank"
+                        rel="noopener"
+                    >
+                        💳 Acheter
+                    </a>
+
                 </div>
+
             </div>
+
         </div>
 
-        <!-- CLASH OF CLANS -->
-        <div class="category">
-            <h2 class="category-title">⚔️ Clash of Clans</h2>
-            <div class="products">
-                <!-- Pass CoC avec image -->
-                <div class="card">
-                    <span class="stock-tag">⏳ Stock limité jusqu'au restock</span>
-                    <img class="product-image" src="Icon_HV_Gold_Pass.png" alt="Pass Or Clash of Clans">
-                    <h3>Pass Or CoC</h3>
-                    <p>Profite du Pass Or pour bénéficier de réductions de temps, de ressources et de skins exclusifs.</p>
-                    <div class="price-row">
-                        <div class="price">5 €</div>
-                        <button class="buy" onclick="buyProduct('pass_coc', this)">Acheter</button>
-                    </div>
-                </div>
+    </div>
 
-                <!-- Services CoC sans images -->
-                <div class="card">
-                    <h3>🏠 Décors & Équipements</h3>
-                    <p>Envie de décors uniques, d'équipements de héros ou de statues sur Clash of Clans ? Contacte-nous pour connaître la liste et commander.</p>
-                    <div class="price-row">
-                        <div class="price">Sur devis</div>
-                        <a href="https://discord.gg/2XUNQeCU8H" target="_blank" class="buy">Contactez-nous</a>
-                    </div>
-                </div>
+</section>
 
-                <div class="card">
-                    <h3>🤖 Bot Ressources</h3>
-                    <p>Automatise le farm de tes ressources sur votre village. Contacte notre équipe sur Discord pour obtenir les informations.</p>
-                    <div class="price-row">
-                        <div class="price">Sur devis</div>
-                        <a href="https://discord.gg/2XUNQeCU8H" target="_blank" class="buy">Contactez-nous</a>
-                    </div>
-                </div>
 
-                <div class="card">
-                    <h3>🎁 Demandes & Dons Auto</h3>
-                    <p>Système de demande de troupes et dons automatiques pour votre clan. Contacte-nous pour en savoir plus.</p>
-                    <div class="price-row">
-                        <div class="price">Sur devis</div>
-                        <a href="https://discord.gg/2XUNQeCU8H" target="_blank" class="buy">Contactez-nous</a>
-                    </div>
-                </div>
-            </div>
+<!-- SÉCURITÉ -->
+
+<section id="securite">
+
+    <h2 class="section-title">
+        🔐 Une commande simple
+    </h2>
+
+    <p class="section-subtitle">
+        Nous faisons au maximum pour rendre ton expérience claire.
+    </p>
+
+    <div class="trust">
+
+        <div class="trust-card">
+            <div class="trust-icon">🔒</div>
+
+            <h3>Paiement PayPal</h3>
+
+            <p>
+                Le paiement est effectué directement
+                sur PayPal. Tes informations de paiement
+                ne sont pas saisies sur Shop Fire.
+            </p>
         </div>
-    </section>
 
-    <!-- FIABILITÉ -->
-    <section id="fiabilite">
-        <h2 class="section-title">🔐 Pourquoi Shop Fire ?</h2>
-        <p class="section-subtitle">Une expérience simple et claire.</p>
-        <div class="trust">
-            <div class="trust-card">
-                <div class="trust-icon">🔒</div>
-                <h3>Paiement sécurisé</h3>
-                <p>Les paiements sont traités via PayPal.</p>
-            </div>
-            <div class="trust-card">
-                <div class="trust-icon">💬</div>
-                <h3>Support Discord</h3>
-                <p>Après ton achat, retrouve-nous sur notre Discord.</p>
-            </div>
-            <div class="trust-card">
-                <div class="trust-icon">⚡</div>
-                <h3>Commande rapide</h3>
-                <p>Choisis ton offre et passe ta commande simplement.</p>
-            </div>
-            <div class="trust-card">
-                <div class="trust-icon">🧾</div>
-                <h3>Suivi</h3>
-                <p>Les informations concernant ta commande sont communiquées après paiement.</p>
-            </div>
+
+        <div class="trust-card">
+            <div class="trust-icon">🛡️</div>
+
+            <h3>Paiement protégé</h3>
+
+            <p>
+                Le paiement s'effectue sur
+                l'environnement PayPal et non
+                directement sur notre site.
+            </p>
         </div>
-    </section>
+
+
+        <div class="trust-card">
+            <div class="trust-icon">⚡</div>
+
+            <h3>Commande simple</h3>
+
+            <p>
+                Sélectionne ton offre, clique sur
+                Acheter puis effectue ton paiement.
+            </p>
+        </div>
+
+
+        <div class="trust-card">
+            <div class="trust-icon">💬</div>
+
+            <h3>Support Discord</h3>
+
+            <p>
+                Après ton paiement, rejoins notre
+                Discord pour nous transmettre les
+                informations nécessaires à ta commande.
+            </p>
+        </div>
+
+    </div>
+
+
+    <div class="payment-info">
+
+        <h3>
+            💳 Après ton paiement
+        </h3>
+
+        <p>
+            Une fois ton paiement effectué sur PayPal,
+            rejoins notre Discord et contacte le support
+            afin que nous puissions traiter ta commande.
+        </p>
+
+        <br>
+
+        <a
+            href="https://discord.gg/2XUNQeCU8H"
+            target="_blank"
+            class="btn discord"
+        >
+            💬 Rejoindre le Discord
+        </a>
+
+    </div>
+
+</section>
+
 </main>
 
+
 <footer>
-    🔥 Shop Fire<br><br>
+
+    🔥 <strong>Shop Fire</strong>
+
+    <br><br>
+
+    Paiement via PayPal • Support Discord
+
+    <br><br>
+
     © 2026 Shop Fire — Tous droits réservés.
+
 </footer>
 
-<div id="message"></div>
-
-<script>
-async function buyProduct(productId, button) {
-    button.disabled = true;
-    button.textContent = "⏳ Chargement...";
-
-    try {
-        const response = await fetch("/api/create-order", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ productId: productId })
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            throw new Error(data.error || "Impossible de créer la commande.");
-        }
-
-        if (!data.approvalUrl) {
-            throw new Error("Lien PayPal introuvable.");
-        }
-
-        window.location.href = data.approvalUrl;
-
-    } catch (error) {
-        console.error(error);
-        showMessage("❌ " + error.message);
-        button.disabled = false;
-        button.textContent = "Acheter";
-    }
-}
-
-function showMessage(text) {
-    const message = document.getElementById("message");
-    message.textContent = text;
-    message.style.display = "block";
-
-    setTimeout(() => {
-        message.style.display = "none";
-    }, 5000);
-}
-
-const params = new URLSearchParams(window.location.search);
-
-if (params.get("paypal") === "cancel") {
-    showMessage("❌ Paiement annulé.");
-}
-
-if (params.get("paypal") === "success") {
-    showMessage("✅ Paiement reçu ! Rejoins notre Discord pour la suite.");
-}
-</script>
 
 </body>
 </html>
+```
