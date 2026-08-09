@@ -10,7 +10,7 @@
 <style>
 
 /* =========================================================
-   BASE ET RESET
+   BASE ET RESET (STYLE SOBRE & SOMBRE TYPE GIACOMO)
 ========================================================= */
 
 * {
@@ -24,199 +24,138 @@ html {
 }
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: #080203; /* Fond sombre teinté de rouge au lieu du noir pur */
-    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #060608; /* Fond sombre / presque noir ultra clean */
+    color: #ffffff;
     overflow-x: hidden;
 }
 
 
 /* =========================================================
-   FOND ANIMÉ ROUGE VIF & LUMINEUX 3D
+   EFFETS LUMINEUX SUBTILS EN FOND (RED GLOWS)
 ========================================================= */
 
-#fire-bg {
+#bg-effects {
     position: fixed;
     inset: 0;
     width: 100%;
     height: 100%;
     z-index: -10;
+    pointer-events: none;
     overflow: hidden;
 }
 
-/* Grand halo rouge vif central */
-#fire-bg::before {
-    content: '';
+/* Halo rouge léger en haut au centre */
+.glow-top {
     position: absolute;
-    width: 220%;
-    height: 220%;
-    top: -40%;
-    left: -60%;
-    background-image: 
-        radial-gradient(circle at 40% 40%, #ff1a1a 0%, #b30000 30%, transparent 65%),
-        radial-gradient(circle at 75% 70%, #ff4d00 0%, #800000 35%, transparent 60%);
-    background-size: 100% 100%;
-    opacity: 0.55; /* Opacité beaucoup plus forte pour plus de lumière */
-    filter: blur(80px);
-    animation: move3D 20s ease-in-out infinite alternate;
-    transform: translateZ(0);
-}
-
-/* Second halo lumineux pour la profondeur 3D */
-#fire-bg::after {
-    content: '';
-    position: absolute;
-    width: 200%;
-    height: 200%;
-    top: -50%;
-    left: -50%;
-    background-image: 
-        radial-gradient(circle at 50% 50%, #ff0033 0%, transparent 50%),
-        radial-gradient(circle at 20% 80%, #ff3300 0%, transparent 45%);
-    background-size: 100% 100%;
-    opacity: 0.45;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(255, 30, 0, 0.25) 0%, rgba(255, 0, 0, 0.05) 50%, transparent 70%);
     filter: blur(90px);
-    animation: move3D 28s ease-in-out infinite reverse;
-    transform: translateZ(0);
 }
 
-@keyframes move3D {
-    0% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
-    50% { transform: translate3d(8%, 6%, 0) rotate(4deg) scale(1.08); }
-    100% { transform: translate3d(-5%, 10%, 0) rotate(-3deg) scale(0.95); }
+/* Halo rouge plus léger au milieu */
+.glow-middle {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 900px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(200, 20, 0, 0.15) 0%, transparent 65%);
+    filter: blur(100px);
 }
 
-/* Grille gaming lumineuse */
+/* Grille ultra discrète */
 #grid {
     position: fixed;
     inset: 0;
-    width: 100%;
-    height: 100%;
     z-index: -9;
     background-image: 
-        linear-gradient(rgba(255, 50, 50, 0.12) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 50, 50, 0.12) 1px, transparent 1px);
-    background-size: 70px 70px;
-    background-position: center;
-    mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.95), transparent 85%);
-    opacity: 0.6;
-}
-
-/* Braises montantes plus brillantes */
-.particles {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -8;
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.8), transparent 75%);
     pointer-events: none;
-}
-
-.particles span {
-    position: absolute;
-    width: 4px;
-    height: 4px;
-    background: #ff5522;
-    border-radius: 50%;
-    opacity: 0.6;
-    box-shadow: 0 0 12px #ff4400, 0 0 20px #ff0000;
-    animation: particleUp linear infinite;
-    transform: translateZ(0);
-}
-
-.particles span:nth-child(1) { left: 8%; bottom: -10%; animation-duration: 9s; animation-delay: -1s; }
-.particles span:nth-child(2) { left: 18%; bottom: -10%; animation-duration: 13s; animation-delay: -4s; }
-.particles span:nth-child(3) { left: 28%; bottom: -10%; animation-duration: 11s; animation-delay: -7s; }
-.particles span:nth-child(4) { left: 38%; bottom: -10%; animation-duration: 15s; animation-delay: -2s; }
-.particles span:nth-child(5) { left: 48%; bottom: -10%; animation-duration: 10s; animation-delay: -5s; }
-.particles span:nth-child(6) { left: 58%; bottom: -10%; animation-duration: 14s; animation-delay: -8s; }
-.particles span:nth-child(7) { left: 68%; bottom: -10%; animation-duration: 12s; animation-delay: -3s; }
-.particles span:nth-child(8) { left: 78%; bottom: -10%; animation-duration: 16s; animation-delay: -6s; }
-.particles span:nth-child(9) { left: 88%; bottom: -10%; animation-duration: 11s; animation-delay: -9s; }
-.particles span:nth-child(10) { left: 95%; bottom: -10%; animation-duration: 17s; animation-delay: -2s; }
-
-@keyframes particleUp {
-    0% { transform: translateY(0) scale(1); opacity: 0; }
-    20% { opacity: 0.8; }
-    80% { opacity: 0.3; }
-    100% { transform: translateY(-110vh) scale(0.4); opacity: 0; }
 }
 
 
 /* =========================================================
-   HEADER ET HERO
+   HEADER / HERO
 ========================================================= */
 
 header {
-    min-height: 80vh;
+    min-height: 85vh;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 100px 20px;
+    padding: 100px 20px 60px;
     position: relative;
 }
 
 .hero {
     position: relative;
     z-index: 2;
-    max-width: 950px;
+    max-width: 900px;
 }
 
 .badge {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 10px 22px;
+    padding: 8px 18px;
     border-radius: 999px;
-    border: 1px solid rgba(255, 80, 50, 0.6);
-    background: rgba(180, 20, 0, 0.25);
-    color: #ffb3a6;
-    font-size: 15px;
-    font-weight: bold;
-    margin-bottom: 30px;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 0 25px rgba(255, 40, 0, 0.4);
+    border: 1px solid rgba(255, 60, 0, 0.3);
+    background: rgba(255, 50, 0, 0.08);
+    color: #ff8866;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 25px;
+    backdrop-filter: blur(10px);
 }
 
 .badge span { color: #ff3300; }
 
 .hero h1 {
-    font-size: clamp(60px, 12vw, 120px);
+    font-size: clamp(55px, 10vw, 110px);
     font-weight: 900;
-    letter-spacing: -6px;
-    line-height: 0.9;
+    letter-spacing: -4px;
+    line-height: 1;
     margin-bottom: 25px;
     text-transform: uppercase;
 }
 
 .fire-text {
     color: #ff3300;
-    background: linear-gradient(to bottom, #ff6633, #ff0000);
+    background: linear-gradient(135deg, #ff5500, #ff0000);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 0 30px rgba(255, 50, 0, 0.8));
+    filter: drop-shadow(0 0 25px rgba(255, 50, 0, 0.6));
 }
 
 .hero p {
-    max-width: 750px;
+    max-width: 680px;
     margin: auto;
-    color: #eee;
-    font-size: clamp(18px, 4vw, 22px);
+    color: #a0a0ab;
+    font-size: clamp(16px, 3.5vw, 20px);
     line-height: 1.6;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+    font-weight: 400;
 }
 
 
 /* =========================================================
-   BOUTONS
+   BOUTONS MODERNES
 ========================================================= */
 
 .hero-buttons {
-    margin-top: 45px;
+    margin-top: 40px;
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: 16px;
     flex-wrap: wrap;
 }
 
@@ -224,120 +163,112 @@ header {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    padding: 18px 35px;
-    border-radius: 14px;
+    padding: 16px 32px;
+    border-radius: 12px;
     text-decoration: none;
-    font-weight: bold;
-    font-size: 17px;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    font-weight: 700;
+    font-size: 16px;
+    transition: all 0.25s ease;
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #ff3300, #b30000);
+    background: #ff3300;
     color: white;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 5px 30px rgba(255, 50, 0, 0.5);
+    border: 1px solid #ff4411;
+    box-shadow: 0 4px 20px rgba(255, 50, 0, 0.35);
 }
 
 .btn-primary:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 45px rgba(255, 50, 0, 0.8);
+    background: #e62e00;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(255, 50, 0, 0.5);
 }
 
 .btn-discord {
-    background: #5865f2;
+    background: #18181f;
     color: white;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 5px 25px rgba(88, 101, 242, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .btn-discord:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 40px rgba(88, 101, 242, 0.7);
+    background: #22222d;
+    border-color: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
 }
 
 
 /* =========================================================
-   SECTIONS ET CARTES (LISIBLES ET LUMINEUSES)
+   SECTIONS ET CARTES (ESTHÉTIQUE CLEAN & DARK)
 ========================================================= */
 
 section {
-    max-width: 1300px;
+    max-width: 1200px;
     margin: auto;
-    padding: 100px 25px;
+    padding: 80px 20px;
 }
 
 .section-title {
     text-align: center;
-    margin-bottom: 70px;
-    position: relative;
+    margin-bottom: 60px;
 }
 
 .section-title h2 {
-    font-size: clamp(35px, 8vw, 50px);
+    font-size: clamp(32px, 6vw, 44px);
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: -2px;
+    letter-spacing: -1.5px;
     color: #fff;
-    margin-bottom: 15px;
-    text-shadow: 0 0 20px rgba(255, 50, 0, 0.5);
+    margin-bottom: 12px;
 }
 
 .section-title h2 span { color: #ff3300; }
 
 .section-title p {
-    color: #ddd;
-    font-size: 19px;
-    max-width: 600px;
-    margin: auto;
+    color: #888899;
+    font-size: 17px;
 }
 
 .products {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
 }
 
 .card {
-    position: relative;
-    background: rgba(20, 8, 10, 0.75);
-    border: 1px solid rgba(255, 80, 50, 0.2);
-    border-radius: 24px;
-    padding: 40px;
-    transition: all 0.4s ease;
+    background: rgba(18, 18, 24, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 35px;
+    transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
-    backdrop-filter: blur(12px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
 }
 
 .card:hover {
-    transform: translateY(-10px) scale(1.02);
-    border-color: rgba(255, 60, 0, 0.8);
-    box-shadow: 0 20px 50px rgba(255, 50, 0, 0.4);
-    background: rgba(30, 10, 15, 0.88);
+    transform: translateY(-6px);
+    border-color: rgba(255, 60, 0, 0.4);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 50, 0, 0.15);
+    background: rgba(24, 24, 32, 0.85);
 }
 
 .card-icon {
-    font-size: 50px;
-    margin-bottom: 25px;
-    filter: drop-shadow(0 0 15px rgba(255, 80, 0, 0.5));
+    font-size: 42px;
+    margin-bottom: 20px;
 }
 
 .card h3 {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 700;
     color: #fff;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
 }
 
 .card p {
-    color: #ccc;
-    line-height: 1.6;
-    margin-bottom: 30px;
-    font-size: 16px;
+    color: #9999a5;
+    line-height: 1.5;
+    margin-bottom: 28px;
+    font-size: 15px;
     flex-grow: 1;
 }
 
@@ -347,126 +278,117 @@ section {
     justify-content: space-between;
     margin-top: auto;
     padding-top: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .price {
-    font-size: 36px;
-    font-weight: 900;
-    color: #ff4411;
+    font-size: 32px;
+    font-weight: 800;
+    color: #ffffff;
     letter-spacing: -1px;
-    text-shadow: 0 0 15px rgba(255, 60, 0, 0.5);
 }
 
 .buy {
-    padding: 15px 30px;
+    padding: 12px 24px;
     border: none;
-    border-radius: 12px;
-    background: linear-gradient(135deg, #ff3300, #b30000);
+    border-radius: 10px;
+    background: #ff3300;
     color: white;
-    font-size: 16px;
-    font-weight: bold;
+    font-size: 15px;
+    font-weight: 700;
     cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    box-shadow: 0 4px 15px rgba(255, 50, 0, 0.4);
+    transition: all 0.2s ease;
 }
 
 .buy:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 25px rgba(255, 60, 0, 0.7);
+    background: #e62e00;
+    box-shadow: 0 0 15px rgba(255, 50, 0, 0.5);
 }
 
 
 /* =========================================================
-   CONFIANCE
+   CONFIANCE / AVANTAGES
 ========================================================= */
 
 .trust {
     max-width: 1200px;
     margin: auto;
-    padding: 20px 25px 100px;
+    padding: 40px 20px 80px;
 }
 
 .trust-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 25px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
 }
 
 .trust-card {
-    padding: 35px;
-    background: rgba(20, 8, 10, 0.7);
-    border: 1px solid rgba(255, 80, 50, 0.15);
-    border-radius: 20px;
+    padding: 30px;
+    background: rgba(18, 18, 24, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
     text-align: center;
     transition: all 0.3s ease;
-    backdrop-filter: blur(8px);
 }
 
 .trust-card:hover {
-    border-color: rgba(255, 80, 0, 0.5);
-    transform: translateY(-5px);
-    background: rgba(30, 10, 15, 0.85);
+    border-color: rgba(255, 60, 0, 0.3);
+    transform: translateY(-4px);
+    background: rgba(24, 24, 32, 0.7);
 }
 
 .trust-icon {
-    font-size: 40px;
-    margin-bottom: 20px;
-    color: #ff4411;
-    filter: drop-shadow(0 0 12px rgba(255, 60, 0, 0.5));
+    font-size: 36px;
+    margin-bottom: 16px;
 }
 
 .trust-card h3 {
-    font-size: 20px;
-    margin-bottom: 12px;
+    font-size: 18px;
+    margin-bottom: 10px;
     color: #fff;
 }
 
 .trust-card p {
-    color: #bbb;
+    color: #888899;
     line-height: 1.5;
-    font-size: 15px;
+    font-size: 14px;
 }
 
 
 /* =========================================================
-   AVIS
+   AVIS CLIENTS
 ========================================================= */
 
 .reviews {
-    max-width: 1100px;
+    max-width: 1200px;
     margin: auto;
-    padding: 0 25px 100px;
+    padding: 0 20px 80px;
 }
 
 .review-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 25px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
 }
 
 .review {
-    background: rgba(20, 8, 10, 0.7);
-    border: 1px solid rgba(255, 80, 50, 0.15);
-    border-radius: 20px;
-    padding: 30px;
-    position: relative;
-    backdrop-filter: blur(8px);
+    background: rgba(18, 18, 24, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    padding: 28px;
 }
 
 .stars {
-    color: #ffcc00;
-    margin-bottom: 18px;
-    font-size: 18px;
-    letter-spacing: 2px;
+    color: #ffaa00;
+    margin-bottom: 15px;
+    font-size: 16px;
 }
 
 .review p {
-    color: #ddd;
-    line-height: 1.6;
+    color: #aaaab5;
+    line-height: 1.5;
     margin-bottom: 20px;
-    font-size: 16px;
+    font-size: 15px;
     font-style: italic;
 }
 
@@ -477,55 +399,61 @@ section {
 }
 
 .client-avatar {
-    width: 40px;
-    height: 40px;
-    background: #441100;
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 50, 0, 0.15);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: bold;
+    font-weight: 700;
     color: #ff5522;
-    border: 1px solid rgba(255, 80, 0, 0.5);
+    border: 1px solid rgba(255, 50, 0, 0.3);
 }
 
 .review strong {
     color: white;
-    font-size: 16px;
+    font-size: 15px;
 }
 
 
 /* =========================================================
-   DISCORD SECTION
+   DISCORD BANNER
 ========================================================= */
 
 .discord-section {
     max-width: 1000px;
-    margin: 0 auto 100px;
-    padding: 80px 30px;
+    margin: 0 auto 80px;
+    padding: 60px 25px;
     text-align: center;
-    border-radius: 30px;
-    background: 
-        linear-gradient(135deg, rgba(88, 101, 242, 0.18), rgba(255, 50, 0, 0.12)),
-        rgba(20, 8, 12, 0.85);
-    border: 1px solid rgba(88, 101, 242, 0.4);
-    backdrop-filter: blur(12px);
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+    border-radius: 24px;
+    background: rgba(18, 18, 24, 0.8);
+    border: 1px solid rgba(88, 101, 242, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.discord-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(88, 101, 242, 0.12), transparent 70%);
+    pointer-events: none;
 }
 
 .discord-section h2 {
-    font-size: clamp(30px, 7vw, 45px);
-    margin-bottom: 20px;
+    font-size: clamp(28px, 5vw, 40px);
+    margin-bottom: 16px;
     text-transform: uppercase;
 }
 
 .discord-section h2 span { color: #5865f2; }
 
 .discord-section p {
-    color: #ccc;
-    font-size: 19px;
-    max-width: 650px;
-    margin: 0 auto 35px;
+    color: #a0a0ab;
+    font-size: 17px;
+    max-width: 600px;
+    margin: 0 auto 30px;
 }
 
 
@@ -534,15 +462,16 @@ section {
 ========================================================= */
 
 footer {
-    border-top: 1px solid rgba(255, 80, 50, 0.15);
-    padding: 50px 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 40px 20px;
     text-align: center;
-    color: #888;
-    background: rgba(10, 3, 5, 0.95);
+    color: #666677;
+    background: #040405;
+    font-size: 14px;
 }
 
 footer strong {
-    color: #ff4411;
+    color: #ff3300;
 }
 
 
@@ -551,16 +480,11 @@ footer strong {
 ========================================================= */
 
 @media (max-width: 768px) {
-    header { padding: 80px 15px; }
-    .hero h1 { letter-spacing: -3px; }
-    .hero p { font-size: 17px; }
-    .btn { padding: 15px 25px; font-size: 16px; }
-    section { padding: 70px 15px; }
-    .section-title { margin-bottom: 50px; }
+    header { padding: 80px 15px 40px; }
+    .hero h1 { letter-spacing: -2px; }
+    .btn { width: 100%; justify-content: center; }
     .products { grid-template-columns: 1fr; }
-    .card { padding: 30px; }
     .trust-grid { grid-template-columns: 1fr; }
-    #grid { background-size: 50px 50px; }
 }
 
 </style>
@@ -569,13 +493,12 @@ footer strong {
 
 <body>
 
-<!-- FOND ANIMÉ ROUGE VIF LUMINEUX -->
-<div id="fire-bg"></div>
-<div id="grid"></div>
-<div class="particles">
-    <span></span><span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span><span></span>
+<!-- EFFETS LUMINEUX SUBTILS -->
+<div id="bg-effects">
+    <div class="glow-top"></div>
+    <div class="glow-middle"></div>
 </div>
+<div id="grid"></div>
 
 <!-- =====================================================
      HERO (ACCUEIL)
@@ -603,7 +526,7 @@ footer strong {
             <a href="#boutique" class="btn btn-primary">
                 🛒 Voir la boutique
             </a>
-            <a href="[https://discord.gg/2XUNQeCU8H](https://discord.gg/2XUNQeCU8H)" target="_blank" class="btn btn-discord">
+            <a href="https://discord.gg/2XUNQeCU8H" target="_blank" class="btn btn-discord">
                 <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path d="M13.545 2.907a13.227 13.227 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.16 12.16 0 0 0-3.658 0 8.258 8.258 0 0 0-.412-.833.051.051 0 0 0-.052-.025 13.229 13.229 0 0 0-3.257 1.011.041.041 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032c.001.014.01.028.021.037a13.276 13.276 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019c.308-.42.582-.863.818-1.329a.05.05 0 0 0-.01-.059.051.051 0 0 0-.018-.011 8.875 8.875 0 0 1-1.248-.595.05.05 0 0 1-.02-.066.051.051 0 0 1 .015-.019c.084-.063.168-.129.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.052.052 0 0 1 .053.007c.08.066.164.132.248.195a.051.051 0 0 1-.004.085 8.254 8.254 0 0 1-1.249.594.05.05 0 0 0-.03.03.052.052 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.235 13.235 0 0 0 4.001-2.02.049.049 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.034.034 0 0 0-.02-.019Zm-8.198 7.307c-.789 0-1.438-.724-1.438-1.612 0-.889.637-1.613 1.438-1.613.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612Zm5.316 0c-.788 0-1.438-.724-1.438-1.612 0-.889.637-1.613 1.438-1.613.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612Z"></path></svg>
                 Notre Discord
             </a>
@@ -776,8 +699,8 @@ footer strong {
 <div class="discord-section">
     <h2>💬 Besoin <span>d'aide</span> ?</h2>
     <p>Rejoins notre serveur Discord pour nous contacter et suivre ta commande.</p>
-    <a href="[https://discord.gg/2XUNQeCU8H](https://discord.gg/2XUNQeCU8H)" target="_blank" class="btn btn-discord">
-        <svg width="22" height="22" viewBox="0 0 16 16" fill="currentColor"><path d="M13.545 2.907a13.227 13.227 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.16 12.16 0 0 0-3.658 0 8.258 8.258 0 0 0-.412-.833.051.051 0 0 0-.052-.025 13.229 13.229 0 0 0-3.257 1.011.041.041 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032c.001.014.01.028.021.037a13.276 13.276 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019c.308-.42.582-.863.818-1.329a.05.05 0 0 0-.01-.059.051.051 0 0 0-.018-.011 8.875 8.875 0 0 1-1.248-.595.05.05 0 0 1-.02-.066.051.051 0 0 1 .015-.019c.084-.063.168-.129.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.052.052 0 0 1 .053.007c.08.066.164.132.248.195a.051.051 0 0 1-.004.085 8.254 8.254 0 0 1-1.249.594.05.05 0 0 0-.03.03.052.052 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.235 13.235 0 0 0 4.001-2.02.049.049 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.034.034 0 0 0-.02-.019Zm-8.198 7.307c-.789 0-1.438-.724-1.438-1.612 0-.889.637-1.613 1.438-1.613.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612Zm5.316 0c-.788 0-1.438-.724-1.438-1.612 0-.889.637-1.613 1.438-1.613.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612Z"></path></svg>
+    <a href="https://discord.gg/2XUNQeCU8H" target="_blank" class="btn btn-discord">
+        <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path d="M13.545 2.907a13.227 13.227 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.16 12.16 0 0 0-3.658 0 8.258 8.258 0 0 0-.412-.833.051.051 0 0 0-.052-.025 13.229 13.229 0 0 0-3.257 1.011.041.041 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032c.001.014.01.028.021.037a13.276 13.276 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019c.308-.42.582-.863.818-1.329a.05.05 0 0 0-.01-.059.051.051 0 0 0-.018-.011 8.875 8.875 0 0 1-1.248-.595.05.05 0 0 1-.02-.066.051.051 0 0 1 .015-.019c.084-.063.168-.129.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.052.052 0 0 1 .053.007c.08.066.164.132.248.195a.051.051 0 0 1-.004.085 8.254 8.254 0 0 1-1.249.594.05.05 0 0 0-.03.03.052.052 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.235 13.235 0 0 0 4.001-2.02.049.049 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.034.034 0 0 0-.02-.019Zm-8.198 7.307c-.789 0-1.438-.724-1.438-1.612 0-.889.637-1.613 1.438-1.613.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612Zm5.316 0c-.788 0-1.438-.724-1.438-1.612 0-.889.637-1.613 1.438-1.613.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612Z"></path></svg>
         🚀 Rejoindre Shop Fire
     </a>
 </div>
@@ -788,7 +711,7 @@ footer strong {
 ===================================================== -->
 <footer>
     <p>© 2026 <strong>Shop Fire</strong> — Tous droits réservés.</p>
-    <p style="margin-top:10px;">Boutique gaming • Discord</p>
+    <p style="margin-top:8px;">Boutique gaming • Discord</p>
 </footer>
 
 </body>
