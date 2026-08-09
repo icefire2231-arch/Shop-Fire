@@ -20,17 +20,15 @@ html {
 
 body {
     font-family: Arial, Helvetica, sans-serif;
-    color: white;
+    color: #fff;
     min-height: 100vh;
     overflow-x: hidden;
     background:
-        radial-gradient(circle at 10% 20%, rgba(255,0,60,.35), transparent 30%),
-        radial-gradient(circle at 90% 20%, rgba(0,100,255,.35), transparent 30%),
-        radial-gradient(circle at 50% 90%, rgba(120,0,255,.25), transparent 35%),
+        radial-gradient(circle at 10% 10%, rgba(255,0,50,.30), transparent 30%),
+        radial-gradient(circle at 90% 10%, rgba(0,100,255,.30), transparent 30%),
+        radial-gradient(circle at 50% 100%, rgba(120,0,255,.22), transparent 35%),
         #05050b;
 }
-
-/* FOND ANIMÉ */
 
 body::before {
     content: "";
@@ -38,9 +36,9 @@ body::before {
     inset: -50%;
     z-index: -2;
     background:
-        linear-gradient(120deg, transparent 35%, rgba(255,0,60,.14), transparent 60%),
-        linear-gradient(300deg, transparent 35%, rgba(0,100,255,.14), transparent 60%);
-    animation: backgroundMove 12s ease-in-out infinite alternate;
+        linear-gradient(120deg, transparent 35%, rgba(255,0,60,.12), transparent 60%),
+        linear-gradient(300deg, transparent 35%, rgba(0,100,255,.12), transparent 60%);
+    animation: moveBg 12s ease-in-out infinite alternate;
 }
 
 body::after {
@@ -50,12 +48,12 @@ body::after {
     z-index: -1;
     pointer-events: none;
     background-image:
-        radial-gradient(circle, rgba(255,255,255,.13) 1px, transparent 1px);
+        radial-gradient(circle, rgba(255,255,255,.12) 1px, transparent 1px);
     background-size: 45px 45px;
     animation: stars 18s linear infinite;
 }
 
-@keyframes backgroundMove {
+@keyframes moveBg {
     from {
         transform: translate(-5%, -5%) rotate(0deg);
     }
@@ -65,12 +63,8 @@ body::after {
 }
 
 @keyframes stars {
-    from {
-        transform: translateY(0);
-    }
-    to {
-        transform: translateY(45px);
-    }
+    from { transform: translateY(0); }
+    to { transform: translateY(45px); }
 }
 
 /* HEADER */
@@ -80,7 +74,7 @@ header {
     top: 0;
     z-index: 100;
     padding: 18px 7%;
-    background: rgba(5,5,12,.75);
+    background: rgba(5,5,12,.78);
     backdrop-filter: blur(20px);
     border-bottom: 1px solid rgba(255,255,255,.08);
 }
@@ -110,7 +104,7 @@ nav a {
     text-decoration: none;
     margin-left: 25px;
     font-weight: bold;
-    opacity: .85;
+    transition: .2s;
 }
 
 nav a:hover {
@@ -146,13 +140,16 @@ nav a:hover {
     font-weight: 1000;
     letter-spacing: -5px;
     line-height: .95;
-    text-shadow:
-        0 0 15px rgba(255,255,255,.2),
-        0 0 40px rgba(255,0,50,.5);
 }
 
 .fire {
-    background: linear-gradient(90deg, #ff1744, #ff5e00, #008cff, #ff1744);
+    background: linear-gradient(
+        90deg,
+        #ff1744,
+        #ff5e00,
+        #008cff,
+        #ff1744
+    );
     background-size: 300%;
     -webkit-background-clip: text;
     color: transparent;
@@ -160,12 +157,8 @@ nav a:hover {
 }
 
 @keyframes fireText {
-    from {
-        background-position: 0%;
-    }
-    to {
-        background-position: 300%;
-    }
+    from { background-position: 0%; }
+    to { background-position: 300%; }
 }
 
 .hero p {
@@ -184,6 +177,7 @@ nav a:hover {
 }
 
 .btn {
+    display: inline-block;
     padding: 15px 25px;
     border-radius: 14px;
     color: white;
@@ -226,7 +220,7 @@ section {
     margin-bottom: 55px;
 }
 
-/* CATÉGORIES */
+/* CATEGORIES */
 
 .category {
     margin-bottom: 90px;
@@ -247,7 +241,7 @@ section {
     background: linear-gradient(90deg, rgba(255,30,70,.8), transparent);
 }
 
-/* PRODUITS */
+/* PRODUCTS */
 
 .products {
     display: grid;
@@ -270,18 +264,6 @@ section {
     transition: .35s;
 }
 
-.card::before {
-    content: "";
-    position: absolute;
-    width: 180px;
-    height: 180px;
-    background: #ff1744;
-    filter: blur(100px);
-    opacity: .15;
-    top: -80px;
-    right: -80px;
-}
-
 .card:hover {
     transform: translateY(-10px);
     border-color: rgba(255,40,80,.5);
@@ -296,7 +278,7 @@ section {
     object-fit: cover;
     border-radius: 17px;
     margin-bottom: 20px;
-    background: linear-gradient(135deg, #171725, #0c0c15);
+    background: #11111c;
     border: 1px solid rgba(255,255,255,.1);
 }
 
@@ -321,13 +303,14 @@ section {
 .price {
     font-size: 30px;
     font-weight: 900;
-    text-shadow: 0 0 15px rgba(255,255,255,.2);
 }
 
 .buy {
+    display: inline-block;
     border: none;
     cursor: pointer;
     color: white;
+    text-decoration: none;
     font-weight: bold;
     padding: 13px 20px;
     border-radius: 12px;
@@ -341,7 +324,73 @@ section {
     box-shadow: 0 0 30px rgba(0,140,255,.65);
 }
 
-/* SÉCURITÉ */
+/* AFTER PAYMENT */
+
+.after-payment {
+    max-width: 900px;
+    margin: 20px auto 0;
+    padding: 40px 30px;
+    text-align: center;
+    border-radius: 28px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(0,100,255,.13),
+            rgba(255,0,60,.13)
+        );
+    border: 1px solid rgba(255,255,255,.12);
+    box-shadow:
+        0 0 50px rgba(0,80,255,.08),
+        inset 0 0 40px rgba(255,255,255,.02);
+}
+
+.after-icon {
+    font-size: 55px;
+    margin-bottom: 15px;
+}
+
+.after-payment h3 {
+    font-size: 30px;
+    margin-bottom: 15px;
+}
+
+.after-payment p {
+    color: rgba(255,255,255,.65);
+    line-height: 1.7;
+    max-width: 700px;
+    margin: auto;
+}
+
+.steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin: 30px 0;
+}
+
+.step {
+    padding: 20px;
+    border-radius: 18px;
+    background: rgba(255,255,255,.045);
+    border: 1px solid rgba(255,255,255,.08);
+}
+
+.step-number {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.step strong {
+    display: block;
+    margin-bottom: 7px;
+}
+
+.step span {
+    color: rgba(255,255,255,.5);
+    font-size: 14px;
+}
+
+/* TRUST */
 
 .trust {
     display: grid;
@@ -378,32 +427,6 @@ section {
     line-height: 1.5;
 }
 
-/* APRÈS PAIEMENT */
-
-.payment-info {
-    max-width: 850px;
-    margin: 30px auto 0;
-    padding: 30px;
-    border-radius: 22px;
-    background: linear-gradient(
-        135deg,
-        rgba(0,100,255,.10),
-        rgba(255,0,60,.10)
-    );
-    border: 1px solid rgba(255,255,255,.1);
-    text-align: center;
-}
-
-.payment-info strong {
-    color: white;
-}
-
-.payment-info p {
-    color: rgba(255,255,255,.65);
-    line-height: 1.7;
-    margin-top: 10px;
-}
-
 /* FOOTER */
 
 footer {
@@ -413,23 +436,10 @@ footer {
     color: rgba(255,255,255,.45);
 }
 
-/* MESSAGE */
-
-#message {
-    position: fixed;
-    bottom: 25px;
-    right: 25px;
-    max-width: 370px;
-    padding: 20px 22px;
-    border-radius: 17px;
-    background: rgba(10,10,18,.96);
-    border: 1px solid rgba(255,255,255,.15);
-    box-shadow: 0 15px 50px rgba(0,0,0,.5);
-    display: none;
-    z-index: 999;
-}
+/* MOBILE */
 
 @media(max-width:700px) {
+
     nav {
         display: none;
     }
@@ -440,6 +450,14 @@ footer {
 
     .category-title {
         font-size: 25px;
+    }
+
+    .steps {
+        grid-template-columns: 1fr;
+    }
+
+    .after-payment {
+        padding: 30px 18px;
     }
 }
 </style>
@@ -456,6 +474,7 @@ footer {
 
         <nav>
             <a href="#boutique">Boutique</a>
+            <a href="#apres-paiement">Après paiement</a>
             <a href="#securite">Sécurité</a>
             <a href="https://discord.gg/2XUNQeCU8H" target="_blank">
                 Discord
@@ -485,8 +504,8 @@ footer {
     <p>
         Découvre nos offres et services dédiés à
         Clash of Clans et Brawl Stars.
-        Choisis ton offre, effectue ton paiement
-        via PayPal et retrouve-nous ensuite sur Discord.
+        Choisis ton offre et effectue ton paiement
+        directement via PayPal.
     </p>
 
     <div class="buttons">
@@ -517,7 +536,7 @@ footer {
     </h2>
 
     <p class="section-subtitle">
-        Sélectionne ton jeu puis l'offre qui t'intéresse.
+        Choisis ton jeu puis l'offre qui t'intéresse.
     </p>
 
 
@@ -531,6 +550,9 @@ footer {
 
         <div class="products">
 
+
+            <!-- PASS -->
+
             <div class="card">
 
                 <img
@@ -542,7 +564,7 @@ footer {
                 <h3>🏆 Pass Clash of Clans</h3>
 
                 <p>
-                    Notre offre dédiée au Pass
+                    Offre dédiée au Pass
                     Clash of Clans.
                 </p>
 
@@ -552,7 +574,7 @@ footer {
 
                     <a
                         class="buy"
-                        href="https://www.paypal.me/FireTwitch955/5EUR"
+                        href="https://www.paypal.me/FireTwitch955/5"
                         target="_blank"
                         rel="noopener"
                     >
@@ -563,6 +585,8 @@ footer {
 
             </div>
 
+
+            <!-- DECOR -->
 
             <div class="card">
 
@@ -585,7 +609,7 @@ footer {
 
                     <a
                         class="buy"
-                        href="https://www.paypal.me/FireTwitch955/3EUR"
+                        href="https://www.paypal.me/FireTwitch955/3"
                         target="_blank"
                         rel="noopener"
                     >
@@ -596,6 +620,8 @@ footer {
 
             </div>
 
+
+            <!-- SCRIPT -->
 
             <div class="card">
 
@@ -618,7 +644,7 @@ footer {
 
                     <a
                         class="buy"
-                        href="https://www.paypal.me/FireTwitch955/15EUR"
+                        href="https://www.paypal.me/FireTwitch955/15"
                         target="_blank"
                         rel="noopener"
                     >
@@ -629,6 +655,8 @@ footer {
 
             </div>
 
+
+            <!-- DONS -->
 
             <div class="card">
 
@@ -651,7 +679,7 @@ footer {
 
                     <a
                         class="buy"
-                        href="https://www.paypal.me/FireTwitch955/5EUR"
+                        href="https://www.paypal.me/FireTwitch955/5"
                         target="_blank"
                         rel="noopener"
                     >
@@ -662,6 +690,8 @@ footer {
 
             </div>
 
+
+            <!-- FARM -->
 
             <div class="card">
 
@@ -684,7 +714,7 @@ footer {
 
                     <a
                         class="buy"
-                        href="https://www.paypal.me/FireTwitch955/5EUR"
+                        href="https://www.paypal.me/FireTwitch955/5"
                         target="_blank"
                         rel="noopener"
                     >
@@ -714,15 +744,15 @@ footer {
 
                 <img
                     class="product-image"
-                    src="https://placehold.co/800x500/151522/ffffff?text=BRAWL+PASS"
+                    src="https://placehold.co/800x500/151522/ffffff?text=BRAWL+STARS"
                     alt="Brawl Stars"
                 >
 
-                <h3>⭐ Brawl Stars</h3>
+                <h3>⭐ Offre Brawl Stars</h3>
 
                 <p>
-                    Notre offre dédiée à
-                    Brawl Stars.
+                    Notre offre dédiée
+                    à Brawl Stars.
                 </p>
 
                 <div class="price-row">
@@ -731,7 +761,7 @@ footer {
 
                     <a
                         class="buy"
-                        href="https://www.paypal.me/FireTwitch955/8EUR"
+                        href="https://www.paypal.me/FireTwitch955/8"
                         target="_blank"
                         rel="noopener"
                     >
@@ -749,94 +779,181 @@ footer {
 </section>
 
 
-<!-- SÉCURITÉ -->
+<!-- APRÈS PAIEMENT -->
 
-<section id="securite">
+<section id="apres-paiement">
 
-    <h2 class="section-title">
-        🔐 Une commande simple
-    </h2>
+    <div class="after-payment">
 
-    <p class="section-subtitle">
-        Nous faisons au maximum pour rendre ton expérience claire.
-    </p>
-
-    <div class="trust">
-
-        <div class="trust-card">
-            <div class="trust-icon">🔒</div>
-
-            <h3>Paiement PayPal</h3>
-
-            <p>
-                Le paiement est effectué directement
-                sur PayPal. Tes informations de paiement
-                ne sont pas saisies sur Shop Fire.
-            </p>
+        <div class="after-icon">
+            ✅
         </div>
-
-
-        <div class="trust-card">
-            <div class="trust-icon">🛡️</div>
-
-            <h3>Paiement protégé</h3>
-
-            <p>
-                Le paiement s'effectue sur
-                l'environnement PayPal et non
-                directement sur notre site.
-            </p>
-        </div>
-
-
-        <div class="trust-card">
-            <div class="trust-icon">⚡</div>
-
-            <h3>Commande simple</h3>
-
-            <p>
-                Sélectionne ton offre, clique sur
-                Acheter puis effectue ton paiement.
-            </p>
-        </div>
-
-
-        <div class="trust-card">
-            <div class="trust-icon">💬</div>
-
-            <h3>Support Discord</h3>
-
-            <p>
-                Après ton paiement, rejoins notre
-                Discord pour nous transmettre les
-                informations nécessaires à ta commande.
-            </p>
-        </div>
-
-    </div>
-
-
-    <div class="payment-info">
 
         <h3>
-            💳 Après ton paiement
+            Merci pour ta commande !
         </h3>
 
         <p>
-            Une fois ton paiement effectué sur PayPal,
-            rejoins notre Discord et contacte le support
-            afin que nous puissions traiter ta commande.
+            Après avoir effectué ton paiement sur PayPal,
+            reviens sur cette page puis rejoins notre Discord.
+            Notre équipe pourra vérifier ton paiement et
+            prendre en charge ta commande.
         </p>
 
-        <br>
+
+        <div class="steps">
+
+            <div class="step">
+
+                <div class="step-number">
+                    💳
+                </div>
+
+                <strong>1. Paie sur PayPal</strong>
+
+                <span>
+                    Effectue le paiement de ton offre
+                    via PayPal.
+                </span>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    💬
+                </div>
+
+                <strong>2. Rejoins Discord</strong>
+
+                <span>
+                    Ouvre notre serveur et contacte
+                    le support.
+                </span>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    🔥
+                </div>
+
+                <strong>3. Ta commande</strong>
+
+                <span>
+                    Indique ton offre et les informations
+                    nécessaires au traitement.
+                </span>
+
+            </div>
+
+        </div>
+
 
         <a
             href="https://discord.gg/2XUNQeCU8H"
             target="_blank"
             class="btn discord"
         >
-            💬 Rejoindre le Discord
+            💬 J'ai payé — Ouvrir Discord
         </a>
+
+    </div>
+
+</section>
+
+
+<!-- SÉCURITÉ -->
+
+<section id="securite">
+
+    <h2 class="section-title">
+        🔐 Paiement & sécurité
+    </h2>
+
+    <p class="section-subtitle">
+        Une expérience simple et transparente.
+    </p>
+
+
+    <div class="trust">
+
+        <div class="trust-card">
+
+            <div class="trust-icon">
+                🔒
+            </div>
+
+            <h3>
+                Paiement PayPal
+            </h3>
+
+            <p>
+                Le paiement est effectué directement
+                sur PayPal. Les informations de paiement
+                ne sont pas saisies sur Shop Fire.
+            </p>
+
+        </div>
+
+
+        <div class="trust-card">
+
+            <div class="trust-icon">
+                🛡️
+            </div>
+
+            <h3>
+                Environnement PayPal
+            </h3>
+
+            <p>
+                Lorsque tu cliques sur Acheter,
+                tu es redirigé vers PayPal pour
+                effectuer ton paiement.
+            </p>
+
+        </div>
+
+
+        <div class="trust-card">
+
+            <div class="trust-icon">
+                ⚡
+            </div>
+
+            <h3>
+                Commande simple
+            </h3>
+
+            <p>
+                Choisis ton offre, paie sur PayPal,
+                puis contacte notre support Discord.
+            </p>
+
+        </div>
+
+
+        <div class="trust-card">
+
+            <div class="trust-icon">
+                💬
+            </div>
+
+            <h3>
+                Support Discord
+            </h3>
+
+            <p>
+                Une question ou un problème ?
+                Notre Discord est disponible pour
+                le suivi des commandes.
+            </p>
+
+        </div>
 
     </div>
 
@@ -858,7 +975,6 @@ footer {
     © 2026 Shop Fire — Tous droits réservés.
 
 </footer>
-
 
 </body>
 </html>
