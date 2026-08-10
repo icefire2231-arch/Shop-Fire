@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Shop Fire 🔥</title>
 
+<!-- SUPABASE CLIENT JS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -90,15 +93,72 @@ text-shadow:0 0 20px rgba(255,0,50,.8);
 nav{
 display:flex;
 align-items:center;
+gap:18px;
 }
 nav a{
 color:#fff;
 text-decoration:none;
-margin-left:24px;
 font-weight:bold;
 transition:.2s;
 }
 nav a:hover{color:#ff1744}
+
+/* FIDÉLITÉ WIDGET */
+.auth-box{
+display:flex;
+align-items:center;
+gap:10px;
+}
+.login-btn{
+background:rgba(255,255,255,.1);
+border:1px solid rgba(255,255,255,.2);
+color:#fff;
+padding:8px 14px;
+border-radius:12px;
+font-size:13px;
+font-weight:bold;
+cursor:pointer;
+transition:.2s;
+}
+.login-btn:hover{
+background:rgba(255,255,255,.2);
+transform:translateY(-2px);
+}
+.user-badge{
+display:none;
+align-items:center;
+gap:8px;
+background:rgba(255,255,255,.06);
+border:1px solid rgba(255,255,255,.15);
+padding:6px 12px;
+border-radius:20px;
+}
+.user-pts{
+color:#ffd700;
+font-weight:900;
+font-size:14px;
+}
+.claim-btn{
+display:none;
+background:#00d084;
+color:#fff;
+border:none;
+padding:5px 10px;
+border-radius:10px;
+font-size:12px;
+font-weight:bold;
+cursor:pointer;
+box-shadow:0 0 10px rgba(0,208,132,.4);
+}
+.logout-btn{
+background:none;
+border:none;
+color:rgba(255,255,255,.4);
+font-size:14px;
+cursor:pointer;
+margin-left:4px;
+}
+.logout-btn:hover{color:#ff1744}
 
 .cart-nav-btn{
 position:relative;
@@ -109,7 +169,6 @@ padding:10px 18px;
 border-radius:12px;
 font-weight:bold;
 cursor:pointer;
-margin-left:24px;
 display:flex;
 align-items:center;
 gap:8px;
@@ -675,7 +734,7 @@ nav a{display:none}
 
 <!-- BANNIÈRE D'ANNONCE -->
 <div class="announcement-bar">
-    ⚡ LIVRAISON RAPIDE • Support client ouvert 7j/7 sur Discord
+    ⚡ LIVRAISON RAPIDE • Support client ouvert 7j/7 sur Discord • 10 € = 1 point de fidélité !
 </div>
 
 <header>
@@ -688,6 +747,17 @@ nav a{display:none}
 <a href="#apres-paiement">Après paiement</a>
 <a href="#securite">Sécurité</a>
 <a href="https://discord.gg/2XUNQeCU8H" target="_blank">Discord</a>
+
+<!-- WIDGET FIDÉLITÉ -->
+<div class="auth-box">
+    <button id="login-btn" onclick="loginWithGoogle()" class="login-btn">🔑 Se connecter</button>
+    <div id="user-badge" class="user-badge">
+        <span id="user-pts" class="user-pts">⭐ 0 pts</span>
+        <button id="claim-btn" onclick="claimFreePass()" class="claim-btn">🎁 Réclamer Pass</button>
+        <button onclick="logout()" class="logout-btn" title="Déconnexion">✖</button>
+    </div>
+</div>
+
 <button class="cart-nav-btn" id="open-cart">
 🛒 Panier <span class="cart-count" id="cart-count">0</span>
 </button>
@@ -708,7 +778,7 @@ SHOP <span class="fire">FIRE</span> 🔥
 <p>
 Découvre nos offres et services dédiés à
 Clash of Clans, Brawl Stars et Clash Royale.
-Ajoute tes articles au panier et effectue ton paiement en 1 seule fois via PayPal.
+Connecte-toi pour cumuler 1 point tous les 10 € d'achat et débloquer des Pass gratuits !
 </p>
 
 <div class="buttons">
@@ -923,7 +993,7 @@ class="product-image"
 src="https://placehold.co/900x550/151522/ffd700?text=👑+PASS+ROYALE"
 alt="Pass Clash Royale">
 
-<h3>👑 Pass Clash Royale</h3>
+<h3>👑 Pass Royale</h3>
 
 <p>
 Profite de notre offre dédiée au Pass Royale.
@@ -958,6 +1028,16 @@ Profite de notre offre dédiée au Pass Royale.
         </button>
         <div class="faq-answer">
             <p>La livraison s'effectue généralement <strong>dans l'heure</strong> suivant la validation de ton paiement et l'ouverture de ton ticket sur Discord.</p>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+            <span>⭐ Comment fonctionnent les points de fidélité ?</span>
+            <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+            <p>Connecte-toi à ton compte avant de commander ! Pour chaque tranche de <strong>10 € d'achat</strong>, tu gagnes <strong>1 point de fidélité</strong>. Dès que tu atteins <strong>10 points</strong>, tu peux débloquer un Pass de ton choix 100 % gratuit.</p>
         </div>
     </div>
 
@@ -1145,6 +1225,14 @@ Paiement via PayPal • Support Discord
 </footer>
 
 <script>
+// CONFIGURATION SUPABASE AUTOMATIQUE
+const SUPABASE_URL = "https://pxsiocyavagdalmpnbdf.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_tnf45GME8HyX9vwc1rWxTw_R_Jno"; 
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+let currentUser = null;
+let userPoints = 0;
+
 let cart = JSON.parse(localStorage.getItem('shop_fire_cart')) || [];
 
 const openCartBtn = document.getElementById('open-cart');
@@ -1159,6 +1247,50 @@ const copyBtn = document.getElementById('copy-btn');
 
 const PAYPAL_USERNAME = "FireTwitch955";
 const DISCORD_WEBHOOK_URL = ""; 
+
+// GESTION AUTH & FIDÉLITÉ
+async function loginWithGoogle() {
+    await _supabase.auth.signInWithOAuth({ provider: 'google' });
+}
+
+async function logout() {
+    await _supabase.auth.signOut();
+    window.location.reload();
+}
+
+async function checkUserSession() {
+    const { data: { user } } = await _supabase.auth.getUser();
+    if (user) {
+        currentUser = user;
+        document.getElementById('login-btn').style.display = 'none';
+        document.getElementById('user-badge').style.display = 'flex';
+        await loadUserPoints(user.id);
+    }
+}
+
+async function loadUserPoints(userId) {
+    let { data } = await _supabase
+        .from('profiles')
+        .select('points')
+        .eq('id', userId)
+        .single();
+
+    if (data) {
+        userPoints = data.points || 0;
+        document.getElementById('user-pts').textContent = `⭐ ${userPoints} pts`;
+        if (userPoints >= 10) {
+            document.getElementById('claim-btn').style.display = 'inline-block';
+        }
+    }
+}
+
+function claimFreePass() {
+    if (userPoints < 10) return;
+    let passName = prompt("Quel Pass gratuit souhaites-tu réclamer ?\n- Pass Clash of Clans\n- Pass Brawl Stars\n- Pass Royale");
+    if (passName) {
+        alert(`🎉 Choix enregistré (${passName}) ! Ouvre un ticket sur Discord avec l'adresse ${currentUser.email} pour recevoir ton Pass gratuit !`);
+    }
+}
 
 function toggleCart() {
     cartOverlay.classList.toggle('active');
@@ -1253,7 +1385,16 @@ function copyCartSummary() {
         summary += `- ${item.name} (x${item.quantity}) : ${item.price * item.quantity} €\n`;
         total += item.price * item.quantity;
     });
-    summary += `💰 **Total à payer** : ${total} €`;
+    
+    let earnedPoints = Math.floor(total / 10);
+    summary += `💰 **Total à payer** : ${total} €\n`;
+    
+    if (currentUser) {
+        summary += `👤 **Compte** : ${currentUser.email}\n`;
+        summary += `⭐ **Points à créditer** : +${earnedPoints} pts`;
+    } else {
+        summary += `💡 *(Connecte-toi sur le site pour gagner des points de fidélité !)*`;
+    }
 
     navigator.clipboard.writeText(summary).then(() => {
         copyBtn.textContent = "✅ Résumé copié !";
@@ -1275,7 +1416,8 @@ function sendDiscordNotification() {
             color: 16717380,
             fields: [
                 { name: "Articles", value: itemsList },
-                { name: "Total", value: `${total} €`, inline: true }
+                { name: "Total", value: `${total} €`, inline: true },
+                { name: "Compte Client", value: currentUser ? currentUser.email : "Non connecté" }
             ],
             footer: { text: "Un client a cliqué sur le bouton de paiement PayPal" }
         }]
@@ -1329,7 +1471,9 @@ function toggleFaq(button) {
     }
 }
 
+// Initialisation
 updateCartUI();
+checkUserSession();
 </script>
 
 </body>
