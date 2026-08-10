@@ -44,6 +44,26 @@ from{transform:translateY(0)}
 to{transform:translateY(45px)}
 }
 
+/* BANNIÈRE D'ANNONCE */
+.announcement-bar{
+background:linear-gradient(90deg,#ff1744,#ff4d00,#5865f2);
+background-size:200% 200%;
+animation:gradientMove 6s ease infinite;
+color:#fff;
+text-align:center;
+padding:8px 15px;
+font-size:13px;
+font-weight:bold;
+letter-spacing:.5px;
+position:relative;
+z-index:101;
+}
+@keyframes gradientMove{
+0%{background-position:0% 50%}
+50%{background-position:100% 50%}
+100%{background-position:0% 50%}
+}
+
 header{
 position:sticky;
 top:0;
@@ -268,7 +288,6 @@ border-color:rgba(255,40,80,.5);
 box-shadow:0 15px 60px rgba(0,0,0,.5),0 0 35px rgba(255,20,60,.18);
 }
 
-/* BADGES SUR LES CARTES */
 .card-badge{
 position:absolute;
 top:30px;
@@ -329,6 +348,87 @@ transition:.25s;
 .add-cart:hover{
 transform:scale(1.08);
 box-shadow:0 0 30px rgba(255,30,60,.65);
+}
+
+/* FAQ SECTION */
+.faq-container{
+max-width:850px;
+margin:auto;
+display:flex;
+flex-direction:column;
+gap:15px;
+}
+.faq-item{
+background:rgba(255,255,255,.04);
+border:1px solid rgba(255,255,255,.08);
+border-radius:18px;
+overflow:hidden;
+transition:.3s;
+}
+.faq-item:hover{
+border-color:rgba(255,30,70,.4);
+}
+.faq-question{
+width:100%;
+padding:20px 25px;
+background:none;
+border:none;
+color:#fff;
+font-size:18px;
+font-weight:bold;
+text-align:left;
+cursor:pointer;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:15px;
+}
+.faq-icon{
+font-size:22px;
+transition:transform .3s ease;
+color:#ff1744;
+}
+.faq-answer{
+max-height:0;
+overflow:hidden;
+transition:max-height .3s ease, padding .3s ease;
+padding:0 25px;
+background:rgba(0,0,0,.2);
+}
+.faq-answer p{
+color:rgba(255,255,255,.7);
+line-height:1.6;
+padding-bottom:20px;
+}
+.faq-item.active .faq-icon{
+transform:rotate(45deg);
+}
+.faq-item.active .faq-answer{
+max-height:200px;
+padding-top:10px;
+}
+
+/* BOUTON DISCORD FLOTTANT */
+.floating-discord{
+position:fixed;
+bottom:25px;
+right:25px;
+z-index:99;
+background:#5865f2;
+color:#fff;
+padding:14px 22px;
+border-radius:50px;
+text-decoration:none;
+font-weight:bold;
+display:flex;
+align-items:center;
+gap:10px;
+box-shadow:0 0 25px rgba(88,101,242,.6);
+transition:.3s;
+}
+.floating-discord:hover{
+transform:scale(1.08) translateY(-3px);
+box-shadow:0 0 35px rgba(88,101,242,.9);
 }
 
 .cart-overlay{
@@ -565,6 +665,7 @@ nav a{display:none}
 .category-title{font-size:25px}
 .steps{grid-template-columns:1fr}
 .after-payment{padding:30px 18px}
+.floating-discord span{display:none}
 }
 </style>
 
@@ -572,12 +673,18 @@ nav a{display:none}
 
 <body>
 
+<!-- BANNIÈRE D'ANNONCE -->
+<div class="announcement-bar">
+    ⚡ LIVRAISON RAPIDE • Support client ouvert 7j/7 sur Discord
+</div>
+
 <header>
 <div class="nav">
 <div class="logo">SHOP <span>FIRE</span> 🔥</div>
 
 <nav>
 <a href="#boutique">Boutique</a>
+<a href="#faq">FAQ</a>
 <a href="#apres-paiement">Après paiement</a>
 <a href="#securite">Sécurité</a>
 <a href="https://discord.gg/2XUNQeCU8H" target="_blank">Discord</a>
@@ -625,7 +732,6 @@ Ajoute tes articles au panier et effectue ton paiement en 1 seule fois via PayPa
 Ajoute tes produits au panier et gère tes quantités.
 </p>
 
-<!-- FILTRES EMOJI PAR JEU -->
 <div class="filter-container">
     <button class="filter-btn active" onclick="filterGame('all', this)">🌐 Tous les jeux</button>
     <button class="filter-btn" onclick="filterGame('coc', this)">⚔️ Clash of Clans</button>
@@ -839,6 +945,54 @@ Profite de notre offre dédiée au Pass Royale.
 
 </section>
 
+<!-- SECTION FAQ -->
+<section id="faq">
+<h2 class="section-title">❓ Foire Aux Questions</h2>
+<p class="section-subtitle">Retrouve les réponses aux questions les plus fréquentes.</p>
+
+<div class="faq-container">
+    <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+            <span>⏱️ Quels sont les délais de livraison ?</span>
+            <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+            <p>La livraison s'effectue généralement <strong>dans l'heure</strong> suivant la validation de ton paiement et l'ouverture de ton ticket sur Discord.</p>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+            <span>📦 Comment se passe la livraison après le paiement ?</span>
+            <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+            <p>Dès que ton paiement PayPal est effectué, rejoins notre serveur Discord et ouvre un ticket. Transmets-nous le récapitulatif de ta commande (copiable en 1 clic depuis ton panier) et ta commande sera immédiatement prise en charge.</p>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+            <span>🔒 Mes identifiants de jeu sont-ils en sécurité ?</span>
+            <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+            <p>Absolument. Vos identifiants sont <strong>100 % sécurisés</strong> et ne sont <strong>jamais sauvegardés</strong>. Ils servent uniquement lors de la procédure de livraison puis sont immédiatement supprimés.</p>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+            <span>💬 Comment contacter le support en cas de besoin ?</span>
+            <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+            <p>Notre support client est ouvert <strong>7j/7</strong> directement sur notre serveur Discord. Ouvre simplement un ticket pour poser tes questions à un membre de notre équipe.</p>
+        </div>
+    </div>
+</div>
+</section>
+
 <section id="apres-paiement">
 
 <div class="after-payment">
@@ -951,6 +1105,11 @@ et de contacter le support.
 
 </main>
 
+<!-- BOUTON DISCORD FLOTTANT -->
+<a href="https://discord.gg/2XUNQeCU8H" target="_blank" class="floating-discord">
+    💬 <span>Discord Support</span>
+</a>
+
 <!-- PANIER LATÉRAL -->
 <div class="cart-overlay" id="cart-overlay"></div>
 <div class="cart-drawer" id="cart-drawer">
@@ -986,7 +1145,6 @@ Paiement via PayPal • Support Discord
 </footer>
 
 <script>
-// Récupération du panier sauvegardé dans le navigateur (Local Storage)
 let cart = JSON.parse(localStorage.getItem('shop_fire_cart')) || [];
 
 const openCartBtn = document.getElementById('open-cart');
@@ -1130,7 +1288,6 @@ function sendDiscordNotification() {
     }).catch(err => console.error("Erreur d'envoi Webhook:", err));
 }
 
-// Fonction de filtrage des jeux
 function filterGame(game, element) {
     const buttons = document.querySelectorAll('.filter-btn');
     buttons.forEach(btn => btn.classList.remove('active'));
@@ -1156,6 +1313,19 @@ function filterGame(game, element) {
         catCoc.classList.add('hidden');
         catBrawl.classList.add('hidden');
         catRoyale.classList.remove('hidden');
+    }
+}
+
+function toggleFaq(button) {
+    const faqItem = button.parentElement;
+    const isActive = faqItem.classList.contains('active');
+
+    document.querySelectorAll('.faq-item').forEach(item => {
+        item.classList.remove('active');
+    });
+
+    if (!isActive) {
+        faqItem.classList.add('active');
     }
 }
 
