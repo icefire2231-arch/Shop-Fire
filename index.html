@@ -830,7 +830,8 @@ alt="Pass Clash of Clans">
 <p>
 Profite de notre offre dédiée au Pass Clash of Clans.
 </p>
-<p id="stock-coc" style="font-weight: bold; font-size: 13px; margin: 10px 0; color: #00d084;"></p>
+<!-- Stock dynamique géré par Supabase -->
+<p id="stock-Pass Coc" style="font-weight: bold; font-size: 13px; margin: 10px 0;"></p>
 
 <div class="price-row">
 
@@ -968,7 +969,8 @@ alt="Pass Brawl Stars">
 <p>
 Notre offre dédiée au Pass Brawl Stars.
 </p>
-<p id="stock-brawl" style="font-weight: bold; font-size: 13px; margin: 10px 0; color: #00d084;"></p>
+<!-- Stock dynamique géré par Supabase -->
+<p id="stock-Pass Brawl Stars" style="font-weight: bold; font-size: 13px; margin: 10px 0;"></p>
 
 <div class="price-row">
 
@@ -1004,7 +1006,8 @@ alt="Pass Clash Royale">
 <p>
 Profite de notre offre dédiée au Pass Royale.
 </p>
-<p id="stock-cr" style="font-weight: bold; font-size: 13px; margin: 10px 0; color: #00d084;"></p>
+<!-- Stock dynamique géré par Supabase -->
+<p id="stock-Pass CR" style="font-weight: bold; font-size: 13px; margin: 10px 0;"></p>
 
 <div class="price-row">
 
@@ -1064,7 +1067,7 @@ Profite de notre offre dédiée au Pass Royale.
             <span class="faq-icon">+</span>
         </button>
         <div class="faq-answer">
-            <p>Absolument. Vos identifiants sont <strong>100 % sécurisés</strong> et ne sont <strong>jamais sauvegardés</strong>. Ils servent uniquement lors de la procédure de livraison puis sont immédiatement supprimés.</p>
+            <p>Absolument. Vos identifiants sont <strong>100 % sécurisés</strong> et ne sont <strong>jamais sauvegardés</strong>. Ils servent uniquement lors de la livraison puis sont immédiatement supprimés.</p>
         </div>
     </div>
 
@@ -1255,7 +1258,7 @@ const copyBtn = document.getElementById('copy-btn');
 const PAYPAL_USERNAME = "FireTwitch955";
 const DISCORD_WEBHOOK_URL = ""; 
 
-// CHARGEMENT DES STOCKS DEPUIS SUPABASE
+// CHARGEMENT DES STOCKS DEPUIS SUPABASE (AUTOMATIQUE)
 async function loadStocks() {
     const { data: products, error } = await _supabase
         .from('products')
@@ -1267,14 +1270,13 @@ async function loadStocks() {
     }
 
     products.forEach(product => {
-        let elementId = "";
-        let buttonId = "";
-        
-        if (product.title === "Pass Coc") { elementId = "stock-coc"; buttonId = "btn-coc"; }
-        if (product.title === "Pass Brawl Stars") { elementId = "stock-brawl"; buttonId = "btn-brawl"; }
-        if (product.title === "Pass CR") { elementId = "stock-cr"; buttonId = "btn-cr"; }
-
+        const elementId = `stock-${product.title}`;
         const stockEl = document.getElementById(elementId);
+
+        let buttonId = "";
+        if (product.title === "Pass Coc") buttonId = "btn-coc";
+        if (product.title === "Pass Brawl Stars") buttonId = "btn-brawl";
+        if (product.title === "Pass CR") buttonId = "btn-cr";
         const btnEl = document.getElementById(buttonId);
 
         if (stockEl) {
@@ -1502,7 +1504,6 @@ function sendDiscordNotification() {
         }).catch(err => console.error("Erreur d'envoi Webhook:", err));
     }
 
-    // Réinitialisation automatique du panier lors de la redirection
     setTimeout(() => {
         cart = [];
         saveCartToStorage();
