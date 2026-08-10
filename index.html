@@ -750,7 +750,7 @@ nav a{display:none}
 
 <!-- WIDGET FIDÉLITÉ -->
 <div class="auth-box">
-    <button id="login-btn" onclick="loginWithGoogle()" class="login-btn">🔑 Se connecter</button>
+    <button id="login-btn" onclick="loginWithEmail()" class="login-btn">🔑 Se connecter</button>
     <div id="user-badge" class="user-badge">
         <span id="user-pts" class="user-pts">⭐ 0 pts</span>
         <button id="claim-btn" onclick="claimFreePass()" class="claim-btn">🎁 Réclamer Pass</button>
@@ -1248,9 +1248,34 @@ const copyBtn = document.getElementById('copy-btn');
 const PAYPAL_USERNAME = "FireTwitch955";
 const DISCORD_WEBHOOK_URL = ""; 
 
-// GESTION AUTH & FIDÉLITÉ
-async function loginWithGoogle() {
-    await _supabase.auth.signInWithOAuth({ provider: 'google' });
+// AUTHENTIFICATION PAR EMAIL (CREATION / CONNEXION)
+async function loginWithEmail() {
+    const email = prompt("Entre ton adresse email :");
+    if (!email) return;
+
+    const password = prompt("Entre ton mot de passe (au moins 6 caractères) :");
+    if (!password) return;
+
+    // Essai de connexion
+    let { data, error } = await _supabase.auth.signInWithPassword({ email, password });
+
+    // Si le compte n'existe pas encore, on le crée automatiquement
+    if (error) {
+        let signUp = await _supabase.auth.signUp({ email, password });
+        if (signUp.error) {
+            alert("Erreur : " + signUp.error.message);
+            return;
+        } else {
+            alert("Compte créé avec succès ! Tu es maintenant connecté.");
+            window.location.reload();
+            return;
+        }
+    }
+
+    if (data.user) {
+        alert("Connexion réussie !");
+        window.location.reload();
+    }
 }
 
 async function logout() {
