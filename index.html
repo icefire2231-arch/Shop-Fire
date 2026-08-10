@@ -1007,7 +1007,7 @@ alt="Pass Clash Royale">
 Profite de notre offre dédiée au Pass Royale.
 </p>
 <!-- Stock dynamique géré par Supabase -->
-<p id="stock-Pass CR" style="font-weight: bold; font-size: 13px; margin: 10px 0;"></p>
+<p id="stock-cr" style="font-weight: bold; font-size: 13px; margin: 10px 0;"></p>
 
 <div class="price-row">
 
@@ -1558,7 +1558,25 @@ function toggleFaq(button) {
 // Initialisation au chargement de la page
 updateCartUI();
 checkUserSession();
-loadStocks();
+async function loadStocks() {
+    const { data: products, error } = await _supabase.from('products').select('*');
+    if (error) {
+        console.error("Erreur Supabase :", error);
+        return;
+    }
+
+    products.forEach(product => {
+        let elementId = "";
+        if (product.title.includes('CR')) elementId = "stock-cr";
+        else if (product.title.includes('Brawl')) elementId = "stock-brawl";
+        else if (product.title.includes('Coc')) elementId = "stock-coc";
+
+        const stockEl = document.getElementById(elementId);
+        if (stockEl) {
+            stockEl.textContent = product.stock > 0 ? `⚡ Stock : ${product.stock} dispo` : "❌ Rupture de stock";
+        }
+    });
+}
 </script>
 
 </body>
