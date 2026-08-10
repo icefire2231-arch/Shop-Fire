@@ -366,12 +366,27 @@ z-index:2;
 .product-image{
 width:100%;
 height:210px;
-object-fit:cover;
+object-fit:contain;
 border-radius:17px;
 margin-bottom:20px;
-background:#11111c;
+background:#0f0f18;
 border:1px solid rgba(255,255,255,.1);
+padding:15px;
 }
+
+/* Style pour aligner l'icône à côté du titre dans la carte si besoin */
+.product-title-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+.product-icon {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
 .card h3{
 font-size:23px;
 margin-bottom:10px;
@@ -822,7 +837,7 @@ Ajoute tes produits au panier et gère tes quantités.
 
 <img
 class="product-image"
-src="https://placehold.co/900x550/151522/ff1744?text=⚔️+PASS+CLASH+OF+CLANS"
+src="Icon_HV_Gold_Pass.png"
 alt="Pass Clash of Clans">
 
 <h3>🏆 Pass Clash of Clans</h3>
@@ -960,7 +975,7 @@ Automatisation du farm de ressources.
 
 <img
 class="product-image"
-src="https://placehold.co/900x550/151522/ffd21f?text=⭐+BRAWL+PASS"
+src="icon_brawl_pass.png"
 alt="Pass Brawl Stars">
 
 <h3>⭐ Pass Brawl Stars</h3>
@@ -996,7 +1011,7 @@ Notre offre dédiée au Pass Brawl Stars.
 
 <img
 class="product-image"
-src="https://placehold.co/900x550/151522/ffd700?text=👑+PASS+ROYALE"
+src="icon_gold_pass.png"
 alt="Pass Royale">
 
 <h3>👑 Pass Royale</h3>
@@ -1004,7 +1019,6 @@ alt="Pass Royale">
 <p>
 Profite de notre offre dédiée au Pass Royale.
 </p>
-<!-- ID mis à jour en "Pass Royale" pour correspondre à Supabase -->
 <p id="stock-Pass Royale" style="font-weight: bold; font-size: 13px; margin: 10px 0;"></p>
 
 <div class="price-row">
@@ -1435,52 +1449,57 @@ function updateCartUI() {
 
     cartTotalPrice.textContent = total + ' €';
     cartCount.textContent = totalCount;
-    checkoutBtn.href = `https://paypal.me/${PAYPAL_USERNAME}/${total}EUR`;
+
+    let paypalUrl = `https://www.paypal.com/paypalme/${PAYPAL_USERNAME}/${total}EUR`;
+    checkoutBtn.href = paypalUrl;
 }
 
 function copyCartSummary() {
-    if (cart.length === 0) return;
-    let summary = "🔥 COMMANDE SHOP FIRE 🔥\n";
+    let summary = "🔥 RÉCAPITULATIF DE COMMANDE - SHOP FIRE 🔥\n\n";
+    if (currentUser) {
+        summary += `👤 Client : ${currentUser.email}\n\n`;
+    }
     let total = 0;
     cart.forEach(item => {
         summary += `- ${item.quantity}x ${item.name} (${item.price * item.quantity} €)\n`;
         total += item.price * item.quantity;
     });
-    summary += `Total : ${total} €\n`;
-    if (currentUser) {
-        summary += `Client Email : ${currentUser.email}`;
-    }
+    summary += `\n💰 Total global : ${total} €\n`;
+    summary += "\nMerci de valider ce panier en ouvrant un ticket sur notre Discord !";
 
     navigator.clipboard.writeText(summary).then(() => {
-        alert("✅ Commande copiée dans le presse-papier ! Colle-la dans ton ticket Discord.");
+        copyBtn.textContent = "✅ Copié avec succès !";
+        setTimeout(() => {
+            copyBtn.textContent = "📋 Copier la commande pour Discord";
+        }, 2500);
     });
 }
 
 function sendDiscordNotification() {
-    // Optionnel pour webhook si configuré
+    // Optionnel si webhook configuré
 }
 
-function filterGame(game, btn) {
+function filterGame(category, btn) {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
 
-    const coc = document.getElementById('cat-coc');
-    const brawl = document.getElementById('cat-brawl');
-    const royale = document.getElementById('cat-royale');
+    const catCoc = document.getElementById('cat-coc');
+    const catBrawl = document.getElementById('cat-brawl');
+    const catRoyale = document.getElementById('cat-royale');
 
-    coc.classList.remove('hidden');
-    brawl.classList.remove('hidden');
-    royale.classList.remove('hidden');
+    catCoc.classList.remove('hidden');
+    catBrawl.classList.remove('hidden');
+    catRoyale.classList.remove('hidden');
 
-    if (game === 'coc') {
-        brawl.classList.add('hidden');
-        royale.classList.add('hidden');
-    } else if (game === 'brawl') {
-        coc.classList.add('hidden');
-        royale.classList.add('hidden');
-    } else if (game === 'royale') {
-        coc.classList.add('hidden');
-        brawl.classList.add('hidden');
+    if (category === 'coc') {
+        catBrawl.classList.add('hidden');
+        catRoyale.classList.add('hidden');
+    } else if (category === 'brawl') {
+        catCoc.classList.add('hidden');
+        catRoyale.classList.add('hidden');
+    } else if (category === 'royale') {
+        catCoc.classList.add('hidden');
+        catBrawl.classList.add('hidden');
     }
 }
 
@@ -1488,17 +1507,20 @@ function toggleFaq(button) {
     const item = button.parentElement;
     const isActive = item.classList.contains('active');
     
-    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
-    
+    document.querySelectorAll('.faq-item').forEach(faq => {
+        faq.classList.remove('active');
+    });
+
     if (!isActive) {
         item.classList.add('active');
     }
 }
 
-// INITIALISATION AU CHARGEMENT DE LA PAGE
-updateCartUI();
-checkUserSession();
-loadStocks();
+window.addEventListener('DOMContentLoaded', async () => {
+    updateCartUI();
+    await checkUserSession();
+    await loadStocks();
+});
 </script>
 
 </body>
