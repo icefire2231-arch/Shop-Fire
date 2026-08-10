@@ -1511,7 +1511,287 @@ window.addEventListener('DOMContentLoaded', async () => {
     await checkUserSession();
     await loadStocks();
 });
-</script>
+<script>
+// CONFIGURATION SUPABASE AUTOMATIQUE
+const SUPABASE_URL = "https://pxsiocyavagdalmpnbdf.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB4c2lvY3lhdmFnZGFsbXBuYmRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzNTQzODEsImV4cCI6MjEwMTkzMDM4MX0.0cZZgjHvrYCro2086KvUjGlgoFPQL5sRzg-JWeyLslI"; 
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-</body>
-</html>
+let currentUser = null;
+let userPoints = 0;
+
+let cart = JSON.parse(localStorage.getItem('shop_fire_cart')) || [];
+
+const openCartBtn = document.getElementById('open-cart');
+const closeCartBtn = document.getElementById('close-cart');
+const cartOverlay = document.getElementById('cart-overlay');
+const cartDrawer = document.getElementById('cart-drawer');
+const cartItemsContainer = document.getElementById('cart-items');
+const cartTotalPrice = document.getElementById('cart-total-price');
+const cartCount = document.getElementById('cart-count');
+const checkoutBtn = document.getElementById('checkout-btn');
+const copyBtn = document.getElementById('copy-btn');
+
+const PAYPAL_USERNAME = "FireTwitch955";
+const DISCORD_WEBHOOK_URL = ""; 
+
+// CHARGEMENT DES STOCKS DEPUIS SUPABASE (CORRIGÉ)
+async function loadStocks() {
+    const { data: products, error } = await _supabase
+        .from('products')
+        .select('*');
+
+    if (error) {
+        console.error("Erreur lors du chargement des stocks :", error);
+        return;
+    }
+
+    products.forEach(product => {
+        let titleLower = product.title.toLowerCase();
+        let elementId = "";
+        let buttonId = "";
+
+        if (titleLower.includes('coc')) {
+            elementId = "stock-Pass Coc";
+            buttonId = "btn-coc";
+        } else if (titleLower.includes('brawl')) {
+            elementId = "stock-Pass Brawl Stars";
+            buttonId = "btn-brawl";
+        } else if (titleLower.includes('cr') || titleLower.includes('royale')) {
+            elementId = "stock-Pass CR";
+            buttonId = "btn-cr";
+        }
+
+        if (elementId) {
+            const stockEl = document.getElementById(elementId);
+            const btnEl = document.getElementById(buttonId);
+
+            if (stockEl) {
+                if (product.stock > 0) {
+                    stockEl.textContent = `⚡ Stock : ${product.stock} dispo`;
+                    stockEl.style.color = "#00d084";
+                    if (btnEl) { btnEl.disabled = false; btnEl.style.opacity = "1"; }
+                } else {
+                    stockEl.textContent = "❌ Rupture de stock";
+                    stockEl.style.color = "#ff1744";
+                    if (btnEl) { btnEl.disabled = true; btnEl.style.opacity = "0.5"; }
+                }
+            }
+        }
+    });
+}
+
+// AUTHENTIFICATION PAR EMAIL (CREATION / CONNEXION DIRECTE)
+async function loginWithEmail() {
+    const email = prompt("Entre ton adresse email :");
+    if (!email) return;
+
+    const password = prompt("Entre ton mot de passe (au moins 6 caractères) :");
+    if (!password) return;
+
+    let { data, error } = await _supabase.auth.signInWithPassword({ email, password });
+
+    if (error) {
+        let signUp = await _supabase.auth.signUp({ email, password });
+        if (signUp.error) {
+            alert("Erreur : " + signUp.error.message);
+            return;
+        }
+        
+        if (signUp.data.session) {
+            alert("🎉 Compte créé et connecté avec succès !");
+            await checkUserSession();
+        } else {
+            alert("🎉 Compte créé avec succès ! Clique à nouveau sur Se connecter si ta session ne s'affiche pas.");
+            await checkUserSession();
+        }
+        return;
+    }
+
+    if (data.session) {
+        alert("🎉 Connexion réussie !");
+        await checkUserSession();
+    }
+}
+
+async function logout() {
+    await _supabase.auth.signOut();
+    window.location.reload();
+}
+
+async function checkUserSession() {
+    const { data: { user } } = await _supabase.auth.getUser();
+    if (user) {
+        currentUser = user;
+        document.getElementById('login-btn').style.display = 'none';
+        document.getElementById('user-badge').style.display = 'flex';
+        await loadUserPoints(user.id);
+    }
+}
+
+async function loadUserPoints(userId) {
+    let { data } = await _supabase
+        .from('profiles')
+        .select('points')
+        .eq('id', userId)
+        .single();
+
+    if (data) {
+        userPoints = data.points || 0;
+        document.getElementById('user-pts').textContent = `⭐ ${userPoints} pts`;
+        if (userPoints >= 10) {
+            document.getElementById('claim-btn').style.display = 'inline-block';
+        }
+    }
+}
+
+function claimFreePass() {
+    if (userPoints < 10) return;
+    let passName = prompt("Quel Pass gratuit souhaites-tu réclamer ?\n- Pass Coc\n- Pass Brawl Stars\n- Pass CR");
+    if (passName) {
+        alert(`🎉 Choix enregistré (${passName}) ! Ouvre un ticket sur Discord avec l'adresse ${currentUser.email} pour recevoir ton Pass gratuit !`);
+    }
+}
+
+function toggleCart() {
+    cartOverlay.classList.toggle('active');
+    cartDrawer.classList.toggle('active');
+}
+
+openCartBtn.addEventListener('click', toggleCart);
+closeCartBtn.addEventListener('click', toggleCart);
+cartOverlay.addEventListener('click', toggleCart);
+
+function saveCartToStorage() {
+    localStorage.setItem('shop_fire_cart', JSON.stringify(cart));
+}
+
+function addToCart(name, price) {
+    const existingItem = cart.find(item => item.name === name);
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cart.push({ name, price, quantity: 1 });
+    }
+    saveCartToStorage();
+    updateCartUI();
+    if (!cartDrawer.classList.contains('active')) {
+        toggleCart();
+    }
+}
+
+function updateQuantity(name, change) {
+    const item = cart.find(item => item.name === name);
+    if (item) {
+        item.quantity += change;
+        if (item.quantity <= 0) {
+            cart = cart.filter(i => i.name !== name);
+        }
+    }
+    saveCartToStorage();
+    updateCartUI();
+}
+
+function updateCartUI() {
+    cartItemsContainer.innerHTML = '';
+    let total = 0;
+    let totalCount = 0;
+
+    if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<p class="empty-msg">Ton panier est vide pour le moment.</p>';
+        copyBtn.style.display = 'none';
+    } else {
+        copyBtn.style.display = 'block';
+        cart.forEach(item => {
+            total += item.price * item.quantity;
+            totalCount += item.quantity;
+
+            const itemElement = document.createElement('div');
+            itemElement.className = 'cart-item';
+            itemElement.innerHTML = `
+                <div class="item-info">
+                    <h4>${item.name}</h4>
+                    <p>${item.price} € x ${item.quantity} = ${item.price * item.quantity} €</p>
+                </div>
+                <div class="quantity-controls">
+                    <button class="qty-btn" onclick="updateQuantity('${item.name}', -1)">-</button>
+                    <span>${item.quantity}</span>
+                    <button class="qty-btn" onclick="updateQuantity('${item.name}', 1)">+</button>
+                </div>
+            `;
+            cartItemsContainer.appendChild(itemElement);
+        });
+    }
+
+    cartTotalPrice.textContent = total + ' €';
+    cartCount.textContent = totalCount;
+    checkoutBtn.href = `https://paypal.me/${PAYPAL_USERNAME}/${total}EUR`;
+}
+
+function copyCartSummary() {
+    if (cart.length === 0) return;
+    let summary = "🔥 RÉCAPITULATIF DE COMMANDE SHOP FIRE :\n";
+    let total = 0;
+    cart.forEach(item => {
+        summary += `- ${item.name} x${item.quantity} (${item.price * item.quantity} €)\n`;
+        total += item.price * item.quantity;
+    });
+    summary += `TOTAL : ${total} €\n`;
+    if (currentUser) {
+        summary += `Compte client : ${currentUser.email}`;
+    }
+
+    navigator.clipboard.writeText(summary).then(() => {
+        copyBtn.textContent = "✅ Copié ! Colle-le sur Discord";
+        setTimeout(() => {
+            copyBtn.textContent = "📋 Copier la commande pour Discord";
+        }, 3000);
+    });
+}
+
+function sendDiscordNotification() {}
+
+function filterGame(category, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const catCoc = document.getElementById('cat-coc');
+    const catBrawl = document.getElementById('cat-brawl');
+    const catRoyale = document.getElementById('cat-royale');
+
+    catCoc.classList.add('hidden');
+    catBrawl.classList.add('hidden');
+    catRoyale.classList.add('hidden');
+
+    if (category === 'all') {
+        catCoc.classList.remove('hidden');
+        catBrawl.classList.remove('hidden');
+        catRoyale.classList.remove('hidden');
+    } else if (category === 'coc') {
+        catCoc.classList.remove('hidden');
+    } else if (category === 'brawl') {
+        catBrawl.classList.remove('hidden');
+    } else if (category === 'royale') {
+        catRoyale.classList.remove('hidden');
+    }
+}
+
+function toggleFaq(button) {
+    const item = button.parentElement;
+    const isActive = item.classList.contains('active');
+    
+    document.querySelectorAll('.faq-item').forEach(faq => {
+        faq.classList.remove('active');
+    });
+
+    if (!isActive) {
+        item.classList.add('active');
+    }
+}
+
+window.addEventListener('DOMContentLoaded', async () => {
+    updateCartUI();
+    await checkUserSession();
+    await loadStocks();
+});
+</script>
