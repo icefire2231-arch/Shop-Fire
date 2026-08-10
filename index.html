@@ -1248,7 +1248,7 @@ const copyBtn = document.getElementById('copy-btn');
 const PAYPAL_USERNAME = "FireTwitch955";
 const DISCORD_WEBHOOK_URL = ""; 
 
-// AUTHENTIFICATION PAR EMAIL (CREATION / CONNEXION)
+// AUTHENTIFICATION PAR EMAIL (CREATION / CONNEXION DIRECTE)
 async function loginWithEmail() {
     const email = prompt("Entre ton adresse email :");
     if (!email) return;
@@ -1256,25 +1256,32 @@ async function loginWithEmail() {
     const password = prompt("Entre ton mot de passe (au moins 6 caractères) :");
     if (!password) return;
 
-    // Essai de connexion
+    // 1. Essai de connexion directe
     let { data, error } = await _supabase.auth.signInWithPassword({ email, password });
 
-    // Si le compte n'existe pas encore, on le crée automatiquement
+    // 2. Si le compte n'existe pas, on le crée automatiquement
     if (error) {
         let signUp = await _supabase.auth.signUp({ email, password });
         if (signUp.error) {
             alert("Erreur : " + signUp.error.message);
             return;
-        } else {
-            alert("Compte créé avec succès ! Tu es maintenant connecté.");
-            window.location.reload();
-            return;
         }
+        
+        // Connexion immédiate post-création
+        if (signUp.data.session) {
+            alert("🎉 Compte créé et connecté avec succès !");
+            await checkUserSession();
+        } else {
+            alert("🎉 Compte créé avec succès ! Clique à nouveau sur Se connecter si ta session ne s'affiche pas.");
+            await checkUserSession();
+        }
+        return;
     }
 
-    if (data.user) {
-        alert("Connexion réussie !");
-        window.location.reload();
+    // 3. Connexion réussie
+    if (data.session) {
+        alert("🎉 Connexion réussie !");
+        await checkUserSession();
     }
 }
 
