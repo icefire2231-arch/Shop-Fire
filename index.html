@@ -1437,29 +1437,41 @@ function copyCartSummary() {
 }
 
 function sendDiscordNotification() {
-    if (!DISCORD_WEBHOOK_URL || cart.length === 0) return;
+    if (cart.length === 0) return;
 
-    let itemsList = cart.map(i => `• ${i.name} (x${i.quantity}) - ${i.price * i.quantity}€`).join("\n");
-    let total = cart.reduce((acc, i) => acc + (i.price * i.quantity), 0);
+    if (DISCORD_WEBHOOK_URL) {
+        let itemsList = cart.map(i => `• ${i.name} (x${i.quantity}) - ${i.price * i.quantity}€`).join("\n");
+        let total = cart.reduce((acc, i) => acc + (i.price * i.quantity), 0);
 
-    const payload = {
-        embeds: [{
-            title: "🛍️ Tentative de Paiement en cours",
-            color: 16717380,
-            fields: [
-                { name: "Articles", value: itemsList },
-                { name: "Total", value: `${total} €`, inline: true },
-                { name: "Compte Client", value: currentUser ? currentUser.email : "Non connecté" }
-            ],
-            footer: { text: "Un client a cliqué sur le bouton de paiement PayPal" }
-        }]
-    };
+        const payload = {
+            embeds: [{
+                title: "🛍️ Tentative de Paiement en cours",
+                color: 16717380,
+                fields: [
+                    { name: "Articles", value: itemsList },
+                    { name: "Total", value: `${total} €`, inline: true },
+                    { name: "Compte Client", value: currentUser ? currentUser.email : "Non connecté" }
+                ],
+                footer: { text: "Un client a cliqué sur le bouton de paiement PayPal" }
+            }]
+        };
 
-    fetch(DISCORD_WEBHOOK_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-    }).catch(err => console.error("Erreur d'envoi Webhook:", err));
+        fetch(DISCORD_WEBHOOK_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        }).catch(err => console.error("Erreur d'envoi Webhook:", err));
+    }
+
+    // Réinitialisation automatique du panier lors de la redirection
+    setTimeout(() => {
+        cart = [];
+        saveCartToStorage();
+        updateCartUI();
+        if (cartDrawer.classList.contains('active')) {
+            toggleCart();
+        }
+    }, 1000);
 }
 
 function filterGame(game, element) {
