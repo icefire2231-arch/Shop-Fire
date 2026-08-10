@@ -830,7 +830,7 @@ alt="Pass Clash of Clans">
 <p>
 Profite de notre offre dédiée au Pass Clash of Clans.
 </p>
-<!-- Stock dynamique géré par Supabase -->
+<!-- Stock dynamique géré par Supabase (utilisant title="Pass Coc") -->
 <p id="stock-Pass Coc" style="font-weight: bold; font-size: 13px; margin: 10px 0;"></p>
 
 <div class="price-row">
@@ -969,7 +969,7 @@ alt="Pass Brawl Stars">
 <p>
 Notre offre dédiée au Pass Brawl Stars.
 </p>
-<!-- Stock dynamique géré par Supabase -->
+<!-- Stock dynamique géré par Supabase (utilisant title="Pass Brawl Stars") -->
 <p id="stock-Pass Brawl Stars" style="font-weight: bold; font-size: 13px; margin: 10px 0;"></p>
 
 <div class="price-row">
@@ -1006,7 +1006,7 @@ alt="Pass Clash Royale">
 <p>
 Profite de notre offre dédiée au Pass Royale.
 </p>
-<!-- Stock dynamique géré par Supabase -->
+<!-- Stock dynamique géré par Supabase (utilisant title="Pass CR") -->
 <p id="stock-Pass CR" style="font-weight: bold; font-size: 13px; margin: 10px 0;"></p>
 
 <div class="price-row">
@@ -1270,6 +1270,7 @@ async function loadStocks() {
     }
 
     products.forEach(product => {
+        // On utilise product.title car la colonne s'appelle 'title' dans Supabase
         const elementId = `stock-${product.title}`;
         const stockEl = document.getElementById(elementId);
 
@@ -1293,7 +1294,7 @@ async function loadStocks() {
     });
 }
 
-// AUTHENTIFICATION PAR EMAIL (CREATION / CONNEXION DIRECTE)
+// AUTHENTIFICATION PAR EMAIL
 async function loginWithEmail() {
     const email = prompt("Entre ton adresse email :");
     if (!email) return;
@@ -1437,128 +1438,79 @@ function updateCartUI() {
 
     cartTotalPrice.textContent = total + ' €';
     cartCount.textContent = totalCount;
-
-    if (total > 0) {
-        checkoutBtn.href = `https://www.paypal.me/${PAYPAL_USERNAME}/${total}`;
-        checkoutBtn.style.pointerEvents = 'all';
-        checkoutBtn.style.opacity = '1';
-    } else {
-        checkoutBtn.href = '#';
-        checkoutBtn.style.pointerEvents = 'none';
-        checkoutBtn.style.opacity = '0.5';
-    }
+    checkoutBtn.href = `https://paypal.me/${PAYPAL_USERNAME}/${total}EUR`;
 }
 
 function copyCartSummary() {
     if (cart.length === 0) return;
-    
-    let summary = "🛒 **Ma commande Shop Fire** :\n";
+    let summary = "🔥 RÉCAPITULATIF DE COMMANDE SHOP FIRE :\n";
     let total = 0;
     cart.forEach(item => {
-        summary += `- ${item.name} (x${item.quantity}) : ${item.price * item.quantity} €\n`;
+        summary += `- ${item.name} x${item.quantity} (${item.price * item.quantity} €)\n`;
         total += item.price * item.quantity;
     });
-    
-    let earnedPoints = Math.floor(total / 10);
-    summary += `💰 **Total à payer** : ${total} €\n`;
-    
+    summary += `TOTAL : ${total} €\n`;
     if (currentUser) {
-        summary += `👤 **Compte** : ${currentUser.email}\n`;
-        summary += `⭐ **Points à créditer** : +${earnedPoints} pts`;
-    } else {
-        summary += `💡 *(Connecte-toi sur le site pour gagner des points de fidélité !)*`;
+        summary += `Compte client : ${currentUser.email}`;
     }
 
     navigator.clipboard.writeText(summary).then(() => {
-        copyBtn.textContent = "✅ Résumé copié !";
+        copyBtn.textContent = "✅ Copié ! Colle-le sur Discord";
         setTimeout(() => {
             copyBtn.textContent = "📋 Copier la commande pour Discord";
-        }, 2500);
+        }, 3000);
     });
 }
 
 function sendDiscordNotification() {
-    if (cart.length === 0) return;
-
-    if (DISCORD_WEBHOOK_URL) {
-        let itemsList = cart.map(i => `• ${i.name} (x${i.quantity}) - ${i.price * i.quantity}€`).join("\n");
-        let total = cart.reduce((acc, i) => acc + (i.price * i.quantity), 0);
-
-        const payload = {
-            embeds: [{
-                title: "🛍️ Tentative de Paiement en cours",
-                color: 16717380,
-                fields: [
-                    { name: "Articles", value: itemsList },
-                    { name: "Total", value: `${total} €`, inline: true },
-                    { name: "Compte Client", value: currentUser ? currentUser.email : "Non connecté" }
-                ],
-                footer: { text: "Un client a cliqué sur le bouton de paiement PayPal" }
-            }]
-        };
-
-        fetch(DISCORD_WEBHOOK_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
-        }).catch(err => console.error("Erreur d'envoi Webhook:", err));
-    }
-
-    setTimeout(() => {
-        cart = [];
-        saveCartToStorage();
-        updateCartUI();
-        if (cartDrawer.classList.contains('active')) {
-            toggleCart();
-        }
-    }, 1000);
+    // Optionnel : actions au clic sur le bouton de paiement
 }
 
-function filterGame(game, element) {
-    const buttons = document.querySelectorAll('.filter-btn');
-    buttons.forEach(btn => btn.classList.remove('active'));
-    element.classList.add('active');
+function filterGame(category, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
 
     const catCoc = document.getElementById('cat-coc');
     const catBrawl = document.getElementById('cat-brawl');
     const catRoyale = document.getElementById('cat-royale');
 
-    if (game === 'all') {
+    catCoc.classList.add('hidden');
+    catBrawl.classList.add('hidden');
+    catRoyale.classList.add('hidden');
+
+    if (category === 'all') {
         catCoc.classList.remove('hidden');
         catBrawl.classList.remove('hidden');
         catRoyale.classList.remove('hidden');
-    } else if (game === 'coc') {
+    } else if (category === 'coc') {
         catCoc.classList.remove('hidden');
-        catBrawl.classList.add('hidden');
-        catRoyale.classList.add('hidden');
-    } else if (game === 'brawl') {
-        catCoc.classList.add('hidden');
+    } else if (category === 'brawl') {
         catBrawl.classList.remove('hidden');
-        catRoyale.classList.add('hidden');
-    } else if (game === 'royale') {
-        catCoc.classList.add('hidden');
-        catBrawl.classList.add('hidden');
+    } else if (category === 'royale') {
         catRoyale.classList.remove('hidden');
     }
 }
 
+// GESTION DES FAQ ACCORDÉON
 function toggleFaq(button) {
-    const faqItem = button.parentElement;
-    const isActive = faqItem.classList.contains('active');
-
-    document.querySelectorAll('.faq-item').forEach(item => {
-        item.classList.remove('active');
+    const item = button.parentElement;
+    const isActive = item.classList.contains('active');
+    
+    document.querySelectorAll('.faq-item').forEach(faq => {
+        faq.classList.remove('active');
     });
 
     if (!isActive) {
-        faqItem.classList.add('active');
+        item.classList.add('active');
     }
 }
 
-// Initialisation au chargement de la page
-updateCartUI();
-checkUserSession();
-loadStocks();
+// CHARGEMENT INITIAL AU DÉMARRAGE DE LA PAGE
+window.addEventListener('DOMContentLoaded', async () => {
+    updateCartUI();
+    await checkUserSession();
+    await loadStocks();
+});
 </script>
 
 </body>
