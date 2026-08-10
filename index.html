@@ -80,7 +80,6 @@ transition:.2s;
 }
 nav a:hover{color:#ff1744}
 
-/* BOUTON PANIER NAV */
 .cart-nav-btn{
 position:relative;
 background:linear-gradient(135deg,#ff1744,#ff4d00);
@@ -262,7 +261,6 @@ font-size:30px;
 font-weight:900;
 }
 
-/* BOUTON AJOUTER AU PANIER */
 .add-cart{
 border:none;
 padding:13px 20px;
@@ -279,7 +277,6 @@ transform:scale(1.08);
 box-shadow:0 0 30px rgba(255,30,60,.65);
 }
 
-/* PANIER TIROIR */
 .cart-overlay{
 position:fixed;
 inset:0;
@@ -372,13 +369,16 @@ text-align:center;
 .cart-footer{
 border-top:1px solid rgba(255,255,255,.1);
 padding-top:20px;
+display:flex;
+flex-direction:column;
+gap:12px;
 }
 .cart-total{
 display:flex;
 justify-content:space-between;
 font-size:22px;
 font-weight:bold;
-margin-bottom:20px;
+margin-bottom:10px;
 }
 .checkout-btn{
 width:100%;
@@ -400,6 +400,24 @@ text-align:center;
 transform:scale(1.02);
 box-shadow:0 0 30px rgba(0,140,255,.7);
 }
+
+.copy-btn{
+width:100%;
+padding:12px;
+border-radius:12px;
+border:1px solid rgba(255,255,255,.2);
+background:rgba(255,255,255,.08);
+color:#fff;
+font-size:14px;
+font-weight:bold;
+cursor:pointer;
+transition:.2s;
+text-align:center;
+}
+.copy-btn:hover{
+background:rgba(255,255,255,.15);
+}
+
 .empty-msg{
 text-align:center;
 color:rgba(255,255,255,.5);
@@ -734,7 +752,7 @@ class="product-image"
 src="https://placehold.co/900x550/151522/ffd700?text=👑+PASS+ROYALE"
 alt="Pass Clash Royale">
 
-<h3>👑 Pass Clash Royale</h3>
+<h3>👑 Pass Royale</h3>
 
 <p>
 Profite de notre offre dédiée au Pass Royale.
@@ -883,7 +901,8 @@ et de contacter le support.
             <span>Total :</span>
             <span id="cart-total-price">0 €</span>
         </div>
-        <a href="#" class="checkout-btn" id="checkout-btn" target="_blank">💳 Payer via PayPal</a>
+        <button class="copy-btn" id="copy-btn" onclick="copyCartSummary()">📋 Copier la commande pour Discord</button>
+        <a href="#" class="checkout-btn" id="checkout-btn" target="_blank" onclick="sendDiscordNotification()">💳 Payer via PayPal</a>
     </div>
 </div>
 
@@ -912,8 +931,11 @@ const cartItemsContainer = document.getElementById('cart-items');
 const cartTotalPrice = document.getElementById('cart-total-price');
 const cartCount = document.getElementById('cart-count');
 const checkoutBtn = document.getElementById('checkout-btn');
+const copyBtn = document.getElementById('copy-btn');
 
 const PAYPAL_USERNAME = "FireTwitch955";
+// OPTIONNEL : Colle ici l'URL de ton Webhook Discord pour recevoir une notif automatique
+const DISCORD_WEBHOOK_URL = ""; 
 
 function toggleCart() {
     cartOverlay.classList.toggle('active');
@@ -955,7 +977,9 @@ function updateCartUI() {
 
     if (cart.length === 0) {
         cartItemsContainer.innerHTML = '<p class="empty-msg">Ton panier est vide pour le moment.</p>';
+        copyBtn.style.display = 'none';
     } else {
+        copyBtn.style.display = 'block';
         cart.forEach(item => {
             total += item.price * item.quantity;
             totalCount += item.quantity;
@@ -989,6 +1013,50 @@ function updateCartUI() {
         checkoutBtn.style.pointerEvents = 'none';
         checkoutBtn.style.opacity = '0.5';
     }
+}
+
+function copyCartSummary() {
+    if (cart.length === 0) return;
+    
+    let summary = "🛒 **Ma commande Shop Fire** :\n";
+    let total = 0;
+    cart.forEach(item => {
+        summary += `- ${item.name} (x${item.quantity}) : ${item.price * item.quantity} €\n`;
+        total += item.price * item.quantity;
+    });
+    summary += `💰 **Total à payer** : ${total} €`;
+
+    navigator.clipboard.writeText(summary).then(() => {
+        copyBtn.textContent = "✅ Résumé copié !";
+        setTimeout(() => {
+            copyBtn.textContent = "📋 Copier la commande pour Discord";
+        }, 2500);
+    });
+}
+
+function sendDiscordNotification() {
+    if (!DISCORD_WEBHOOK_URL || cart.length === 0) return;
+
+    let itemsList = cart.map(i => `• ${i.name} (x${i.quantity}) - ${i.price * i.quantity}€`).join("\n");
+    let total = cart.reduce((acc, i) => acc + (i.price * i.quantity), 0);
+
+    const payload = {
+        embeds: [{
+            title: "🛍️ Tentative de Paiement en cours",
+            color: 16717380,
+            fields: [
+                { name: "Articles", value: itemsList },
+                { name: "Total", value: `${total} €`, inline: true }
+            ],
+            footer: { text: "Un client a cliqué sur le bouton de paiement PayPal" }
+        }]
+    };
+
+    fetch(DISCORD_WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+    }).catch(err => console.error("Erreur d'envoi Webhook:", err));
 }
 
 updateCartUI();
