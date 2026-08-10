@@ -192,9 +192,45 @@ margin-bottom:15px;
 .section-subtitle{
 text-align:center;
 color:rgba(255,255,255,.55);
-margin-bottom:55px;
+margin-bottom:35px;
 }
-.category{margin-bottom:90px}
+
+/* FILTRES BOUTIQUE */
+.filter-container{
+display:flex;
+justify-content:center;
+gap:12px;
+flex-wrap:wrap;
+margin-bottom:50px;
+}
+.filter-btn{
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.12);
+color:#fff;
+padding:12px 22px;
+border-radius:50px;
+font-weight:bold;
+font-size:15px;
+cursor:pointer;
+transition:.25s;
+display:flex;
+align-items:center;
+gap:8px;
+}
+.filter-btn:hover, .filter-btn.active{
+background:linear-gradient(135deg,#ff1744,#ff4d00);
+border-color:transparent;
+box-shadow:0 0 20px rgba(255,30,60,.4);
+transform:translateY(-2px);
+}
+
+.category{
+margin-bottom:70px;
+transition:.3s;
+}
+.category.hidden{
+display:none;
+}
 .category-title{
 display:flex;
 align-items:center;
@@ -231,6 +267,24 @@ transform:translateY(-10px);
 border-color:rgba(255,40,80,.5);
 box-shadow:0 15px 60px rgba(0,0,0,.5),0 0 35px rgba(255,20,60,.18);
 }
+
+/* BADGES SUR LES CARTES */
+.card-badge{
+position:absolute;
+top:30px;
+right:30px;
+background:linear-gradient(135deg,#ff1744,#ff7700);
+color:#fff;
+font-size:11px;
+font-weight:900;
+text-transform:uppercase;
+padding:6px 14px;
+border-radius:20px;
+box-shadow:0 0 15px rgba(255,23,68,.6);
+letter-spacing:.5px;
+z-index:2;
+}
+
 .product-image{
 width:100%;
 height:210px;
@@ -571,15 +625,24 @@ Ajoute tes articles au panier et effectue ton paiement en 1 seule fois via PayPa
 Ajoute tes produits au panier et gère tes quantités.
 </p>
 
+<!-- FILTRES EMOJI PAR JEU -->
+<div class="filter-container">
+    <button class="filter-btn active" onclick="filterGame('all', this)">🌐 Tous les jeux</button>
+    <button class="filter-btn" onclick="filterGame('coc', this)">⚔️ Clash of Clans</button>
+    <button class="filter-btn" onclick="filterGame('brawl', this)">⭐ Brawl Stars</button>
+    <button class="filter-btn" onclick="filterGame('royale', this)">👑 Clash Royale</button>
+</div>
+
 <!-- CLASH OF CLANS -->
 
-<div class="category">
+<div class="category" id="cat-coc">
 
 <h2 class="category-title">⚔️ Clash of Clans</h2>
 
 <div class="products">
 
 <div class="card">
+<span class="card-badge">🔥 Best Seller</span>
 
 <img
 class="product-image"
@@ -676,6 +739,7 @@ Automatisation des dons de troupes.
 </div>
 
 <div class="card">
+<span class="card-badge">🔥 Best Seller</span>
 
 <img
 class="product-image"
@@ -704,13 +768,14 @@ Automatisation du farm de ressources.
 
 <!-- BRAWL STARS -->
 
-<div class="category">
+<div class="category" id="cat-brawl">
 
 <h2 class="category-title">⭐ Brawl Stars</h2>
 
 <div class="products">
 
 <div class="card">
+<span class="card-badge">🔥 Best Seller</span>
 
 <img
 class="product-image"
@@ -739,7 +804,7 @@ Notre offre dédiée au Pass Brawl Stars.
 
 <!-- CLASH ROYALE -->
 
-<div class="category">
+<div class="category" id="cat-royale">
 
 <h2 class="category-title">👑 Clash Royale</h2>
 
@@ -752,7 +817,7 @@ class="product-image"
 src="https://placehold.co/900x550/151522/ffd700?text=👑+PASS+ROYALE"
 alt="Pass Clash Royale">
 
-<h3>👑 Pass Royale</h3>
+<h3>👑 Pass Clash Royale</h3>
 
 <p>
 Profite de notre offre dédiée au Pass Royale.
@@ -921,7 +986,8 @@ Paiement via PayPal • Support Discord
 </footer>
 
 <script>
-let cart = [];
+// Récupération du panier sauvegardé dans le navigateur (Local Storage)
+let cart = JSON.parse(localStorage.getItem('shop_fire_cart')) || [];
 
 const openCartBtn = document.getElementById('open-cart');
 const closeCartBtn = document.getElementById('close-cart');
@@ -934,7 +1000,6 @@ const checkoutBtn = document.getElementById('checkout-btn');
 const copyBtn = document.getElementById('copy-btn');
 
 const PAYPAL_USERNAME = "FireTwitch955";
-// OPTIONNEL : Colle ici l'URL de ton Webhook Discord pour recevoir une notif automatique
 const DISCORD_WEBHOOK_URL = ""; 
 
 function toggleCart() {
@@ -946,6 +1011,10 @@ openCartBtn.addEventListener('click', toggleCart);
 closeCartBtn.addEventListener('click', toggleCart);
 cartOverlay.addEventListener('click', toggleCart);
 
+function saveCartToStorage() {
+    localStorage.setItem('shop_fire_cart', JSON.stringify(cart));
+}
+
 function addToCart(name, price) {
     const existingItem = cart.find(item => item.name === name);
     if (existingItem) {
@@ -953,6 +1022,7 @@ function addToCart(name, price) {
     } else {
         cart.push({ name, price, quantity: 1 });
     }
+    saveCartToStorage();
     updateCartUI();
     if (!cartDrawer.classList.contains('active')) {
         toggleCart();
@@ -967,6 +1037,7 @@ function updateQuantity(name, change) {
             cart = cart.filter(i => i.name !== name);
         }
     }
+    saveCartToStorage();
     updateCartUI();
 }
 
@@ -1057,6 +1128,35 @@ function sendDiscordNotification() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
     }).catch(err => console.error("Erreur d'envoi Webhook:", err));
+}
+
+// Fonction de filtrage des jeux
+function filterGame(game, element) {
+    const buttons = document.querySelectorAll('.filter-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    element.classList.add('active');
+
+    const catCoc = document.getElementById('cat-coc');
+    const catBrawl = document.getElementById('cat-brawl');
+    const catRoyale = document.getElementById('cat-royale');
+
+    if (game === 'all') {
+        catCoc.classList.remove('hidden');
+        catBrawl.classList.remove('hidden');
+        catRoyale.classList.remove('hidden');
+    } else if (game === 'coc') {
+        catCoc.classList.remove('hidden');
+        catBrawl.classList.add('hidden');
+        catRoyale.classList.add('hidden');
+    } else if (game === 'brawl') {
+        catCoc.classList.add('hidden');
+        catBrawl.classList.remove('hidden');
+        catRoyale.classList.add('hidden');
+    } else if (game === 'royale') {
+        catCoc.classList.add('hidden');
+        catBrawl.classList.add('hidden');
+        catRoyale.classList.remove('hidden');
+    }
 }
 
 updateCartUI();
