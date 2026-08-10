@@ -4,737 +4,871 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Shop Fire 🔥</title>
+
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-html{
-    scroll-behavior:smooth;
-}
-
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
 body{
-    font-family:Arial,Helvetica,sans-serif;
-    color:white;
-    background:#05050b;
-    overflow-x:hidden;
+font-family:Arial,Helvetica,sans-serif;
+color:#fff;
+background:#05050b;
+overflow-x:hidden;
 }
-
-/* FOND ANIMÉ */
 body::before{
-    content:"";
-    position:fixed;
-    inset:-50%;
-    z-index:-2;
-    background:
-        radial-gradient(circle at 20% 30%,rgba(255,0,55,.35),transparent 25%),
-        radial-gradient(circle at 80% 20%,rgba(0,100,255,.35),transparent 25%),
-        radial-gradient(circle at 50% 90%,rgba(120,0,255,.25),transparent 30%);
-    animation:bgMove 12s ease-in-out infinite alternate;
+content:"";
+position:fixed;
+inset:-50%;
+z-index:-2;
+background:
+radial-gradient(circle at 20% 30%,rgba(255,0,55,.35),transparent 25%),
+radial-gradient(circle at 80% 20%,rgba(0,100,255,.35),transparent 25%),
+radial-gradient(circle at 50% 90%,rgba(120,0,255,.25),transparent 30%);
+animation:bgMove 12s ease-in-out infinite alternate;
 }
-
 body::after{
-    content:"";
-    position:fixed;
-    inset:0;
-    z-index:-1;
-    background-image:
-        radial-gradient(circle,rgba(255,255,255,.12) 1px,transparent 1px);
-    background-size:45px 45px;
-    animation:stars 18s linear infinite;
-    pointer-events:none;
+content:"";
+position:fixed;
+inset:0;
+z-index:-1;
+background-image:radial-gradient(circle,rgba(255,255,255,.12) 1px,transparent 1px);
+background-size:45px 45px;
+animation:stars 18s linear infinite;
+pointer-events:none;
 }
-
 @keyframes bgMove{
-    from{ transform:translate(-5%,-5%) rotate(0deg); }
-    to{ transform:translate(5%,5%) rotate(8deg); }
+from{transform:translate(-5%,-5%) rotate(0deg)}
+to{transform:translate(5%,5%) rotate(8deg)}
 }
-
 @keyframes stars{
-    from{ transform:translateY(0); }
-    to{ transform:translateY(45px); }
+from{transform:translateY(0)}
+to{transform:translateY(45px)}
 }
 
-/* HEADER */
 header{
-    position:sticky;
-    top:0;
-    z-index:100;
-    background:rgba(5,5,12,.8);
-    backdrop-filter:blur(20px);
-    border-bottom:1px solid rgba(255,255,255,.08);
-    padding:18px 7%;
+position:sticky;
+top:0;
+z-index:100;
+background:rgba(5,5,12,.82);
+backdrop-filter:blur(20px);
+border-bottom:1px solid rgba(255,255,255,.08);
+padding:18px 7%;
 }
-
 .nav{
-    max-width:1200px;
-    margin:auto;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+max-width:1200px;
+margin:auto;
+display:flex;
+justify-content:space-between;
+align-items:center;
 }
-
 .logo{
-    font-size:25px;
-    font-weight:900;
-    text-shadow:0 0 20px rgba(255,0,50,.8);
+font-size:25px;
+font-weight:900;
+text-shadow:0 0 20px rgba(255,0,50,.8);
 }
-
-.logo span{
-    color:#ff1744;
-}
+.logo span{color:#ff1744}
 
 nav{
-    display:flex;
-    align-items:center;
+display:flex;
+align-items:center;
 }
-
 nav a{
-    color:white;
-    text-decoration:none;
-    margin-left:24px;
-    font-weight:bold;
-    transition:.2s;
+color:#fff;
+text-decoration:none;
+margin-left:24px;
+font-weight:bold;
+transition:.2s;
 }
-
-nav a:hover{
-    color:#ff1744;
-}
+nav a:hover{color:#ff1744}
 
 /* BOUTON PANIER NAV */
 .cart-nav-btn{
-    position:relative;
-    background:linear-gradient(135deg,#ff1744,#ff4d00);
-    border:none;
-    color:white;
-    padding:10px 18px;
-    border-radius:12px;
-    font-weight:bold;
-    cursor:pointer;
-    margin-left:24px;
-    display:flex;
-    align-items:center;
-    gap:8px;
-    box-shadow:0 0 15px rgba(255,30,60,.4);
-    transition:.2s;
+position:relative;
+background:linear-gradient(135deg,#ff1744,#ff4d00);
+border:none;
+color:#fff;
+padding:10px 18px;
+border-radius:12px;
+font-weight:bold;
+cursor:pointer;
+margin-left:24px;
+display:flex;
+align-items:center;
+gap:8px;
+box-shadow:0 0 15px rgba(255,30,60,.4);
+transition:.2s;
 }
-
-.cart-nav-btn:hover{
-    transform:scale(1.05);
-}
-
+.cart-nav-btn:hover{transform:scale(1.05)}
 .cart-count{
-    background:white;
-    color:#ff1744;
-    font-size:12px;
-    border-radius:50%;
-    width:20px;
-    height:20px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-weight:bold;
+background:#fff;
+color:#ff1744;
+font-size:12px;
+border-radius:50%;
+width:20px;
+height:20px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:bold;
 }
 
-/* HERO */
 .hero{
-    max-width:1200px;
-    min-height:600px;
-    margin:auto;
-    padding:60px 20px;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
+max-width:1200px;
+min-height:650px;
+margin:auto;
+padding:80px 20px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
 }
-
 .badge{
-    padding:10px 18px;
-    border-radius:50px;
-    background:rgba(255,20,70,.12);
-    border:1px solid rgba(255,50,80,.45);
-    box-shadow:0 0 25px rgba(255,0,60,.25);
-    margin-bottom:25px;
-    font-weight:bold;
+padding:10px 18px;
+border-radius:50px;
+background:rgba(255,20,70,.12);
+border:1px solid rgba(255,50,80,.45);
+box-shadow:0 0 25px rgba(255,0,60,.25);
+margin-bottom:25px;
+font-weight:bold;
 }
-
 .hero h1{
-    font-size:clamp(55px,9vw,110px);
-    font-weight:1000;
-    letter-spacing:-5px;
-    line-height:.95;
+font-size:clamp(55px,9vw,110px);
+font-weight:1000;
+letter-spacing:-5px;
+line-height:.95;
 }
-
 .fire{
-    background:linear-gradient(90deg, #ff1744, #ff6200, #007cff, #ff1744);
-    background-size:300%;
-    -webkit-background-clip:text;
-    color:transparent;
-    animation:fireText 4s linear infinite;
+background:linear-gradient(90deg,#ff1744,#ff6200,#007cff,#ff1744);
+background-size:300%;
+-webkit-background-clip:text;
+color:transparent;
+animation:fireText 4s linear infinite;
 }
-
 @keyframes fireText{
-    from{ background-position:0%; }
-    to{ background-position:300%; }
+from{background-position:0%}
+to{background-position:300%}
 }
-
 .hero p{
-    max-width:700px;
-    margin:30px auto;
-    font-size:18px;
-    line-height:1.7;
-    color:rgba(255,255,255,.7);
+max-width:700px;
+margin:30px auto;
+font-size:18px;
+line-height:1.7;
+color:rgba(255,255,255,.7);
 }
-
 .buttons{
-    display:flex;
-    gap:15px;
-    flex-wrap:wrap;
-    justify-content:center;
+display:flex;
+gap:15px;
+flex-wrap:wrap;
+justify-content:center;
 }
-
 .btn{
-    display:inline-block;
-    padding:15px 25px;
-    border-radius:14px;
-    color:white;
-    text-decoration:none;
-    font-weight:bold;
-    transition:.25s;
+display:inline-block;
+padding:15px 25px;
+border-radius:14px;
+color:#fff;
+text-decoration:none;
+font-weight:bold;
+transition:.25s;
 }
-
-.btn:hover{
-    transform:translateY(-4px) scale(1.03);
-}
-
+.btn:hover{transform:translateY(-4px) scale(1.03)}
 .primary{
-    background:linear-gradient(135deg,#ff1744,#ff4d00);
-    box-shadow:0 0 25px rgba(255,30,60,.4);
+background:linear-gradient(135deg,#ff1744,#ff4d00);
+box-shadow:0 0 25px rgba(255,30,60,.4);
 }
-
 .discord{
-    background:#5865f2;
-    box-shadow:0 0 25px rgba(88,101,242,.45);
+background:#5865f2;
+box-shadow:0 0 25px rgba(88,101,242,.45);
 }
 
-/* SECTIONS */
 section{
-    max-width:1200px;
-    margin:auto;
-    padding:80px 20px;
+max-width:1200px;
+margin:auto;
+padding:90px 20px;
 }
-
 .section-title{
-    text-align:center;
-    font-size:42px;
-    margin-bottom:15px;
+text-align:center;
+font-size:42px;
+margin-bottom:15px;
 }
-
 .section-subtitle{
-    text-align:center;
-    color:rgba(255,255,255,.55);
-    margin-bottom:55px;
+text-align:center;
+color:rgba(255,255,255,.55);
+margin-bottom:55px;
 }
-
-/* CATÉGORIES */
-.category{
-    margin-bottom:90px;
-}
-
+.category{margin-bottom:90px}
 .category-title{
-    display:flex;
-    align-items:center;
-    gap:15px;
-    font-size:32px;
-    margin-bottom:25px;
+display:flex;
+align-items:center;
+gap:15px;
+font-size:32px;
+margin-bottom:25px;
 }
-
 .category-title::after{
-    content:"";
-    height:2px;
-    flex:1;
-    background:linear-gradient(90deg,rgba(255,30,70,.8),transparent);
+content:"";
+height:2px;
+flex:1;
+background:linear-gradient(90deg,rgba(255,30,70,.8),transparent);
 }
 
-/* PRODUITS */
 .products{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:25px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:25px;
 }
-
 .card{
-    position:relative;
-    overflow:hidden;
-    background:linear-gradient(145deg, rgba(255,255,255,.09), rgba(255,255,255,.025));
-    border:1px solid rgba(255,255,255,.1);
-    border-radius:24px;
-    padding:20px;
-    backdrop-filter:blur(15px);
-    transition:.35s;
-    display:flex;
-    flex-direction:column;
+position:relative;
+overflow:hidden;
+background:linear-gradient(145deg,rgba(255,255,255,.09),rgba(255,255,255,.025));
+border:1px solid rgba(255,255,255,.1);
+border-radius:24px;
+padding:20px;
+backdrop-filter:blur(15px);
+transition:.35s;
+display:flex;
+flex-direction:column;
 }
-
 .card:hover{
-    transform:translateY(-10px);
-    border-color:rgba(255,40,80,.5);
-    box-shadow:0 15px 60px rgba(0,0,0,.5), 0 0 35px rgba(255,20,60,.18);
+transform:translateY(-10px);
+border-color:rgba(255,40,80,.5);
+box-shadow:0 15px 60px rgba(0,0,0,.5),0 0 35px rgba(255,20,60,.18);
 }
-
 .product-image{
-    width:100%;
-    height:210px;
-    object-fit:cover;
-    border-radius:17px;
-    margin-bottom:20px;
-    background:#11111c;
-    border:1px solid rgba(255,255,255,.1);
+width:100%;
+height:210px;
+object-fit:cover;
+border-radius:17px;
+margin-bottom:20px;
+background:#11111c;
+border:1px solid rgba(255,255,255,.1);
 }
-
 .card h3{
-    font-size:23px;
-    margin-bottom:10px;
+font-size:23px;
+margin-bottom:10px;
 }
-
 .card p{
-    color:rgba(255,255,255,.6);
-    line-height:1.5;
-    flex-grow:1;
+color:rgba(255,255,255,.6);
+line-height:1.5;
+min-height:48px;
+flex-grow:1;
 }
-
 .price-row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-top:25px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-top:25px;
 }
-
 .price{
-    font-size:30px;
-    font-weight:900;
+font-size:30px;
+font-weight:900;
 }
 
+/* BOUTON AJOUTER AU PANIER */
 .add-cart{
-    border:none;
-    padding:13px 20px;
-    border-radius:12px;
-    color:white;
-    font-weight:bold;
-    background:linear-gradient(135deg,#ff1744,#ff4d00);
-    box-shadow:0 0 20px rgba(255,30,60,.35);
-    cursor:pointer;
-    transition:.25s;
+border:none;
+padding:13px 20px;
+border-radius:12px;
+color:#fff;
+font-weight:bold;
+background:linear-gradient(135deg,#ff1744,#ff4d00);
+box-shadow:0 0 20px rgba(255,30,60,.35);
+cursor:pointer;
+transition:.25s;
 }
-
 .add-cart:hover{
-    transform:scale(1.08);
-    box-shadow:0 0 30px rgba(255,30,60,.65);
+transform:scale(1.08);
+box-shadow:0 0 30px rgba(255,30,60,.65);
 }
 
-/* PANIER TIROIR (DRAWER) */
+/* PANIER TIROIR */
 .cart-overlay{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.7);
-    backdrop-filter:blur(5px);
-    z-index:200;
-    opacity:0;
-    pointer-events:none;
-    transition:.3s;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.7);
+backdrop-filter:blur(5px);
+z-index:200;
+opacity:0;
+pointer-events:none;
+transition:.3s;
 }
-
 .cart-overlay.active{
-    opacity:1;
-    pointer-events:all;
+opacity:1;
+pointer-events:all;
 }
-
 .cart-drawer{
-    position:fixed;
-    top:0;
-    right:-450px;
-    width:100%;
-    max-width:420px;
-    height:100%;
-    background:#0b0b14;
-    border-left:1px solid rgba(255,255,255,.1);
-    z-index:201;
-    padding:30px 20px;
-    display:flex;
-    flex-direction:column;
-    transition:.3s ease-in-out;
-    box-shadow:-10px 0 30px rgba(0,0,0,.8);
+position:fixed;
+top:0;
+right:-450px;
+width:100%;
+max-width:420px;
+height:100%;
+background:#0b0b14;
+border-left:1px solid rgba(255,255,255,.1);
+z-index:201;
+padding:30px 20px;
+display:flex;
+flex-direction:column;
+transition:.3s ease-in-out;
+box-shadow:-10px 0 30px rgba(0,0,0,.8);
 }
-
-.cart-drawer.active{
-    right:0;
-}
-
+.cart-drawer.active{right:0}
 .cart-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding-bottom:20px;
-    border-bottom:1px solid rgba(255,255,255,.1);
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding-bottom:20px;
+border-bottom:1px solid rgba(255,255,255,.1);
 }
-
-.cart-header h2{
-    font-size:24px;
-}
-
+.cart-header h2{font-size:24px}
 .close-cart{
-    background:none;
-    border:none;
-    color:white;
-    font-size:28px;
-    cursor:pointer;
+background:none;
+border:none;
+color:#fff;
+font-size:28px;
+cursor:pointer;
 }
-
 .cart-items{
-    flex:1;
-    overflow-y:auto;
-    padding:20px 0;
-    display:flex;
-    flex-direction:column;
-    gap:15px;
+flex:1;
+overflow-y:auto;
+padding:20px 0;
+display:flex;
+flex-direction:column;
+gap:15px;
 }
-
 .cart-item{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    background:rgba(255,255,255,.04);
-    border:1px solid rgba(255,255,255,.08);
-    padding:15px;
-    border-radius:14px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+background:rgba(255,255,255,.04);
+border:1px solid rgba(255,255,255,.08);
+padding:15px;
+border-radius:14px;
 }
-
 .item-info h4{
-    font-size:16px;
-    margin-bottom:5px;
+font-size:16px;
+margin-bottom:5px;
 }
-
 .item-info p{
-    color:rgba(255,255,255,.6);
-    font-size:14px;
+color:rgba(255,255,255,.6);
+font-size:14px;
 }
-
 .quantity-controls{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    background:rgba(255,255,255,.08);
-    padding:5px 10px;
-    border-radius:8px;
+display:flex;
+align-items:center;
+gap:10px;
+background:rgba(255,255,255,.08);
+padding:5px 10px;
+border-radius:8px;
 }
-
 .qty-btn{
-    background:none;
-    border:none;
-    color:white;
-    font-size:18px;
-    font-weight:bold;
-    cursor:pointer;
-    width:20px;
-    text-align:center;
+background:none;
+border:none;
+color:#fff;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+width:20px;
+text-align:center;
 }
-
 .cart-footer{
-    border-top:1px solid rgba(255,255,255,.1);
-    padding-top:20px;
+border-top:1px solid rgba(255,255,255,.1);
+padding-top:20px;
 }
-
 .cart-total{
-    display:flex;
-    justify-content:space-between;
-    font-size:22px;
-    font-weight:bold;
-    margin-bottom:20px;
+display:flex;
+justify-content:space-between;
+font-size:22px;
+font-weight:bold;
+margin-bottom:20px;
 }
-
 .checkout-btn{
-    width:100%;
-    padding:15px;
-    border-radius:14px;
-    border:none;
-    background:linear-gradient(135deg,#0070ba,#00a8ff);
-    color:white;
-    font-size:18px;
-    font-weight:bold;
-    cursor:pointer;
-    box-shadow:0 0 20px rgba(0,140,255,.4);
-    transition:.25s;
-    text-decoration:none;
-    display:block;
-    text-align:center;
+width:100%;
+padding:15px;
+border-radius:14px;
+border:none;
+background:linear-gradient(135deg,#0070ba,#00a8ff);
+color:#fff;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+box-shadow:0 0 20px rgba(0,140,255,.4);
+transition:.25s;
+text-decoration:none;
+display:block;
+text-align:center;
 }
-
 .checkout-btn:hover{
-    transform:scale(1.02);
-    box-shadow:0 0 30px rgba(0,140,255,.7);
+transform:scale(1.02);
+box-shadow:0 0 30px rgba(0,140,255,.7);
 }
-
 .empty-msg{
-    text-align:center;
-    color:rgba(255,255,255,.5);
-    margin-top:40px;
+text-align:center;
+color:rgba(255,255,255,.5);
+margin-top:40px;
 }
 
-/* APRÈS PAIEMENT & SÉCURITÉ */
 .after-payment{
-    max-width:900px;
-    margin:auto;
-    padding:40px 30px;
-    text-align:center;
-    border-radius:28px;
-    background:linear-gradient(135deg, rgba(0,100,255,.13), rgba(255,0,60,.13));
-    border:1px solid rgba(255,255,255,.12);
+max-width:900px;
+margin:auto;
+padding:40px 30px;
+text-align:center;
+border-radius:28px;
+background:linear-gradient(135deg,rgba(0,100,255,.13),rgba(255,0,60,.13));
+border:1px solid rgba(255,255,255,.12);
 }
-
-.after-icon{ font-size:55px; margin-bottom:15px; }
-.after-payment h3{ font-size:30px; margin-bottom:15px; }
-.after-payment p{ color:rgba(255,255,255,.65); line-height:1.7; }
-
+.after-icon{
+font-size:55px;
+margin-bottom:15px;
+}
+.after-payment h3{
+font-size:30px;
+margin-bottom:15px;
+}
+.after-payment p{
+color:rgba(255,255,255,.65);
+line-height:1.7;
+}
 .steps{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:15px;
-    margin:30px 0;
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:15px;
+margin:30px 0;
 }
-
 .step{
-    padding:20px;
-    border-radius:18px;
-    background:rgba(255,255,255,.045);
-    border:1px solid rgba(255,255,255,.08);
+padding:20px;
+border-radius:18px;
+background:rgba(255,255,255,.045);
+border:1px solid rgba(255,255,255,.08);
 }
-
-.step-number{ font-size:28px; margin-bottom:10px; }
-.step strong{ display:block; margin-bottom:7px; }
-.step span{ color:rgba(255,255,255,.5); font-size:14px; }
+.step-number{
+font-size:28px;
+margin-bottom:10px;
+}
+.step strong{
+display:block;
+margin-bottom:7px;
+}
+.step span{
+color:rgba(255,255,255,.5);
+font-size:14px;
+}
 
 .trust{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:20px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
 }
-
 .trust-card{
-    padding:25px;
-    border-radius:20px;
-    background:rgba(255,255,255,.04);
-    border:1px solid rgba(255,255,255,.08);
-    text-align:center;
-    transition:.3s;
+padding:25px;
+border-radius:20px;
+background:rgba(255,255,255,.04);
+border:1px solid rgba(255,255,255,.08);
+text-align:center;
+transition:.3s;
 }
-
 .trust-card:hover{
-    transform:translateY(-5px);
-    border-color:rgba(0,150,255,.4);
-    box-shadow:0 0 30px rgba(0,100,255,.12);
+transform:translateY(-5px);
+border-color:rgba(0,150,255,.4);
+box-shadow:0 0 30px rgba(0,100,255,.12);
+}
+.trust-icon{
+font-size:35px;
+margin-bottom:15px;
+}
+.trust-card h3{margin-bottom:10px}
+.trust-card p{
+color:rgba(255,255,255,.55);
+line-height:1.5;
 }
 
-.trust-icon{ font-size:35px; margin-bottom:15px; }
-.trust-card h3{ margin-bottom:10px; }
-.trust-card p{ color:rgba(255,255,255,.55); line-height:1.5; }
-
-/* FOOTER */
 footer{
-    text-align:center;
-    padding:50px 20px;
-    border-top:1px solid rgba(255,255,255,.08);
-    color:rgba(255,255,255,.45);
+text-align:center;
+padding:50px 20px;
+border-top:1px solid rgba(255,255,255,.08);
+color:rgba(255,255,255,.45);
 }
 
-/* MOBILE */
 @media(max-width:700px){
-    nav a{ display:none; }
-    .hero h1{ letter-spacing:-3px; }
-    .category-title{ font-size:25px; }
-    .steps{ grid-template-columns:1fr; }
-    .after-payment{ padding:30px 18px; }
+nav a{display:none}
+.hero h1{letter-spacing:-3px}
+.category-title{font-size:25px}
+.steps{grid-template-columns:1fr}
+.after-payment{padding:30px 18px}
 }
 </style>
+
 </head>
+
 <body>
 
 <header>
-    <div class="nav">
-        <div class="logo">SHOP <span>FIRE</span> 🔥</div>
-        <nav>
-            <a href="#boutique">Boutique</a>
-            <a href="#apres-paiement">Après paiement</a>
-            <a href="#securite">Sécurité</a>
-            <a href="https://discord.gg/2XUNQeCU8H" target="_blank">Discord</a>
-            <button class="cart-nav-btn" id="open-cart">
-                🛒 Panier
-                <span class="cart-count" id="cart-count">0</span>
-            </button>
-        </nav>
-    </div>
+<div class="nav">
+<div class="logo">SHOP <span>FIRE</span> 🔥</div>
+
+<nav>
+<a href="#boutique">Boutique</a>
+<a href="#apres-paiement">Après paiement</a>
+<a href="#securite">Sécurité</a>
+<a href="https://discord.gg/2XUNQeCU8H" target="_blank">Discord</a>
+<button class="cart-nav-btn" id="open-cart">
+🛒 Panier <span class="cart-count" id="cart-count">0</span>
+</button>
+</nav>
+</div>
 </header>
 
 <main>
-    <!-- HERO -->
-    <div class="hero">
-        <div class="badge">🔥 SHOP GAMING • FIRE</div>
-        <h1>SHOP <span class="fire">FIRE</span> 🔥</h1>
-        <p>Découvre nos offres et services dédiés à Clash of Clans, Brawl Stars et Clash Royale. Ajoute tes articles au panier et paie en une seule fois via PayPal.</p>
-        <div class="buttons">
-            <a href="#boutique" class="btn primary">🛒 Voir la boutique</a>
-            <a href="https://discord.gg/2XUNQeCU8H" target="_blank" class="btn discord">💬 Notre Discord</a>
-        </div>
-    </div>
 
-    <!-- BOUTIQUE -->
-    <section id="boutique">
-        <h2 class="section-title">🛒 Notre boutique</h2>
-        <p class="section-subtitle">Sélectionne tes articles et gère les quantités dans ton panier.</p>
+<div class="hero">
 
-        <!-- CLASH OF CLANS -->
-        <div class="category">
-            <h2 class="category-title">⚔️ Clash of Clans</h2>
-            <div class="products">
-                <div class="card">
-                    <img class="product-image" src="https://placehold.co/900x550/151522/ff1744?text=⚔️+PASS+CLASH+OF+CLANS" alt="Pass Clash of Clans">
-                    <h3>🏆 Pass Clash of Clans</h3>
-                    <p>Notre offre dédiée au Pass Clash of Clans.</p>
-                    <div class="price-row">
-                        <div class="price">5 €</div>
-                        <button class="add-cart" onclick="addToCart('Pass Clash of Clans', 5)">+ Panier</button>
-                    </div>
-                </div>
+<div class="badge">🔥 SHOP GAMING • FIRE</div>
 
-                <div class="card">
-                    <img class="product-image" src="https://placehold.co/900x550/151522/00a8ff?text=🏠+DECOR+CLASH+OF+CLANS" alt="Décor Clash of Clans">
-                    <h3>🏠 Décor Clash of Clans</h3>
-                    <p>Offre dédiée aux décorations Clash of Clans.</p>
-                    <div class="price-row">
-                        <div class="price">3 €</div>
-                        <button class="add-cart" onclick="addToCart('Décor Clash of Clans', 3)">+ Panier</button>
-                    </div>
-                </div>
+<h1>
+SHOP <span class="fire">FIRE</span> 🔥
+</h1>
 
-                <div class="card">
-                    <img class="product-image" src="https://placehold.co/900x550/151522/9b5cff?text=🤖+SCRIPT+TROUPES" alt="Script demande de troupes">
-                    <h3>🤖 Script demande de troupes</h3>
-                    <p>Automatisation des demandes de troupes.</p>
-                    <div class="price-row">
-                        <div class="price">15 €</div>
-                        <button class="add-cart" onclick="addToCart('Script Troupes', 15)">+ Panier</button>
-                    </div>
-                </div>
+<p>
+Découvre nos offres et services dédiés à
+Clash of Clans, Brawl Stars et Clash Royale.
+Ajoute tes articles au panier et effectue ton paiement en 1 seule fois via PayPal.
+</p>
 
-                <div class="card">
-                    <img class="product-image" src="https://placehold.co/900x550/151522/ff9d00?text=🎁+DONS+AUTO" alt="Dons auto">
-                    <h3>🎁 Dons auto</h3>
-                    <p>Automatisation des dons de troupes.</p>
-                    <div class="price-row">
-                        <div class="price">5 €</div>
-                        <button class="add-cart" onclick="addToCart('Dons Auto', 5)">+ Panier</button>
-                    </div>
-                </div>
+<div class="buttons">
 
-                <div class="card">
-                    <img class="product-image" src="https://placehold.co/900x550/151522/00d084?text=⛏️+FARM+RESSOURCES" alt="Farm ressources">
-                    <h3>⛏️ Farm ressources</h3>
-                    <p>Automatisation du farm de ressources.</p>
-                    <div class="price-row">
-                        <div class="price">5 €</div>
-                        <button class="add-cart" onclick="addToCart('Farm Ressources', 5)">+ Panier</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+<a href="#boutique" class="btn primary">
+🛒 Voir la boutique
+</a>
 
-        <!-- BRAWL STARS -->
-        <div class="category">
-            <h2 class="category-title">⭐ Brawl Stars</h2>
-            <div class="products">
-                <div class="card">
-                    <img class="product-image" src="https://placehold.co/900x550/151522/ffd21f?text=⭐+BRAWL+PASS" alt="Pass Brawl Stars">
-                    <h3>⭐ Pass Brawl Stars</h3>
-                    <p>Notre offre dédiée au Pass Brawl Stars.</p>
-                    <div class="price-row">
-                        <div class="price">8 €</div>
-                        <button class="add-cart" onclick="addToCart('Pass Brawl Stars', 8)">+ Panier</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+<a href="https://discord.gg/2XUNQeCU8H" target="_blank" class="btn discord">
+💬 Notre Discord
+</a>
 
-        <!-- CLASH ROYALE -->
-        <div class="category">
-            <h2 class="category-title">👑 Clash Royale</h2>
-            <div class="products">
-                <div class="card">
-                    <img class="product-image" src="https://placehold.co/900x550/151522/ffd700?text=👑+PASS+ROYALE" alt="Pass Clash Royale">
-                    <h3>👑 Pass Royale</h3>
-                    <p>Notre offre dédiée au Pass Royale de Clash Royale.</p>
-                    <div class="price-row">
-                        <div class="price">6 €</div>
-                        <button class="add-cart" onclick="addToCart('Pass Clash Royale', 6)">+ Panier</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+</div>
+</div>
 
-    <!-- APRÈS PAIEMENT -->
-    <section id="apres-paiement">
-        <div class="after-payment">
-            <div class="after-icon">✅</div>
-            <h3>Merci pour ta commande !</h3>
-            <p>Après ton paiement PayPal, rejoins notre Discord pour nous transmettre le détail de ta commande.</p>
-            <div class="steps">
-                <div class="step">
-                    <div class="step-number">💳</div>
-                    <strong>1. Paiement</strong>
-                    <span>Paye le total exact de ton panier via PayPal.</span>
-                </div>
-                <div class="step">
-                    <div class="step-number">💬</div>
-                    <strong>2. Discord</strong>
-                    <span>Rejoins notre serveur et ouvre un ticket support.</span>
-                </div>
-                <div class="step">
-                    <div class="step-number">🔥</div>
-                    <strong>3. Livraison</strong>
-                    <span>Envoie la liste de tes articles pour recevoir ton offre.</span>
-                </div>
-            </div>
-            <a href="https://discord.gg/2XUNQeCU8H" target="_blank" class="btn discord">💬 J'ai payé — Ouvrir Discord</a>
-        </div>
-    </section>
+<section id="boutique">
 
-    <!-- SÉCURITÉ -->
-    <section id="securite">
-        <h2 class="section-title">🔐 Paiement & sécurité</h2>
-        <p class="section-subtitle">Un processus simple et transparent.</p>
-        <div class="trust">
-            <div class="trust-card">
-                <div class="trust-icon">🔒</div>
-                <h3>Paiement PayPal</h3>
-                <p>Le paiement est effectué directement sur PayPal en toute sécurité.</p>
-            </div>
-            <div class="trust-card">
-                <div class="trust-icon">⚡</div>
-                <h3>Panier regroupé</h3>
-                <p>Achète plusieurs articles en un seul règlement.</p>
-            </div>
-            <div class="trust-card">
-                <div class="trust-icon">💬</div>
-                <h3>Support Discord</h3>
-                <p>Assistance rapide sur Discord après ton règlement.</p>
-            </div>
-        </div>
-    </section>
+<h2 class="section-title">🛒 Notre boutique</h2>
+
+<p class="section-subtitle">
+Ajoute tes produits au panier et gère tes quantités.
+</p>
+
+<!-- CLASH OF CLANS -->
+
+<div class="category">
+
+<h2 class="category-title">⚔️ Clash of Clans</h2>
+
+<div class="products">
+
+<div class="card">
+
+<img
+class="product-image"
+src="https://placehold.co/900x550/151522/ff1744?text=⚔️+PASS+CLASH+OF+CLANS"
+alt="Pass Clash of Clans">
+
+<h3>🏆 Pass Clash of Clans</h3>
+
+<p>
+Profite de notre offre dédiée au Pass Clash of Clans.
+</p>
+
+<div class="price-row">
+
+<div class="price">5 €</div>
+
+<button class="add-cart" onclick="addToCart('Pass Clash of Clans', 5)">
++ Panier
+</button>
+
+</div>
+</div>
+
+<div class="card">
+
+<img
+class="product-image"
+src="https://placehold.co/900x550/151522/00a8ff?text=🏠+DECOR+CLASH+OF+CLANS"
+alt="Décor Clash of Clans">
+
+<h3>🏠 Décor Clash of Clans</h3>
+
+<p>
+Découvre notre offre dédiée aux décorations Clash of Clans.
+</p>
+
+<div class="price-row">
+
+<div class="price">3 €</div>
+
+<button class="add-cart" onclick="addToCart('Décor Clash of Clans', 3)">
++ Panier
+</button>
+
+</div>
+</div>
+
+<div class="card">
+
+<img
+class="product-image"
+src="https://placehold.co/900x550/151522/9b5cff?text=🤖+SCRIPT+TROUPES"
+alt="Script demande de troupes">
+
+<h3>🤖 Script demande de troupes</h3>
+
+<p>
+Automatisation des demandes de troupes.
+</p>
+
+<div class="price-row">
+
+<div class="price">15 €</div>
+
+<button class="add-cart" onclick="addToCart('Script Troupes', 15)">
++ Panier
+</button>
+
+</div>
+</div>
+
+<div class="card">
+
+<img
+class="product-image"
+src="https://placehold.co/900x550/151522/ff9d00?text=🎁+DONS+AUTO"
+alt="Dons auto">
+
+<h3>🎁 Dons auto</h3>
+
+<p>
+Automatisation des dons de troupes.
+</p>
+
+<div class="price-row">
+
+<div class="price">5 €</div>
+
+<button class="add-cart" onclick="addToCart('Dons Auto', 5)">
++ Panier
+</button>
+
+</div>
+</div>
+
+<div class="card">
+
+<img
+class="product-image"
+src="https://placehold.co/900x550/151522/00d084?text=⛏️+FARM+RESSOURCES"
+alt="Farm ressources">
+
+<h3>⛏️ Farm ressources</h3>
+
+<p>
+Automatisation du farm de ressources.
+</p>
+
+<div class="price-row">
+
+<div class="price">5 €</div>
+
+<button class="add-cart" onclick="addToCart('Farm Ressources', 5)">
++ Panier
+</button>
+
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- BRAWL STARS -->
+
+<div class="category">
+
+<h2 class="category-title">⭐ Brawl Stars</h2>
+
+<div class="products">
+
+<div class="card">
+
+<img
+class="product-image"
+src="https://placehold.co/900x550/151522/ffd21f?text=⭐+BRAWL+PASS"
+alt="Pass Brawl Stars">
+
+<h3>⭐ Pass Brawl Stars</h3>
+
+<p>
+Notre offre dédiée au Pass Brawl Stars.
+</p>
+
+<div class="price-row">
+
+<div class="price">8 €</div>
+
+<button class="add-cart" onclick="addToCart('Pass Brawl Stars', 8)">
++ Panier
+</button>
+
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- CLASH ROYALE -->
+
+<div class="category">
+
+<h2 class="category-title">👑 Clash Royale</h2>
+
+<div class="products">
+
+<div class="card">
+
+<img
+class="product-image"
+src="https://placehold.co/900x550/151522/ffd700?text=👑+PASS+ROYALE"
+alt="Pass Clash Royale">
+
+<h3>👑 Pass Clash Royale</h3>
+
+<p>
+Profite de notre offre dédiée au Pass Royale.
+</p>
+
+<div class="price-row">
+
+<div class="price">6 €</div>
+
+<button class="add-cart" onclick="addToCart('Pass Clash Royale', 6)">
++ Panier
+</button>
+
+</div>
+</div>
+
+</div>
+</div>
+
+</section>
+
+<section id="apres-paiement">
+
+<div class="after-payment">
+
+<div class="after-icon">✅</div>
+
+<h3>Merci pour ta commande !</h3>
+
+<p>
+Après ton paiement PayPal, rejoins notre Discord
+pour nous transmettre les informations nécessaires
+à ta commande.
+</p>
+
+<div class="steps">
+
+<div class="step">
+<div class="step-number">💳</div>
+<strong>1. Paiement</strong>
+<span>Effectue le paiement du montant total de ton panier sur PayPal.</span>
+</div>
+
+<div class="step">
+<div class="step-number">💬</div>
+<strong>2. Discord</strong>
+<span>Rejoins notre serveur et contacte le support.</span>
+</div>
+
+<div class="step">
+<div class="step-number">🔥</div>
+<strong>3. Commande</strong>
+<span>Indique tes articles commandés et les informations nécessaires.</span>
+</div>
+
+</div>
+
+<a
+href="https://discord.gg/2XUNQeCU8H"
+target="_blank"
+class="btn discord">
+💬 J'ai payé — Ouvrir Discord </a>
+
+</div>
+
+</section>
+
+<section id="securite">
+
+<h2 class="section-title">🔐 Paiement & sécurité</h2>
+
+<p class="section-subtitle">
+Un processus simple et transparent.
+</p>
+
+<div class="trust">
+
+<div class="trust-card">
+
+<div class="trust-icon">🔒</div>
+
+<h3>Paiement PayPal</h3>
+
+<p>
+Le paiement est effectué directement sur PayPal.
+Aucune information bancaire n'est saisie sur Shop Fire.
+</p>
+
+</div>
+
+<div class="trust-card">
+
+<div class="trust-icon">🛡️</div>
+
+<h3>Paiement sécurisé</h3>
+
+<p>
+Tu es redirigé vers PayPal pour effectuer ton règlement global.
+</p>
+
+</div>
+
+<div class="trust-card">
+
+<div class="trust-icon">⚡</div>
+
+<h3>Commande regroupée</h3>
+
+<p>
+Ajoute autant d'articles que tu veux et gère les quantités avant de payer.
+</p>
+
+</div>
+
+<div class="trust-card">
+
+<div class="trust-icon">💬</div>
+
+<h3>Support Discord</h3>
+
+<p>
+Notre Discord permet de suivre les commandes
+et de contacter le support.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
 </main>
 
-<!-- PANIER LATÉRAL (DRAWER) -->
+<!-- PANIER LATÉRAL -->
 <div class="cart-overlay" id="cart-overlay"></div>
 <div class="cart-drawer" id="cart-drawer">
     <div class="cart-header">
@@ -754,13 +888,20 @@ footer{
 </div>
 
 <footer>
-    🔥 <strong>Shop Fire</strong><br><br>
-    Paiement via PayPal • Support Discord<br><br>
-    © 2026 Shop Fire — Tous droits réservés.
+
+🔥 <strong>Shop Fire</strong>
+
+<br><br>
+
+Paiement via PayPal • Support Discord
+
+<br><br>
+
+© 2026 Shop Fire — Tous droits réservés.
+
 </footer>
 
 <script>
-// GESTION DU PANIER
 let cart = [];
 
 const openCartBtn = document.getElementById('open-cart');
@@ -772,7 +913,7 @@ const cartTotalPrice = document.getElementById('cart-total-price');
 const cartCount = document.getElementById('cart-count');
 const checkoutBtn = document.getElementById('checkout-btn');
 
-const PAYPAL_USERNAME = "FireTwitch955"; // Ton identifiant PayPal
+const PAYPAL_USERNAME = "FireTwitch955";
 
 function toggleCart() {
     cartOverlay.classList.toggle('active');
@@ -809,7 +950,6 @@ function updateQuantity(name, change) {
 
 function updateCartUI() {
     cartItemsContainer.innerHTML = '';
-    
     let total = 0;
     let totalCount = 0;
 
@@ -840,7 +980,6 @@ function updateCartUI() {
     cartTotalPrice.textContent = total + ' €';
     cartCount.textContent = totalCount;
 
-    // Mise à jour du lien de paiement PayPal avec le montant total dynamique
     if (total > 0) {
         checkoutBtn.href = `https://www.paypal.me/${PAYPAL_USERNAME}/${total}`;
         checkoutBtn.style.pointerEvents = 'all';
@@ -852,7 +991,6 @@ function updateCartUI() {
     }
 }
 
-// Initialisation
 updateCartUI();
 </script>
 
