@@ -830,12 +830,13 @@ alt="Pass Clash of Clans">
 <p>
 Profite de notre offre dédiée au Pass Clash of Clans.
 </p>
+<p id="stock-coc" style="font-weight: bold; font-size: 13px; margin: 10px 0; color: #00d084;"></p>
 
 <div class="price-row">
 
 <div class="price">5 €</div>
 
-<button class="add-cart" onclick="addToCart('Pass Clash of Clans', 5)">
+<button class="add-cart" id="btn-coc" onclick="addToCart('Pass Coc', 5)">
 + Panier
 </button>
 
@@ -854,6 +855,7 @@ alt="Décor Clash of Clans">
 <p>
 Découvre notre offre dédiée aux décorations Clash of Clans.
 </p>
+<p style="font-weight: bold; font-size: 13px; margin: 10px 0; color: #00d084;">⚡ Stock illimité</p>
 
 <div class="price-row">
 
@@ -878,6 +880,7 @@ alt="Script demande de troupes">
 <p>
 Automatisation des demandes de troupes.
 </p>
+<p style="font-weight: bold; font-size: 13px; margin: 10px 0; color: #00d084;">⚡ Stock illimité</p>
 
 <div class="price-row">
 
@@ -902,6 +905,7 @@ alt="Dons auto">
 <p>
 Automatisation des dons de troupes.
 </p>
+<p style="font-weight: bold; font-size: 13px; margin: 10px 0; color: #00d084;">⚡ Stock illimité</p>
 
 <div class="price-row">
 
@@ -927,6 +931,7 @@ alt="Farm ressources">
 <p>
 Automatisation du farm de ressources.
 </p>
+<p style="font-weight: bold; font-size: 13px; margin: 10px 0; color: #00d084;">⚡ Stock illimité</p>
 
 <div class="price-row">
 
@@ -963,12 +968,13 @@ alt="Pass Brawl Stars">
 <p>
 Notre offre dédiée au Pass Brawl Stars.
 </p>
+<p id="stock-brawl" style="font-weight: bold; font-size: 13px; margin: 10px 0; color: #00d084;"></p>
 
 <div class="price-row">
 
 <div class="price">8 €</div>
 
-<button class="add-cart" onclick="addToCart('Pass Brawl Stars', 8)">
+<button class="add-cart" id="btn-brawl" onclick="addToCart('Pass Brawl Stars', 8)">
 + Panier
 </button>
 
@@ -998,12 +1004,13 @@ alt="Pass Clash Royale">
 <p>
 Profite de notre offre dédiée au Pass Royale.
 </p>
+<p id="stock-cr" style="font-weight: bold; font-size: 13px; margin: 10px 0; color: #00d084;"></p>
 
 <div class="price-row">
 
 <div class="price">6 €</div>
 
-<button class="add-cart" onclick="addToCart('Pass Clash Royale', 6)">
+<button class="add-cart" id="btn-cr" onclick="addToCart('Pass CR', 6)">
 + Panier
 </button>
 
@@ -1248,6 +1255,42 @@ const copyBtn = document.getElementById('copy-btn');
 const PAYPAL_USERNAME = "FireTwitch955";
 const DISCORD_WEBHOOK_URL = ""; 
 
+// CHARGEMENT DES STOCKS DEPUIS SUPABASE
+async function loadStocks() {
+    const { data: products, error } = await _supabase
+        .from('products')
+        .select('*');
+
+    if (error) {
+        console.error("Erreur lors du chargement des stocks :", error);
+        return;
+    }
+
+    products.forEach(product => {
+        let elementId = "";
+        let buttonId = "";
+        
+        if (product.title === "Pass Coc") { elementId = "stock-coc"; buttonId = "btn-coc"; }
+        if (product.title === "Pass Brawl Stars") { elementId = "stock-brawl"; buttonId = "btn-brawl"; }
+        if (product.title === "Pass CR") { elementId = "stock-cr"; buttonId = "btn-cr"; }
+
+        const stockEl = document.getElementById(elementId);
+        const btnEl = document.getElementById(buttonId);
+
+        if (stockEl) {
+            if (product.stock > 0) {
+                stockEl.textContent = `⚡ Stock : ${product.stock} dispo`;
+                stockEl.style.color = "#00d084";
+                if (btnEl) { btnEl.disabled = false; btnEl.style.opacity = "1"; }
+            } else {
+                stockEl.textContent = "❌ Rupture de stock";
+                stockEl.style.color = "#ff1744";
+                if (btnEl) { btnEl.disabled = true; btnEl.style.opacity = "0.5"; }
+            }
+        }
+    });
+}
+
 // AUTHENTIFICATION PAR EMAIL (CREATION / CONNEXION DIRECTE)
 async function loginWithEmail() {
     const email = prompt("Entre ton adresse email :");
@@ -1256,10 +1299,8 @@ async function loginWithEmail() {
     const password = prompt("Entre ton mot de passe (au moins 6 caractères) :");
     if (!password) return;
 
-    // 1. Essai de connexion directe
     let { data, error } = await _supabase.auth.signInWithPassword({ email, password });
 
-    // 2. Si le compte n'existe pas, on le crée automatiquement
     if (error) {
         let signUp = await _supabase.auth.signUp({ email, password });
         if (signUp.error) {
@@ -1267,7 +1308,6 @@ async function loginWithEmail() {
             return;
         }
         
-        // Connexion immédiate post-création
         if (signUp.data.session) {
             alert("🎉 Compte créé et connecté avec succès !");
             await checkUserSession();
@@ -1278,7 +1318,6 @@ async function loginWithEmail() {
         return;
     }
 
-    // 3. Connexion réussie
     if (data.session) {
         alert("🎉 Connexion réussie !");
         await checkUserSession();
@@ -1318,7 +1357,7 @@ async function loadUserPoints(userId) {
 
 function claimFreePass() {
     if (userPoints < 10) return;
-    let passName = prompt("Quel Pass gratuit souhaites-tu réclamer ?\n- Pass Clash of Clans\n- Pass Brawl Stars\n- Pass Royale");
+    let passName = prompt("Quel Pass gratuit souhaites-tu réclamer ?\n- Pass Coc\n- Pass Brawl Stars\n- Pass CR");
     if (passName) {
         alert(`🎉 Choix enregistré (${passName}) ! Ouvre un ticket sur Discord avec l'adresse ${currentUser.email} pour recevoir ton Pass gratuit !`);
     }
@@ -1515,9 +1554,10 @@ function toggleFaq(button) {
     }
 }
 
-// Initialisation
+// Initialisation au chargement de la page
 updateCartUI();
 checkUserSession();
+loadStocks();
 </script>
 
 </body>
