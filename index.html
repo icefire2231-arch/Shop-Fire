@@ -83,12 +83,35 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 }
-.logo{
-font-size:25px;
-font-weight:900;
-text-shadow:0 0 20px rgba(255,0,50,.8);
+
+/* LOGO PLUS CLEAN ET PROFESSIONNEL */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: #fff;
+    text-decoration: none;
+    font-family: system-ui, -apple-system, sans-serif;
 }
-.logo span{color:#ff1744}
+.logo-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #ff1744, #ff4d00);
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(255, 23, 68, 0.4);
+    font-size: 18px;
+}
+.logo span {
+    background: linear-gradient(135deg, #ff1744, #ff7700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 
 nav{
 display:flex;
@@ -642,28 +665,12 @@ cursor:pointer;
 box-shadow:0 0 20px rgba(0,140,255,.4);
 transition:.25s;
 text-decoration:none;
-display:flex;
-align-items:center;
-justify-content:center;
-gap:12px;
+display:block;
 text-align:center;
 }
 .checkout-btn:hover{
 transform:scale(1.02);
 box-shadow:0 0 30px rgba(0,140,255,.7);
-}
-
-/* ANIMATION LOGO PAYPAL TOURNANT */
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-.paypal-logo-spin {
-    width: 24px;
-    height: 24px;
-    animation: spin 3s linear infinite;
-    display: inline-block;
-    vertical-align: middle;
 }
 
 .copy-btn{
@@ -770,22 +777,6 @@ border-top:1px solid rgba(255,255,255,.08);
 color:rgba(255,255,255,.45);
 }
 
-.legal-links {
-margin-top: 15px;
-display: flex;
-justify-content: center;
-gap: 20px;
-font-size: 13px;
-}
-.legal-links a {
-color: rgba(255,255,255,0.6);
-text-decoration: none;
-transition: color 0.2s;
-}
-.legal-links a:hover {
-color: #ff1744;
-}
-
 @media(max-width:700px){
 nav a{display:none}
 .hero h1{letter-spacing:-3px}
@@ -807,7 +798,11 @@ nav a{display:none}
 
 <header>
 <div class="nav">
-<div class="logo">SHOP <span>FIRE</span> 🔥</div>
+<!-- LOGO PLUS CLEAN -->
+<a href="#" class="logo">
+    <div class="logo-icon">🔥</div>
+    SHOP <span>FIRE</span>
+</a>
 
 <nav>
 <a href="#boutique">Boutique</a>
@@ -1288,10 +1283,7 @@ et de contacter le support.
             <span id="cart-total-price">0 €</span>
         </div>
         <button class="copy-btn" id="copy-btn" onclick="copyCartSummary()">📋 Copier la commande pour Discord</button>
-        <a href="#" class="checkout-btn" id="checkout-btn" target="_blank">
-            <svg class="paypal-logo-spin" viewBox="0 0 24 24" fill="white"><path d="M7.076 21.338H2.47a.641.641 0 0 1-.633-.74L4.944 3.72a.774.774 0 0 1 .763-.64h6.73c2.476 0 4.332.556 5.378 1.606 1.018 1.018 1.252 2.618.704 4.786-.68 2.738-2.39 4.332-5.02 4.492H10.84l-1.424 8.376zm11.66-13.81c-.55-1.12-1.536-1.85-3.134-2.112h-5.076l-1.92 11.288h2.956l1.242-7.306h1.22c1.774 0 3.12-.646 3.51-2.284.15-.626.104-1.166-.202-1.586z"/></svg>
-            Payer via PayPal
-        </a>
+        <a href="#" class="checkout-btn" id="checkout-btn" target="_blank">💳 Payer via PayPal</a>
     </div>
 </div>
 
@@ -1303,13 +1295,7 @@ et de contacter le support.
 
 Paiement via PayPal • Support Discord
 
-<div class="legal-links">
-    <a href="#securite">Mentions Légales</a>
-    <a href="#faq">CGV</a>
-    <a href="#securite">Confidentialité</a>
-</div>
-
-<br>
+<br><br>
 
 © 2026 Shop Fire — Tous droits réservés.
 
@@ -1377,16 +1363,15 @@ async function loadStocks() {
     });
 }
 
-// GESTION DES CODES PROMO (Modifiables selon les mois)
+// GESTION DES CODES PROMO
 function applyPromoCode() {
     const code = promoInput.value.trim().toUpperCase();
     
-    // EXEMPLES DE CODES PROMO MENSUELS OU PERMANENTS :
     const validCodes = {
-        "SUMMER20": 0.20,  // -20% (Idéal pour l'été)
-        "RENTREE10": 0.10, // -10% (Idéal pour septembre)
-        "FIRE50": 0.50,    // -50% (Promo exceptionnelle)
-        "WELCOME": 0.05    // -5% permanent
+        "SUMMER20": 0.20, 
+        "RENTREE10": 0.10, 
+        "FIRE50": 0.50,    
+        "WELCOME": 0.05    
     };
 
     if (validCodes[code] !== undefined) {
@@ -1404,7 +1389,7 @@ function applyPromoCode() {
     }
 }
 
-// AUTHENTIFICATION PAR EMAIL (CREATION / CONNEXION DIRECTE)
+// AUTHENTIFICATION PAR EMAIL
 async function loginWithEmail() {
     const email = prompt("Entre ton adresse email :");
     if (!email) return;
@@ -1513,6 +1498,7 @@ function updateQuantity(name, change) {
     updateCartUI();
 }
 
+// MISE À JOUR DE L'UI DU PANIER (AVEC SÉCURISATION DU BOUTON PAYPAL)
 function updateCartUI() {
     cartItemsContainer.innerHTML = '';
     
@@ -1520,9 +1506,17 @@ function updateCartUI() {
         cartItemsContainer.innerHTML = '<p class="empty-msg">Ton panier est vide pour le moment.</p>';
         cartTotalPrice.textContent = '0 €';
         cartCount.textContent = '0';
+        
+        // Désactivation visuelle et fonctionnelle du bouton PayPal
+        checkoutBtn.style.opacity = '0.4';
+        checkoutBtn.style.pointerEvents = 'none';
         checkoutBtn.href = '#';
         return;
     }
+
+    // Réactiver le bouton si le panier n'est pas vide
+    checkoutBtn.style.opacity = '1';
+    checkoutBtn.style.pointerEvents = 'auto';
 
     let totalCount = 0;
     let totalPrice = 0;
@@ -1560,33 +1554,34 @@ function updateCartUI() {
     checkoutBtn.href = paypalUrl;
 }
 
+// COPIER LE RÉCAPITULATIF POUR DISCORD
 function copyCartSummary() {
     if (cart.length === 0) {
         alert("Ton panier est vide !");
         return;
     }
 
-    let summary = "🔥 RÉCAPITULATIF DE COMMANDE - SHOP FIRE 🔥\n\n";
-    let subtotal = 0;
+    let summary = "🔥 COMMANDE SHOP FIRE 🔥\n\n";
+    let rawTotal = 0;
 
     cart.forEach(item => {
-        let itemTotal = item.price * item.quantity;
-        subtotal += itemTotal;
-        summary += `• ${item.quantity}x ${item.name} (${itemTotal} €)\n`;
+        let subtotal = item.price * item.quantity;
+        rawTotal += subtotal;
+        summary += `- ${item.quantity}x ${item.name} (${subtotal} €)\n`;
     });
 
-    let finalTotal = subtotal;
     if (appliedDiscount > 0) {
-        finalTotal = subtotal * (1 - appliedDiscount);
-        summary += `\nSous-total : ${subtotal.toFixed(2)} €`;
+        let finalTotal = rawTotal * (1 - appliedDiscount);
+        summary += `\nSous-total : ${rawTotal.toFixed(2)} €`;
         summary += `\nCode promo (${appliedPromoName}) : -${appliedDiscount * 100}%`;
+        summary += `\nTotal final : ${finalTotal.toFixed(2)} €`;
+    } else {
+        summary += `\nTotal : ${rawTotal.toFixed(2)} €`;
     }
 
-    summary += `\n\n💰 Total à payer : ${finalTotal.toFixed(2)} €`;
     if (currentUser) {
-        summary += `\n📧 Email client : ${currentUser.email}`;
+        summary += `\nEmail client : ${currentUser.email}`;
     }
-    summary += `\n\n👉 Paiement effectué via PayPal. J'attends la livraison !`;
 
     navigator.clipboard.writeText(summary).then(() => {
         copyBtn.textContent = "✅ Copié avec succès !";
@@ -1594,24 +1589,36 @@ function copyCartSummary() {
             copyBtn.textContent = "📋 Copier la commande pour Discord";
         }, 3000);
     }).catch(err => {
-        console.error("Erreur lors de la copie :", err);
+        alert("Erreur lors de la copie : " + err);
     });
 }
 
-function filterGame(category, btn) {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
+// FILTRE DES JEUX
+function filterGame(game, btnElement) {
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    btnElement.classList.add('active');
 
-    const categories = document.querySelectorAll('.category');
-    categories.forEach(cat => {
-        if (category === 'all' || cat.id === `cat-${category}`) {
-            cat.classList.remove('hidden');
-        } else {
-            cat.classList.add('hidden');
-        }
-    });
+    const catCoc = document.getElementById('cat-coc');
+    const catBrawl = document.getElementById('cat-brawl');
+    const catRoyale = document.getElementById('cat-royale');
+
+    catCoc.classList.remove('hidden');
+    catBrawl.classList.remove('hidden');
+    catRoyale.classList.remove('hidden');
+
+    if (game === 'coc') {
+        catBrawl.classList.add('hidden');
+        catRoyale.classList.add('hidden');
+    } else if (game === 'brawl') {
+        catCoc.classList.add('hidden');
+        catRoyale.classList.add('hidden');
+    } else if (game === 'royale') {
+        catCoc.classList.add('hidden');
+        catBrawl.classList.add('hidden');
+    }
 }
 
+// FAQ TOGGLE
 function toggleFaq(button) {
     const item = button.parentElement;
     const isActive = item.classList.contains('active');
@@ -1623,10 +1630,11 @@ function toggleFaq(button) {
     }
 }
 
+// INITIALISATION AU CHARGEMENT DE LA PAGE
 window.addEventListener('DOMContentLoaded', async () => {
-    await checkUserSession();
-    await loadStocks();
+    loadStocks();
     updateCartUI();
+    await checkUserSession();
 });
 </script>
 
