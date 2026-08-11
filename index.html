@@ -410,6 +410,13 @@ transition:.25s;
 transform:scale(1.08);
 box-shadow:0 0 30px rgba(255,30,60,.65);
 }
+.add-cart.disabled {
+background: rgba(255, 255, 255, 0.1);
+color: rgba(255, 255, 255, 0.3);
+box-shadow: none;
+pointer-events: none;
+cursor: not-allowed;
+}
 
 /* FAQ SECTION */
 .faq-container{
@@ -1450,6 +1457,50 @@ const promoMsg = document.getElementById('promo-msg');
 
 const PAYPAL_USERNAME = "FireTwitch955";
 
+// --- CHARGEMENT DES STOCKS DEPUIS SUPABASE ---
+async function loadStocks() {
+    const { data: products, error } = await _supabase
+        .from('products')
+        .select('*');
+
+    if (error) {
+        console.error("Erreur lors du chargement des stocks :", error);
+        return;
+    }
+
+    if (products) {
+        products.forEach(product => {
+            const stockEl = document.getElementById(`stock-${product.name}`);
+            const btnEl = document.getElementById(getButtonId(product.name));
+
+            if (stockEl) {
+                if (product.stock > 0) {
+                    stockEl.style.color = "#00d084";
+                    stockEl.innerText = `⚡ En stock : ${product.stock} restants`;
+                    if (btnEl) {
+                        btnEl.classList.remove('disabled');
+                        btnEl.removeAttribute('disabled');
+                    }
+                } else {
+                    stockEl.style.color = "#ff1744";
+                    stockEl.innerText = `❌ Rupture de stock`;
+                    if (btnEl) {
+                        btnEl.classList.add('disabled');
+                        btnEl.setAttribute('disabled', 'true');
+                    }
+                }
+            }
+        });
+    }
+}
+
+function getButtonId(productName) {
+    if (productName === 'Pass Coc') return 'btn-coc';
+    if (productName === 'Pass Brawl Stars') return 'btn-brawl';
+    if (productName === 'Pass Royale') return 'btn-cr';
+    return '';
+}
+
 function applyPromoCode() {
     const codeSaisi = promoInput.value.trim().toUpperCase();
 
@@ -1508,7 +1559,6 @@ function updateCart() {
 
     cartCount.innerText = totalItems;
     
-    // Application de la réduction du code promo
     let total = subtotal * (1 - appliedDiscount);
     cartTotalPrice.innerText = total.toFixed(2) + " €";
 
@@ -1579,7 +1629,6 @@ openCartBtn.addEventListener('click', openCart);
 closeCartBtn.addEventListener('click', closeCart);
 cartOverlay.addEventListener('click', closeCart);
 
-// Gestion des filtres et FAQ de base
 function filterGame(game, btn) {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
@@ -1618,6 +1667,7 @@ function closeLegalModals() {
 
 // Initialisation au chargement
 updateCart();
+loadStocks();
 </script>
 
 </body>
