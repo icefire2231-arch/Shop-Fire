@@ -583,17 +583,51 @@ text-align:center;
 }
 .cart-footer{
 border-top:1px solid rgba(255,255,255,.1);
-padding-top:20px;
+padding-top:15px;
 display:flex;
 flex-direction:column;
-gap:12px;
+gap:10px;
 }
+
+/* SECTION PROMO CODE */
+.promo-box{
+display:flex;
+gap:8px;
+}
+.promo-input{
+flex:1;
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.15);
+padding:10px 12px;
+border-radius:10px;
+color:#fff;
+font-size:14px;
+outline:none;
+}
+.promo-input:focus{border-color:#ff1744}
+.promo-apply-btn{
+background:rgba(255,255,255,.15);
+border:none;
+color:#fff;
+padding:0 15px;
+border-radius:10px;
+font-weight:bold;
+cursor:pointer;
+transition:.2s;
+}
+.promo-apply-btn:hover{background:#ff1744}
+.promo-msg{
+font-size:12px;
+margin-top:-4px;
+min-height:16px;
+}
+
 .cart-total{
 display:flex;
 justify-content:space-between;
 font-size:22px;
 font-weight:bold;
-margin-bottom:10px;
+margin-top:5px;
 }
 .checkout-btn{
 width:100%;
@@ -1210,6 +1244,13 @@ et de contacter le support.
         <p class="empty-msg">Ton panier est vide pour le moment.</p>
     </div>
     <div class="cart-footer">
+        <!-- CHAMP CODE PROMO -->
+        <div class="promo-box">
+            <input type="text" id="promo-input" class="promo-input" placeholder="Code promo (ex: RRENTREE)">
+            <button class="promo-apply-btn" onclick="applyPromoCode()">Appliquer</button>
+        </div>
+        <div class="promo-msg" id="promo-msg"></div>
+
         <div class="cart-total">
             <span>Total :</span>
             <span id="cart-total-price">0 €</span>
@@ -1241,6 +1282,8 @@ const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let currentUser = null;
 let userPoints = 0;
+let appliedDiscount = 0; // Pourcentage de réduction (ex: 0.20 pour 20%)
+let appliedPromoName = "";
 
 let cart = JSON.parse(localStorage.getItem('shop_fire_cart')) || [];
 
@@ -1253,6 +1296,8 @@ const cartTotalPrice = document.getElementById('cart-total-price');
 const cartCount = document.getElementById('cart-count');
 const checkoutBtn = document.getElementById('checkout-btn');
 const copyBtn = document.getElementById('copy-btn');
+const promoInput = document.getElementById('promo-input');
+const promoMsg = document.getElementById('promo-msg');
 
 const PAYPAL_USERNAME = "FireTwitch955";
 
@@ -1289,6 +1334,34 @@ async function loadStocks() {
             }
         }
     });
+}
+
+// GESTION DES CODES PROMO (Modifiables selon les mois)
+function applyPromoCode() {
+    const code = promoInput.value.trim().toUpperCase();
+    
+    // EXEMPLES DE CODES PROMO MENSUELS OU PERMANENTS :
+    // Tu peux modifier les noms et les réductions ici facilement !
+    const validCodes = {
+        "SUMMER20": 0.20,  // -20% (Idéal pour l'été)
+        "RENTREE10": 0.10, // -10% (Idéal pour septembre)
+        "FIRE50": 0.50,    // -50% (Promo exceptionnelle)
+        "WELCOME": 0.05    // -5% permanent
+    };
+
+    if (validCodes[code] !== undefined) {
+        appliedDiscount = validCodes[code];
+        appliedPromoName = code;
+        promoMsg.style.color = "#00d084";
+        promoMsg.textContent = `✅ Code "${code}" appliqué (-${appliedDiscount * 100}%) !`;
+        updateCartUI();
+    } else {
+        appliedDiscount = 0;
+        appliedPromoName = "";
+        promoMsg.style.color = "#ff1744";
+        promoMsg.textContent = "❌ Code promo invalide ou expiré.";
+        updateCartUI();
+    }
 }
 
 // AUTHENTIFICATION PAR EMAIL (CREATION / CONNEXION DIRECTE)
@@ -1404,7 +1477,7 @@ function updateQuantity(name, change) {
 
 function updateCartUI() {
     cartItemsContainer.innerHTML = '';
-    let total = 0;
+    let subtotal = 0;
     let totalCount = 0;
 
     if (cart.length === 0) {
@@ -1415,6 +1488,12 @@ function updateCartUI() {
         checkoutBtn.style.opacity = "0.5";
         checkoutBtn.style.pointerEvents = "none";
         checkoutBtn.href = "#";
+        
+        // Réinitialiser la promo si le panier se vide
+        appliedDiscount = 0;
+        appliedPromoName = "";
+        promoMsg.textContent = "";
+        promoInput.value = "";
     } else {
         copyBtn.style.display = 'block';
         
@@ -1423,7 +1502,7 @@ function updateCartUI() {
         checkoutBtn.style.pointerEvents = "auto";
 
         cart.forEach(item => {
-            total += item.price * item.quantity;
+            subtotal += item.price * item.quantity;
             totalCount += item.quantity;
 
             const itemElement = document.createElement('div');
@@ -1443,11 +1522,16 @@ function updateCartUI() {
         });
     }
 
-    cartTotalPrice.textContent = total + ' €';
+    // Calcul du total avec réduction du code promo
+    let finalTotal = subtotal * (1 - appliedDiscount);
+    // Arrondir à 2 chiffres après la virgule si besoin, ou garder en entier
+    finalTotal = Math.round(finalTotal * 100) / 100;
+
+    cartTotalPrice.textContent = finalTotal + ' €';
     cartCount.textContent = totalCount;
 
-    let paypalUrl = `https://www.paypal.com/paypalme/${PAYPAL_USERNAME}/${total}EUR`;
-    if (total > 0) {
+    let paypalUrl = `https://www.paypal.com/paypalme/${PAYPAL_USERNAME}/${finalTotal}EUR`;
+    if (finalTotal > 0) {
         checkoutBtn.href = paypalUrl;
     }
 }
@@ -1460,6 +1544,9 @@ function copyCartSummary() {
     cart.forEach(item => {
         summary += `- ${item.name} (x${item.quantity}) : ${item.price * item.quantity} €\n`;
     });
+    if (appliedPromoName) {
+        summary += `🎟️ Code promo appliqué : ${appliedPromoName} (-${appliedDiscount * 100}%)\n`;
+    }
     summary += `\n💰 Total : ${cartTotalPrice.textContent}\n`;
     summary += "⚡ Merci de procéder au paiement puis d'envoyer ce message dans votre ticket Discord !";
 
