@@ -864,7 +864,7 @@ nav a{display:none}
 <a href="#faq">FAQ</a>
 <a href="#apres-paiement">Après paiement</a>
 <a href="#securite">Sécurité</a>
-<a href="https://discord.gg/6TJT6JjCg5" target="_blank">Discord</a>
+<a href="https://discord.gg/2XUNQeCU8H" target="_blank">Discord</a>
 
 <!-- WIDGET FIDÉLITÉ -->
 <div class="auth-box">
@@ -905,7 +905,7 @@ Connecte-toi pour cumuler 1 point tous les 10 € d'achat et débloquer des Pass
 🛒 Voir la boutique
 </a>
 
-<a href="https://discord.gg/6TJT6JjCg5" target="_blank" class="btn discord">
+<a href="https://discord.gg/2XUNQeCU8H" target="_blank" class="btn discord">
 💬 Notre Discord
 </a>
 
@@ -1235,7 +1235,7 @@ pour nous transmettre les informations nécessaires
 </div>
 
 <a
-href="https://discord.gg/6TJT6JjCg5"
+href="https://discord.gg/2XUNQeCU8H"
 target="_blank"
 class="btn discord">
 💬 J'ai payé — Ouvrir Discord </a>
@@ -1311,7 +1311,7 @@ et de contacter le support.
 </main>
 
 <!-- BOUTON DISCORD FLOTTANT -->
-<a href="https://discord.gg/6TJT6JjCg5" target="_blank" class="floating-discord">
+<a href="https://discord.gg/2XUNQeCU8H" target="_blank" class="floating-discord">
     💬 <span>Discord Support</span>
 </a>
 
@@ -1328,7 +1328,7 @@ et de contacter le support.
     <div class="cart-footer">
         <!-- CHAMP CODE PROMO -->
         <div class="promo-box">
-            <input type="text" id="promo-input" class="promo-input" placeholder="Code promo (ex: WELCOME)">
+            <input type="text" id="promo-input" class="promo-input" placeholder="Code promo (ex: RRENTREE)">
             <button class="promo-apply-btn" onclick="applyPromoCode()">Appliquer</button>
         </div>
         <div class="promo-msg" id="promo-msg"></div>
@@ -1421,7 +1421,7 @@ const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let currentUser = null;
 let userPoints = 0;
-let appliedDiscount = 0;
+let appliedDiscount = 0; 
 let appliedPromoName = "";
 
 let cart = JSON.parse(localStorage.getItem('shop_fire_cart')) || [];
@@ -1440,84 +1440,78 @@ const promoMsg = document.getElementById('promo-msg');
 
 const PAYPAL_USERNAME = "FireTwitch955";
 
-// CHARGEMENT DES STOCKS DEPUIS SUPABASE (AUTOMATIQUE)
+// CHARGEMENT DES STOCKS DEPUIS SUPABASE
 async function loadStocks() {
     const { data: products, error } = await _supabase
         .from('products')
         .select('*');
-    
+
+    if (error) {
+        console.error('Erreur lors du chargement des stocks :', error);
+        return;
+    }
+
     if (products) {
-        products.forEach(p => {
-            let stockEl = document.getElementById(`stock-${p.name}`);
-            if (stockEl) {
-                if (p.stock > 0) {
-                    stockEl.innerHTML = `⚡ En stock : <span style="color: #00d084;">${p.stock}</span>`;
+        products.forEach(product => {
+            const stockElement = document.getElementById(`stock-${product.name}`);
+            const btnElement = document.getElementById(`btn-${getIdFromName(product.name)}`);
+            
+            if (stockElement) {
+                if (product.stock > 0) {
+                    stockElement.style.color = "#00d084";
+                    stockElement.textContent = `⚡ Stock : ${product.stock}`;
                 } else {
-                    stockEl.innerHTML = `❌ <span style="color: #ff1744;">Rupture de stock</span>`;
-                    let btn = document.getElementById(`btn-${p.id}`);
-                    if (btn) {
-                        btn.disabled = true;
-                        btn.style.background = "rgba(255,255,255,0.1)";
-                        btn.style.cursor = "not-allowed";
-                        btn.innerText = "Rupture";
+                    stockElement.style.color = "#ff1744";
+                    stockElement.textContent = `❌ Rupture de stock`;
+                    if (btnElement) {
+                        btnElement.disabled = true;
+                        btnElement.style.opacity = "0.5";
+                        btnElement.style.cursor = "not-allowed";
+                        btnElement.textContent = "Rupture";
                     }
                 }
             }
         });
     }
 }
-loadStocks();
 
-openCartBtn.addEventListener('click', () => {
-    cartOverlay.classList.add('active');
-    cartDrawer.classList.add('active');
-});
-
-closeCartBtn.addEventListener('click', closeCart);
-cartOverlay.addEventListener('click', closeCart);
-
-function closeCart() {
-    cartOverlay.classList.remove('active');
-    cartDrawer.classList.remove('active');
+function getIdFromName(name) {
+    if (name === 'Pass Coc') return 'coc';
+    if (name === 'Pass Brawl Stars') return 'brawl';
+    if (name === 'Pass Royale') return 'cr';
+    return '';
 }
 
-function filterGame(category, btnElement) {
-    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-    btnElement.classList.add('active');
-
-    const categories = ['coc', 'brawl', 'royale'];
-    categories.forEach(cat => {
-        let el = document.getElementById(`cat-${cat}`);
-        if (category === 'all' || category === cat) {
-            el.classList.remove('hidden');
-        } else {
-            el.classList.add('hidden');
-        }
-    });
-}
-
+// GESTION DU PANIER & INTERFACE
 function addToCart(name, price) {
-    let existingItem = cart.find(item => item.name === name);
+    const existingItem = cart.find(item => item.name === name);
     if (existingItem) {
         existingItem.quantity += 1;
     } else {
-        cart.push({ name: name, price: price, quantity: 1 });
+        cart.push({ name, price, quantity: 1 });
     }
     saveCart();
     updateCartUI();
-    openCartBtn.click();
+    openCart();
 }
 
-function updateQuantity(name, change) {
-    let item = cart.find(i => i.name === name);
-    if (item) {
-        item.quantity += change;
-        if (item.quantity <= 0) {
-            cart = cart.filter(i => i.name !== name);
-        }
-    }
+function removeFromcart(name) {
+    cart = cart.filter(item => item.name !== name);
     saveCart();
     updateCartUI();
+}
+
+function changeQuantity(name, delta) {
+    const item = cart.find(item => item.name === name);
+    if (item) {
+        item.quantity += delta;
+        if (item.quantity <= 0) {
+            removeFromcart(name);
+        } else {
+            saveCart();
+            updateCartUI();
+        }
+    }
 }
 
 function saveCart() {
@@ -1525,192 +1519,189 @@ function saveCart() {
 }
 
 function updateCartUI() {
-    cartItemsContainer.innerHTML = '';
     let totalCount = 0;
     let totalPrice = 0;
 
+    cartItemsContainer.innerHTML = '';
+
     if (cart.length === 0) {
         cartItemsContainer.innerHTML = '<p class="empty-msg">Ton panier est vide pour le moment.</p>';
-        checkoutBtn.setAttribute('href', '#');
         checkoutBtn.classList.add('disabled');
+        copyBtn.style.display = 'none';
     } else {
         checkoutBtn.classList.remove('disabled');
+        copyBtn.style.display = 'block';
+
         cart.forEach(item => {
             totalCount += item.quantity;
             totalPrice += item.price * item.quantity;
 
-            cartItemsContainer.innerHTML += `
-                <div class="cart-item">
-                    <div class="item-info">
-                        <h4>${item.name}</h4>
-                        <p>${item.price} € x ${item.quantity}</p>
-                    </div>
-                    <div class="quantity-controls">
-                        <button class="qty-btn" onclick="updateQuantity('${item.name}', -1)">-</button>
-                        <span>${item.quantity}</span>
-                        <button class="qty-btn" onclick="updateQuantity('${item.name}', 1)">+</button>
-                    </div>
+            const div = document.createElement('div');
+            div.className = 'cart-item';
+            div.innerHTML = `
+                <div class="item-info">
+                    <h4>${item.name}</h4>
+                    <p>${item.price} € x ${item.quantity}</p>
+                </div>
+                <div class="quantity-controls">
+                    <button class="qty-btn" onclick="changeQuantity('${item.name}', -1)">-</button>
+                    <span>${item.quantity}</span>
+                    <button class="qty-btn" onclick="changeQuantity('${item.name}', 1)">+</button>
                 </div>
             `;
+            cartItemsContainer.appendChild(div);
         });
     }
 
+    // Appliquer la réduction code promo s'il y en a une
     if (appliedDiscount > 0) {
         totalPrice = totalPrice * (1 - appliedDiscount);
     }
 
-    cartCount.innerText = totalCount;
-    cartTotalPrice.innerText = totalPrice.toFixed(2) + ' €';
+    cartCount.textContent = totalCount;
+    cartTotalPrice.textContent = totalPrice.toFixed(2) + ' €';
 
-    if (cart.length > 0) {
-        let paypalURL = `https://www.paypal.com/paypalme/${PAYPAL_USERNAME}/${totalPrice.toFixed(2)}EUR`;
-        checkoutBtn.setAttribute('href', paypalURL);
-    }
+    // Mettre à jour le lien PayPal avec le montant dynamique
+    checkoutBtn.href = `https://paypal.me/${PAYPAL_USERNAME}/${totalPrice.toFixed(2)}EUR`;
 }
-updateCartUI();
 
+// CODE PROMO
 function applyPromoCode() {
-    let code = promoInput.value.trim().toUpperCase();
-    if (code === "WELCOME5" || code === "FIRE5") {
-        appliedDiscount = 0.05;
+    const code = promoInput.value.trim().toUpperCase();
+    if (code === "RRENTREE" || code === "FIRE10") {
+        appliedDiscount = 0.10; // 10% de réduction
         appliedPromoName = code;
         promoMsg.style.color = "#00d084";
-        promoMsg.innerText = "Code promo appliqué : -5% !";
-    } else if (code === "FIRE10") {
-        appliedDiscount = 0.10;
-        appliedPromoName = code;
-        promoMsg.style.color = "#00d084";
-        promoMsg.innerText = "Code promo appliqué : -10% !";
+        promoMsg.textContent = "✅ Code promo appliqué (-10%) !";
+        updateCartUI();
     } else {
         appliedDiscount = 0;
         appliedPromoName = "";
         promoMsg.style.color = "#ff1744";
-        promoMsg.innerText = "Code promo invalide.";
+        promoMsg.textContent = "❌ Code promo invalide.";
+        updateCartUI();
     }
-    updateCartUI();
 }
 
+// COPIER LA COMMANDE POUR DISCORD
 function copyCartSummary() {
-    if (cart.length === 0) {
-        alert("Ton panier est vide !");
-        return;
-    }
-    let summary = "🔥 RÉCAPITULATIF COMMANDE SHOP FIRE 🔥\n\n";
-    let rawTotal = 0;
+    let summary = "🔥 RÉCAPITULATIF DE COMMANDE - SHOP FIRE 🔥\n\n";
+    let total = 0;
     cart.forEach(item => {
-        summary += `• ${item.quantity}x ${item.name} (${item.price * item.quantity} €)\n`;
-        rawTotal += item.price * item.quantity;
+        summary += `- ${item.quantity}x ${item.name} (${item.price * item.quantity} €)\n`;
+        total += item.price * item.quantity;
     });
-    
-    let finalTotal = rawTotal;
     if (appliedDiscount > 0) {
-        finalTotal = rawTotal * (1 - appliedDiscount);
-        summary += `\nCode promo : ${appliedPromoName} (-${appliedDiscount * 100}%)`;
+        total = total * (1 - appliedDiscount);
+        summary += `\nCode promo appliqué : ${appliedPromoName} (-10%)\n`;
     }
-
-    summary += `\n💰 Total : ${finalTotal.toFixed(2)} €`;
-    summary += `\n💳 Paiement effectué via PayPal (${PAYPAL_USERNAME}).`;
-
+    summary += `\nTotal global : ${total.toFixed(2)} €`;
     if (currentUser) {
-        summary += `\n👤 Email compte : ${currentUser.email}`;
+        summary += `\nCompte client : ${currentUser.email}`;
     }
 
-    navigator.clipboard.writeText(summary);
-    copyBtn.innerText = "✅ Copié avec succès !";
-    setTimeout(() => {
-        copyBtn.innerText = "📋 Copier la commande pour Discord";
-    }, 2500);
+    navigator.clipboard.writeText(summary).then(() => {
+        copyBtn.textContent = "✅ Copié avec succès !";
+        setTimeout(() => {
+            copyBtn.textContent = "📋 Copier la commande pour Discord";
+        }, 2500);
+    });
 }
 
-function openLegalModal(modalId) {
-    document.getElementById(`modal-${modalId}`).classList.add('active');
+// GESTION DU TIROIR PANIER
+function openCart() {
+    cartOverlay.classList.add('active');
+    cartDrawer.classList.add('active');
 }
 
-function closeLegalModals() {
-    document.querySelectorAll('.legal-modal').forEach(modal => modal.classList.remove('active'));
+function closeCart() {
+    cartOverlay.classList.remove('active');
+    cartDrawer.classList.remove('active');
 }
 
+openCartBtn.addEventListener('click', openCart);
+closeCartBtn.addEventListener('click', closeCart);
+cartOverlay.addEventListener('click', closeCart);
+
+// FILTRE DES JEUX
+function filterGame(game, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const categories = {
+        coc: document.getElementById('cat-coc'),
+        brawl: document.getElementById('cat-brawl'),
+        royale: document.getElementById('cat-royale')
+    };
+
+    if (game === 'all') {
+        Object.values(categories).forEach(cat => cat.classList.remove('hidden'));
+    } else {
+        Object.keys(categories).forEach(key => {
+            if (key === game) {
+                categories[key].classList.remove('hidden');
+            } else {
+                categories[key].classList.add('hidden');
+            }
+        });
+    }
+}
+
+// FAQ TOGGLE
 function toggleFaq(button) {
     const item = button.parentElement;
     const isActive = item.classList.contains('active');
     
-    document.querySelectorAll('.faq-item').forEach(faq => {
-        faq.classList.remove('active');
-    });
-
+    document.querySelectorAll('.faq-item').forEach(faq => faq.classList.remove('active'));
+    
     if (!isActive) {
         item.classList.add('active');
     }
 }
 
+// MODALES JURIDIQUES
+function openLegalModal(modalId) {
+    document.getElementById(`modal-${modalId}`).classList.add('active');
+}
+
+function closeLegalModals() {
+    document.querySelectorAll('.legal-modal').forEach(m => m.classList.remove('active'));
+}
+
+// AUTHENTIFICATION SUPABASE (SIMPLIFIÉE EMAIL)
 async function loginWithEmail() {
-    let email = prompt("Entre ton adresse email pour te connecter/t'inscrire :");
+    const email = prompt("Entrez votre email pour vous connecter ou créer un compte :");
     if (!email) return;
 
-    let { data, error } = await _supabase
-        .from('profiles')
-        .select('*')
-        .eq('email', email)
-        .single();
-
-    if (!data) {
-        let { data: newProfile, error: err } = await _supabase
-            .from('profiles')
-            .insert([{ email: email, points: 0 }])
-            .select()
-            .single();
-        
-        if (newProfile) {
-            currentUser = newProfile;
-            userPoints = newProfile.points;
-        }
+    const { data, error } = await _supabase.auth.signInWithOtp({ email });
+    if (error) {
+        alert("Erreur de connexion : " + error.message);
     } else {
-        currentUser = data;
-        userPoints = data.points;
-    }
-
-    updateAuthUI();
-    alert("Connexion réussie ! Bienvenue sur Shop Fire.");
-}
-
-function updateAuthUI() {
-    if (currentUser) {
-        document.getElementById('login-btn').style.display = 'none';
-        let badge = document.getElementById('user-badge');
-        badge.style.display = 'flex';
-        document.getElementById('user-pts').innerText = `⭐ ${userPoints} pts`;
-        
-        if (userPoints >= 10) {
-            document.getElementById('claim-btn').style.display = 'inline-block';
-        } else {
-            document.getElementById('claim-btn').style.display = 'none';
-        }
-    } else {
-        document.getElementById('login-btn').style.display = 'inline-block';
-        document.getElementById('user-badge').style.display = 'none';
+        alert("Un lien magique de connexion a été envoyé à votre adresse email ! Vérifiez votre boîte de réception.");
     }
 }
 
-async function claimFreePass() {
-    if (userPoints < 10) return;
-    userPoints -= 10;
-    
-    await _supabase
-        .from('profiles')
-        .update({ points: userPoints })
-        .eq('email', currentUser.email);
-
-    currentUser.points = userPoints;
-    updateAuthUI();
-    alert("🎉 Félicitations ! Ton Pass gratuit a été débloqué. Ouvre un ticket sur Discord pour le réclamer !");
-}
-
-function logout() {
+async function logout() {
+    await _supabase.auth.signOut();
     currentUser = null;
-    userPoints = 0;
-    updateAuthUI();
-    alert("Déconnecté avec succès.");
+    document.getElementById('login-btn').style.display = 'block';
+    document.getElementById('user-badge').style.display = 'none';
 }
+
+// INITIALISATION AU CHARGEMENT DE LA PAGE
+document.addEventListener('DOMContentLoaded', async () => {
+    loadStocks();
+    updateCartUI();
+
+    // Vérification de session Supabase active
+    const { data: { session } } = await _supabase.auth.getSession();
+    if (session) {
+        currentUser = session.user;
+        document.getElementById('login-btn').style.display = 'none';
+        document.getElementById('user-badge').style.display = 'flex';
+        document.getElementById('user-pts').textContent = `⭐ 5 pts`; // Exemple ou fetch depuis table profiles
+    }
+});
 </script>
 
 </body>
