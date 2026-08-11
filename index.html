@@ -747,11 +747,85 @@ color:rgba(255,255,255,.55);
 line-height:1.5;
 }
 
+/* MODALES PAGES JURIDIQUES */
+.legal-modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.8);
+backdrop-filter:blur(8px);
+z-index:300;
+display:none;
+justify-content:center;
+align-items:center;
+padding:20px;
+}
+.legal-modal.active{display:flex}
+.legal-content{
+background:#0e0e1a;
+border:1px solid rgba(255,255,255,.15);
+border-radius:20px;
+max-width:700px;
+width:100%;
+max-height:80vh;
+overflow-y:auto;
+padding:30px;
+position:relative;
+box-shadow:0 0 40px rgba(0,0,0,.9);
+}
+.legal-content h2{
+font-size:26px;
+margin-bottom:20px;
+color:#ff1744;
+}
+.legal-content h3{
+font-size:18px;
+margin:15px 0 8px;
+color:#fff;
+}
+.legal-content p, .legal-content li{
+color:rgba(255,255,255,.7);
+font-size:14px;
+line-height:1.6;
+margin-bottom:10px;
+}
+.legal-content ul{
+padding-left:20px;
+margin-bottom:10px;
+}
+.close-legal{
+position:absolute;
+top:20px;
+right:20px;
+background:none;
+border:none;
+color:#fff;
+font-size:24px;
+cursor:pointer;
+}
+
 footer{
 text-align:center;
 padding:50px 20px;
 border-top:1px solid rgba(255,255,255,.08);
 color:rgba(255,255,255,.45);
+}
+footer .legal-links{
+margin-top:15px;
+display:flex;
+justify-content:center;
+gap:20px;
+flex-wrap:wrap;
+}
+footer .legal-links a{
+color:rgba(255,255,255,.6);
+text-decoration:none;
+font-size:13px;
+transition:.2s;
+cursor:pointer;
+}
+footer .legal-links a:hover{
+color:#ff1744;
+text-decoration:underline;
 }
 
 @media(max-width:700px){
@@ -1260,6 +1334,56 @@ et de contacter le support.
     </div>
 </div>
 
+<!-- MODALES INFORMATIONS JURIDIQUES -->
+<div class="legal-modal" id="modal-mentions">
+    <div class="legal-content">
+        <button class="close-legal" onclick="closeLegalModals()">&times;</button>
+        <h2>Mentions Légales</h2>
+        <h3>1. Éditeur du site</h3>
+        <p>Le site <strong>Shop Fire</strong> est édité dans le cadre d'une activité de services numériques et gaming.</p>
+        <p>Contact support : Via notre serveur Discord officiel.</p>
+        <h3>2. Hébergement</h3>
+        <p>Le site est hébergé par des solutions de Cloud web sécurisées.</p>
+        <h3>3. Propriété intellectuelle</h3>
+        <p>Tous les éléments du site Shop Fire (textes, logos, images, scripts) sont protégés. Les images et marques des jeux (Clash of Clans, Brawl Stars, Clash Royale) appartiennent à Supercell.</p>
+    </div>
+</div>
+
+<div class="legal-modal" id="modal-cgv">
+    <div class="legal-content">
+        <button class="close-legal" onclick="closeLegalModals()">&times;</button>
+        <h2>Conditions Générales de Vente (CGV)</h2>
+        <h3>Article 1 : Objet</h3>
+        <p>Les présentes CGV régissent la vente de services et d'éléments digitaux liés aux jeux mobiles sur le site Shop Fire.</p>
+        <h3>Article 2 : Prix et Paiement</h3>
+        <p>Les prix sont indiqués en Euros (€). Le règlement s'effectue globalement via la solution sécurisée PayPal. La commande est validée après confirmation du paiement.</p>
+        <h3>Article 3 : Livraison</h3>
+        <p>La livraison des services s'effectue de manière dématérialisée, généralement dans l'heure suivant l'ouverture d'un ticket sur le support Discord avec les détails de la commande.</p>
+    </div>
+</div>
+
+<div class="legal-modal" id="modal-confidentialite">
+    <div class="legal-content">
+        <button class="close-legal" onclick="closeLegalModals()">&times;</button>
+        <h2>Politique de Confidentialité</h2>
+        <h3>1. Collecte des données</h3>
+        <p>Les données collectées se limitent à l'adresse email lors de la création d'un compte (pour le système de fidélité) ainsi que les informations de commandes nécessaires au traitement.</p>
+        <h3>2. Sécurité des identifiants</h3>
+        <p>Les identifiants de jeux transmis ponctuellement pour l'exécution des services ne sont <strong>jamais stockés</strong> de manière permanente et sont supprimés immédiatement après livraison.</p>
+    </div>
+</div>
+
+<div class="legal-modal" id="modal-remboursement">
+    <div class="legal-content">
+        <button class="close-legal" onclick="closeLegalModals()">&times;</button>
+        <h2>Politique de Remboursement</h2>
+        <h3>1. Biens numériques et services</h3>
+        <p>Conformément à la législation en vigueur sur les contenus numériques fournis sur support immatériel et l'exécution de services personnalisés, une fois la prestation entamée ou le code / pass activé, aucun droit de rétractation ne peut être exigé.</p>
+        <h3>2. Litiges et exceptions</h3>
+        <p>En cas de problème technique avéré ou d'erreur de notre part empêchant la livraison du service, une solution de remplacement ou un remboursement pourra être examiné au cas par cas via notre support Discord.</p>
+    </div>
+</div>
+
 <footer>
 
 🔥 <strong>Shop Fire</strong>
@@ -1268,7 +1392,14 @@ et de contacter le support.
 
 Paiement via PayPal • Support Discord
 
-<br><br>
+<div class="legal-links">
+    <a onclick="openLegalModal('mentions')">Mentions légales</a>
+    <a onclick="openLegalModal('cgv')">CGV</a>
+    <a onclick="openLegalModal('confidentialite')">Politique de confidentialité</a>
+    <a onclick="openLegalModal('remboursement')">Politique de remboursement</a>
+</div>
+
+<br>
 
 © 2026 Shop Fire — Tous droits réservés.
 
@@ -1336,17 +1467,14 @@ async function loadStocks() {
     });
 }
 
-// GESTION DES CODES PROMO (Modifiables selon les mois)
+// GESTION DES CODES PROMO
 function applyPromoCode() {
     const code = promoInput.value.trim().toUpperCase();
-    
-    // EXEMPLES DE CODES PROMO MENSUELS OU PERMANENTS :
-    // Tu peux modifier les noms et les réductions ici facilement !
     const validCodes = {
-        "SUMMER20": 0.20,  // -20% (Idéal pour l'été)
-        "RENTREE10": 0.10, // -10% (Idéal pour septembre)
-        "FIRE50": 0.50,    // -50% (Promo exceptionnelle)
-        "WELCOME": 0.05    // -5% permanent
+        "SUMMER20": 0.20,
+        "RENTREE10": 0.10,
+        "FIRE50": 0.50,
+        "WELCOME": 0.05
     };
 
     if (validCodes[code] !== undefined) {
@@ -1364,7 +1492,7 @@ function applyPromoCode() {
     }
 }
 
-// AUTHENTIFICATION PAR EMAIL (CREATION / CONNEXION DIRECTE)
+// AUTHENTIFICATION PAR EMAIL
 async function loginWithEmail() {
     const email = prompt("Entre ton adresse email :");
     if (!email) return;
@@ -1450,7 +1578,7 @@ function saveCartToStorage() {
 }
 
 function addToCart(name, price) {
-    const existingItem = cart.find(item => item.name === name);
+    let existingItem = cart.find(item => item.name === name);
     if (existingItem) {
         existingItem.quantity += 1;
     } else {
@@ -1458,13 +1586,11 @@ function addToCart(name, price) {
     }
     saveCartToStorage();
     updateCartUI();
-    if (!cartDrawer.classList.contains('active')) {
-        toggleCart();
-    }
+    toggleCart();
 }
 
 function updateQuantity(name, change) {
-    const item = cart.find(item => item.name === name);
+    let item = cart.find(item => item.name === name);
     if (item) {
         item.quantity += change;
         if (item.quantity <= 0) {
@@ -1477,37 +1603,19 @@ function updateQuantity(name, change) {
 
 function updateCartUI() {
     cartItemsContainer.innerHTML = '';
-    let subtotal = 0;
     let totalCount = 0;
+    let totalPrice = 0;
 
     if (cart.length === 0) {
         cartItemsContainer.innerHTML = '<p class="empty-msg">Ton panier est vide pour le moment.</p>';
-        copyBtn.style.display = 'none';
-        
-        // Bloquer le bouton PayPal quand le panier est vide
-        checkoutBtn.style.opacity = "0.5";
-        checkoutBtn.style.pointerEvents = "none";
-        checkoutBtn.href = "#";
-        
-        // Réinitialiser la promo si le panier se vide
-        appliedDiscount = 0;
-        appliedPromoName = "";
-        promoMsg.textContent = "";
-        promoInput.value = "";
     } else {
-        copyBtn.style.display = 'block';
-        
-        // Activer le bouton PayPal quand il y a des articles
-        checkoutBtn.style.opacity = "1";
-        checkoutBtn.style.pointerEvents = "auto";
-
         cart.forEach(item => {
-            subtotal += item.price * item.quantity;
             totalCount += item.quantity;
+            totalPrice += item.price * item.quantity;
 
-            const itemElement = document.createElement('div');
-            itemElement.className = 'cart-item';
-            itemElement.innerHTML = `
+            let div = document.createElement('div');
+            div.className = 'cart-item';
+            div.innerHTML = `
                 <div class="item-info">
                     <h4>${item.name}</h4>
                     <p>${item.price} € x ${item.quantity} = ${item.price * item.quantity} €</p>
@@ -1518,86 +1626,120 @@ function updateCartUI() {
                     <button class="qty-btn" onclick="updateQuantity('${item.name}', 1)">+</button>
                 </div>
             `;
-            cartItemsContainer.appendChild(itemElement);
+            cartItemsContainer.appendChild(div);
         });
     }
 
-    // Calcul du total avec réduction du code promo
-    let finalTotal = subtotal * (1 - appliedDiscount);
-    // Arrondir à 2 chiffres après la virgule si besoin, ou garder en entier
-    finalTotal = Math.round(finalTotal * 100) / 100;
-
-    cartTotalPrice.textContent = finalTotal + ' €';
     cartCount.textContent = totalCount;
 
-    let paypalUrl = `https://www.paypal.com/paypalme/${PAYPAL_USERNAME}/${finalTotal}EUR`;
-    if (finalTotal > 0) {
-        checkoutBtn.href = paypalUrl;
+    // Appliquer réduction code promo si actif
+    let finalPrice = totalPrice;
+    if (appliedDiscount > 0) {
+        finalPrice = totalPrice * (1 - appliedDiscount);
     }
+
+    cartTotalPrice.textContent = finalPrice.toFixed(2) + ' €';
+
+    // Lien Paypal dynamique avec montant total
+    checkoutBtn.href = `https://paypal.me/${PAYPAL_USERNAME}/${finalPrice.toFixed(2)}EUR`;
 }
 
 function copyCartSummary() {
-    let summary = "🔥 RÉCAPITULATIF DE COMMANDE - SHOP FIRE 🔥\n\n";
+    if (cart.length === 0) {
+        alert("Ton panier est vide !");
+        return;
+    }
+
+    let summary = "🔥 RÉCAPITULATIF DE COMMANDE - SHOP FIRE 🔥\n";
     if (currentUser) {
         summary += `👤 Client : ${currentUser.email}\n`;
     }
+    let rawTotal = 0;
     cart.forEach(item => {
-        summary += `- ${item.name} (x${item.quantity}) : ${item.price * item.quantity} €\n`;
+        summary += `- ${item.quantity}x ${item.name} (${item.price * item.quantity} €)\n`;
+        rawTotal += item.price * item.quantity;
     });
-    if (appliedPromoName) {
-        summary += `🎟️ Code promo appliqué : ${appliedPromoName} (-${appliedDiscount * 100}%)\n`;
+
+    let finalTotal = rawTotal;
+    if (appliedDiscount > 0) {
+        summary += `🏷️ Code promo appliqué : ${appliedPromoName} (-${appliedDiscount * 100}%)\n`;
+        finalTotal = rawTotal * (1 - appliedDiscount);
     }
-    summary += `\n💰 Total : ${cartTotalPrice.textContent}\n`;
-    summary += "⚡ Merci de procéder au paiement puis d'envoyer ce message dans votre ticket Discord !";
+
+    summary += `💰 Total à payer : ${finalTotal.toFixed(2)} €\n`;
+    summary += `💳 Paiement effectué via PayPal (${PAYPAL_USERNAME}).`;
 
     navigator.clipboard.writeText(summary).then(() => {
-        alert("✅ Récapitulatif copié dans le presse-papier ! Tu peux le coller dans ton ticket Discord.");
+        copyBtn.textContent = "✅ Copié ! Colle-le sur Discord";
+        setTimeout(() => {
+            copyBtn.textContent = "📋 Copier la commande pour Discord";
+        }, 3000);
     });
 }
 
-function filterGame(game, btnElement) {
-    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-    btnElement.classList.add('active');
+// Filtres boutique
+function filterGame(category, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
 
-    const catCoc = document.getElementById('cat-coc');
-    const catBrawl = document.getElementById('cat-brawl');
-    const catRoyale = document.getElementById('cat-royale');
+    const coc = document.getElementById('cat-coc');
+    const brawl = document.getElementById('cat-brawl');
+    const royale = document.getElementById('cat-royale');
 
-    catCoc.classList.remove('hidden');
-    catBrawl.classList.remove('hidden');
-    catRoyale.classList.remove('hidden');
+    coc.classList.remove('hidden');
+    brawl.classList.remove('hidden');
+    royale.classList.remove('hidden');
 
-    if (game === 'coc') {
-        catBrawl.classList.add('hidden');
-        catRoyale.classList.add('hidden');
-    } else if (game === 'brawl') {
-        catCoc.classList.add('hidden');
-        catRoyale.classList.add('hidden');
-    } else if (game === 'royale') {
-        catCoc.classList.add('hidden');
-        catBrawl.classList.add('hidden');
+    if (category === 'coc') {
+        brawl.classList.add('hidden');
+        royale.classList.add('hidden');
+    } else if (category === 'brawl') {
+        coc.classList.add('hidden');
+        royale.classList.add('hidden');
+    } else if (category === 'royale') {
+        coc.classList.add('hidden');
+        brawl.classList.add('hidden');
     }
 }
 
+// FAQ Accordéon
 function toggleFaq(button) {
-    const faqItem = button.parentElement;
-    const isActive = faqItem.classList.contains('active');
-
-    document.querySelectorAll('.faq-item').forEach(item => {
-        item.classList.remove('active');
-    });
-
+    const item = button.parentElement;
+    const isActive = item.classList.contains('active');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
     if (!isActive) {
-        faqItem.classList.add('active');
+        item.classList.add('active');
     }
 }
+
+// Gestion Modales Légales
+function openLegalModal(type) {
+    closeLegalModals();
+    if (type === 'mentions') document.getElementById('modal-mentions').classList.add('active');
+    if (type === 'cgv') document.getElementById('modal-cgv').classList.add('active');
+    if (type === 'confidentialite') document.getElementById('modal-confidentialite').classList.add('active');
+    if (type === 'remboursement') document.getElementById('modal-remboursement').classList.add('active');
+}
+
+function closeLegalModals() {
+    document.querySelectorAll('.legal-modal').forEach(m => m.classList.remove('active'));
+}
+
+// Fermeture des modales si clic en dehors du contenu
+window.addEventListener('click', (e) => {
+    document.querySelectorAll('.legal-modal').forEach(modal => {
+        if (e.target === modal) {
+            modal.classList.remove('active');
+        }
+    });
+});
 
 // Initialisation au chargement de la page
-window.addEventListener('DOMContentLoaded', async () => {
-    await checkUserSession();
-    await loadStocks();
+window.onload = async () => {
     updateCartUI();
-});
+    await loadStocks();
+    await checkUserSession();
+};
 </script>
 
 </body>
