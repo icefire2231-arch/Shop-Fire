@@ -1328,7 +1328,7 @@ et de contacter le support.
     <div class="cart-footer">
         <!-- CHAMP CODE PROMO -->
         <div class="promo-box">
-            <input type="text" id="promo-input" class="promo-input" placeholder="Code promo (ex: RRENTREE)">
+            <input type="text" id="promo-input" class="promo-input" placeholder="Code promo (ex: WELCOME)">
             <button class="promo-apply-btn" onclick="applyPromoCode()">Appliquer</button>
         </div>
         <div class="promo-msg" id="promo-msg"></div>
@@ -1421,7 +1421,7 @@ const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let currentUser = null;
 let userPoints = 0;
-let appliedDiscount = 0; // Pourcentage de réduction (ex: 0.20 pour 20%)
+let appliedDiscount = 0; // Pourcentage de réduction (0.05 pour 5%)
 let appliedPromoName = "";
 
 let cart = JSON.parse(localStorage.getItem('shop_fire_cart')) || [];
@@ -1475,13 +1475,10 @@ async function loadStocks() {
     });
 }
 
-// GESTION DES CODES PROMO
+// GESTION DU CODE PROMO (WELCOME - 5%)
 function applyPromoCode() {
     const code = promoInput.value.trim().toUpperCase();
     const validCodes = {
-        "SUMMER20": 0.20,
-        "RENTREE10": 0.10,
-        "FIRE50": 0.50,
         "WELCOME": 0.05
     };
 
@@ -1489,7 +1486,7 @@ function applyPromoCode() {
         appliedDiscount = validCodes[code];
         appliedPromoName = code;
         promoMsg.style.color = "#00d084";
-        promoMsg.textContent = `✅ Code "${code}" appliqué (-${appliedDiscount * 100}%) !`;
+        promoMsg.textContent = `✅ Code "${code}" appliqué (-5%) !`;
         updateCartUI();
     } else {
         appliedDiscount = 0;
@@ -1676,7 +1673,7 @@ function copyCartSummary() {
 
     let finalTotal = rawTotal;
     if (appliedDiscount > 0) {
-        summary += `🏷️ Code promo appliqué : ${appliedPromoName} (-${appliedDiscount * 100}%)\n`;
+        summary += `🏷️ Code promo appliqué : ${appliedPromoName} (-5%)\n`;
         finalTotal = rawTotal * (1 - appliedDiscount);
     }
 
