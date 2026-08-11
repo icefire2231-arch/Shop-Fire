@@ -1585,13 +1585,32 @@ function saveCartToStorage() {
     localStorage.setItem('shop_fire_cart', JSON.stringify(cart));
 }
 
-function addToCart(name, price) {
-    let existingItem = cart.find(item => item.name === name);
+async function addToCart(name, price, productId) {
+    const { data, error } = await _supabase
+        .from('products')
+        .select('stock')
+        .eq('id', productId)
+        .single();
+
+    if (data && data.stock <= 0) {
+        alert(`❌ Désolé, le produit "${name}" est épuisé !`);
+        return;
+    }
+
+    const existingItem = cart.find(item => item.name === name);
+    const currentQtyInCart = existingItem ? existingItem.quantity : 0;
+
+    if (data && currentQtyInCart + 1 > data.stock) {
+        alert(`❌ Stock insuffisant dans ton panier (${data.stock} maximum disponible).`);
+        return;
+    }
+
     if (existingItem) {
         existingItem.quantity += 1;
     } else {
-        cart.push({ name, price, quantity: 1 });
+        cart.push({ name, price, quantity: 1, id: productId });
     }
+    
     saveCartToStorage();
     updateCartUI();
     toggleCart();
