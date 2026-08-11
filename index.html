@@ -864,7 +864,7 @@ nav a{display:none}
 <a href="#faq">FAQ</a>
 <a href="#apres-paiement">Après paiement</a>
 <a href="#securite">Sécurité</a>
-<a href="https://discord.gg/2XUNQeCU8H" target="_blank">Discord</a>
+<a href="https://discord.gg/6TJT6JjCg5" target="_blank">Discord</a>
 
 <!-- WIDGET FIDÉLITÉ -->
 <div class="auth-box">
@@ -905,7 +905,7 @@ Connecte-toi pour cumuler 1 point tous les 10 € d'achat et débloquer des Pass
 🛒 Voir la boutique
 </a>
 
-<a href="https://discord.gg/2XUNQeCU8H" target="_blank" class="btn discord">
+<a href="https://discord.gg/6TJT6JjCg5" target="_blank" class="btn discord">
 💬 Notre Discord
 </a>
 
@@ -1235,7 +1235,7 @@ pour nous transmettre les informations nécessaires
 </div>
 
 <a
-href="https://discord.gg/2XUNQeCU8H"
+href="https://discord.gg/6TJT6JjCg5"
 target="_blank"
 class="btn discord">
 💬 J'ai payé — Ouvrir Discord </a>
@@ -1311,7 +1311,7 @@ et de contacter le support.
 </main>
 
 <!-- BOUTON DISCORD FLOTTANT -->
-<a href="https://discord.gg/2XUNQeCU8H" target="_blank" class="floating-discord">
+<a href="https://discord.gg/6TJT6JjCg5" target="_blank" class="floating-discord">
     💬 <span>Discord Support</span>
 </a>
 
@@ -1421,7 +1421,7 @@ const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let currentUser = null;
 let userPoints = 0;
-let appliedDiscount = 0; // Pourcentage de réduction (0.05 pour 5%)
+let appliedDiscount = 0;
 let appliedPromoName = "";
 
 let cart = JSON.parse(localStorage.getItem('shop_fire_cart')) || [];
@@ -1440,146 +1440,59 @@ const promoMsg = document.getElementById('promo-msg');
 
 const PAYPAL_USERNAME = "FireTwitch955";
 
-// CHARGEMENT DES STOCKS DEPUIS SUPABASE (AUTOMATIQUE)
 async function loadStocks() {
     const { data: products, error } = await _supabase
         .from('products')
         .select('*');
-
-    if (error) {
-        console.error("Erreur lors du chargement des stocks :", error);
-        return;
-    }
-
-    products.forEach(product => {
-        const elementId = `stock-${product.title}`;
-        const stockEl = document.getElementById(elementId);
-
-        let buttonId = "";
-        if (product.title === "Pass Coc") buttonId = "btn-coc";
-        if (product.title === "Pass Brawl Stars") buttonId = "btn-brawl";
-        if (product.title === "Pass Royale") buttonId = "btn-cr";
-        const btnEl = document.getElementById(buttonId);
-
-        if (stockEl) {
-            if (product.stock > 0) {
-                stockEl.textContent = `⚡ Stock : ${product.stock} dispo`;
-                stockEl.style.color = "#00d084";
-                if (btnEl) { btnEl.disabled = false; btnEl.style.opacity = "1"; }
-            } else {
-                stockEl.textContent = "❌ Rupture de stock";
-                stockEl.style.color = "#ff1744";
-                if (btnEl) { btnEl.disabled = true; btnEl.style.opacity = "0.5"; }
+    
+    if (products) {
+        products.forEach(p => {
+            let stockEl = document.getElementById(`stock-${p.name}`);
+            if (stockEl) {
+                if (p.stock > 0) {
+                    stockEl.innerHTML = `⚡ En stock : <span style="color: #00d084;">${p.stock}</span>`;
+                } else {
+                    stockEl.innerHTML = `❌ <span style="color: #ff1744;">Rupture de stock</span>`;
+                    let btn = document.getElementById(`btn-${p.id}`);
+                    if (btn) {
+                        btn.disabled = true;
+                        btn.style.background = "rgba(255,255,255,0.1)";
+                        btn.style.cursor = "not-allowed";
+                        btn.innerText = "Rupture";
+                    }
+                }
             }
+        });
+    }
+}
+loadStocks();
+
+openCartBtn.addEventListener('click', () => {
+    cartOverlay.classList.add('active');
+    cartDrawer.classList.add('active');
+});
+
+closeCartBtn.addEventListener('click', closeCart);
+cartOverlay.addEventListener('click', closeCart);
+
+function closeCart() {
+    cartOverlay.classList.remove('active');
+    cartDrawer.classList.remove('active');
+}
+
+function filterGame(category, btnElement) {
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    btnElement.classList.add('active');
+
+    const categories = ['coc', 'brawl', 'royale'];
+    categories.forEach(cat => {
+        let el = document.getElementById(`cat-${cat}`);
+        if (category === 'all' || category === cat) {
+            el.classList.remove('hidden');
+        } else {
+            el.classList.add('hidden');
         }
     });
-}
-
-// GESTION DU CODE PROMO (WELCOME - 5%)
-function applyPromoCode() {
-    const code = promoInput.value.trim().toUpperCase();
-    const validCodes = {
-        "WELCOME": 0.05
-    };
-
-    if (validCodes[code] !== undefined) {
-        appliedDiscount = validCodes[code];
-        appliedPromoName = code;
-        promoMsg.style.color = "#00d084";
-        promoMsg.textContent = `✅ Code "${code}" appliqué (-5%) !`;
-        updateCartUI();
-    } else {
-        appliedDiscount = 0;
-        appliedPromoName = "";
-        promoMsg.style.color = "#ff1744";
-        promoMsg.textContent = "❌ Code promo invalide ou expiré.";
-        updateCartUI();
-    }
-}
-
-// AUTHENTIFICATION PAR EMAIL
-async function loginWithEmail() {
-    const email = prompt("Entre ton adresse email :");
-    if (!email) return;
-
-    const password = prompt("Entre ton mot de passe (au moins 6 caractères) :");
-    if (!password) return;
-
-    let { data, error } = await _supabase.auth.signInWithPassword({ email, password });
-
-    if (error) {
-        let signUp = await _supabase.auth.signUp({ email, password });
-        if (signUp.error) {
-            alert("Erreur : " + signUp.error.message);
-            return;
-        }
-        
-        if (signUp.data.session) {
-            alert("🎉 Compte créé et connecté avec succès !");
-            await checkUserSession();
-        } else {
-            alert("🎉 Compte créé avec succès ! Clique à nouveau sur Se connecter si ta session ne s'affiche pas.");
-            await checkUserSession();
-        }
-        return;
-    }
-
-    if (data.session) {
-        alert("🎉 Connexion réussie !");
-        await checkUserSession();
-    }
-}
-
-async function logout() {
-    await _supabase.auth.signOut();
-    window.location.reload();
-}
-
-async function checkUserSession() {
-    const { data: { user } } = await _supabase.auth.getUser();
-    if (user) {
-        currentUser = user;
-        document.getElementById('login-btn').style.display = 'none';
-        document.getElementById('user-badge').style.display = 'flex';
-        await loadUserPoints(user.id);
-    }
-}
-
-async function loadUserPoints(userId) {
-    let { data } = await _supabase
-        .from('profiles')
-        .select('points')
-        .eq('id', userId)
-        .single();
-
-    if (data) {
-        userPoints = data.points || 0;
-        document.getElementById('user-pts').textContent = `⭐ ${userPoints} pts`;
-        if (userPoints >= 10) {
-            document.getElementById('claim-btn').style.display = 'inline-block';
-        }
-    }
-}
-
-function claimFreePass() {
-    if (userPoints < 10) return;
-    let passName = prompt("Quel Pass gratuit souhaites-tu réclamer ?\n- Pass Coc\n- Pass Brawl Stars\n- Pass Royale");
-    if (passName) {
-        alert(`🎉 Choix enregistré (${passName}) ! Ouvre un ticket sur Discord avec l'adresse ${currentUser.email} pour recevoir ton Pass gratuit !`);
-    }
-}
-
-function toggleCart() {
-    cartOverlay.classList.toggle('active');
-    cartDrawer.classList.toggle('active');
-}
-
-openCartBtn.addEventListener('click', toggleCart);
-closeCartBtn.addEventListener('click', toggleCart);
-cartOverlay.addEventListener('click', toggleCart);
-
-function saveCartToStorage() {
-    localStorage.setItem('shop_fire_cart', JSON.stringify(cart));
 }
 
 function addToCart(name, price) {
@@ -1587,23 +1500,27 @@ function addToCart(name, price) {
     if (existingItem) {
         existingItem.quantity += 1;
     } else {
-        cart.push({ name, price, quantity: 1 });
+        cart.push({ name: name, price: price, quantity: 1 });
     }
-    saveCartToStorage();
+    saveCart();
     updateCartUI();
-    toggleCart();
+    openCartBtn.click();
 }
 
 function updateQuantity(name, change) {
-    let item = cart.find(item => item.name === name);
+    let item = cart.find(i => i.name === name);
     if (item) {
         item.quantity += change;
         if (item.quantity <= 0) {
             cart = cart.filter(i => i.name !== name);
         }
     }
-    saveCartToStorage();
+    saveCart();
     updateCartUI();
+}
+
+function saveCart() {
+    localStorage.setItem('shop_fire_cart', JSON.stringify(cart));
 }
 
 function updateCartUI() {
@@ -1613,46 +1530,63 @@ function updateCartUI() {
 
     if (cart.length === 0) {
         cartItemsContainer.innerHTML = '<p class="empty-msg">Ton panier est vide pour le moment.</p>';
+        checkoutBtn.setAttribute('href', '#');
+        checkoutBtn.classList.add('disabled');
     } else {
+        checkoutBtn.classList.remove('disabled');
         cart.forEach(item => {
             totalCount += item.quantity;
             totalPrice += item.price * item.quantity;
 
-            let div = document.createElement('div');
-            div.className = 'cart-item';
-            div.innerHTML = `
-                <div class="item-info">
-                    <h4>${item.name}</h4>
-                    <p>${item.price} € x ${item.quantity} = ${item.price * item.quantity} €</p>
-                </div>
-                <div class="quantity-controls">
-                    <button class="qty-btn" onclick="updateQuantity('${item.name}', -1)">-</button>
-                    <span>${item.quantity}</span>
-                    <button class="qty-btn" onclick="updateQuantity('${item.name}', 1)">+</button>
+            cartItemsContainer.innerHTML += `
+                <div class="cart-item">
+                    <div class="item-info">
+                        <h4>${item.name}</h4>
+                        <p>${item.price} € x ${item.quantity}</p>
+                    </div>
+                    <div class="quantity-controls">
+                        <button class="qty-btn" onclick="updateQuantity('${item.name}', -1)">-</button>
+                        <span>${item.quantity}</span>
+                        <button class="qty-btn" onclick="updateQuantity('${item.name}', 1)">+</button>
+                    </div>
                 </div>
             `;
-            cartItemsContainer.appendChild(div);
         });
     }
 
-    cartCount.textContent = totalCount;
-
-    // Appliquer réduction code promo si actif
-    let finalPrice = totalPrice;
     if (appliedDiscount > 0) {
-        finalPrice = totalPrice * (1 - appliedDiscount);
+        totalPrice = totalPrice * (1 - appliedDiscount);
     }
 
-    cartTotalPrice.textContent = finalPrice.toFixed(2) + ' €';
+    cartCount.innerText = totalCount;
+    cartTotalPrice.innerText = totalPrice.toFixed(2) + ' €';
 
-    // Bloquer ou autoriser le bouton de paiement selon le panier
-    if (cart.length === 0 || finalPrice <= 0) {
-        checkoutBtn.classList.add('disabled');
-        checkoutBtn.removeAttribute('href');
+    if (cart.length > 0) {
+        let paypalURL = `https://www.paypal.com/paypalme/${PAYPAL_USERNAME}/${totalPrice.toFixed(2)}EUR`;
+        checkoutBtn.setAttribute('href', paypalURL);
+    }
+}
+updateCartUI();
+
+function applyPromoCode() {
+    let code = promoInput.value.trim().toUpperCase();
+    if (code === "WELCOME5" || code === "FIRE5") {
+        appliedDiscount = 0.05;
+        appliedPromoName = code;
+        promoMsg.style.color = "#00d084";
+        promoMsg.innerText = "Code promo appliqué : -5% !";
+    } else if (code === "FIRE10") {
+        appliedDiscount = 0.10;
+        appliedPromoName = code;
+        promoMsg.style.color = "#00d084";
+        promoMsg.innerText = "Code promo appliqué : -10% !";
     } else {
-        checkoutBtn.classList.remove('disabled');
-        checkoutBtn.href = `https://paypal.me/${PAYPAL_USERNAME}/${finalPrice.toFixed(2)}EUR`;
+        appliedDiscount = 0;
+        appliedPromoName = "";
+        promoMsg.style.color = "#ff1744";
+        promoMsg.innerText = "Code promo invalide.";
     }
+    updateCartUI();
 }
 
 function copyCartSummary() {
@@ -1660,97 +1594,122 @@ function copyCartSummary() {
         alert("Ton panier est vide !");
         return;
     }
-
-    let summary = "🔥 RÉCAPITULATIF DE COMMANDE - SHOP FIRE 🔥\n";
-    if (currentUser) {
-        summary += `👤 Client : ${currentUser.email}\n`;
-    }
+    let summary = "🔥 RÉCAPITULATIF COMMANDE SHOP FIRE 🔥\n\n";
     let rawTotal = 0;
     cart.forEach(item => {
-        summary += `- ${item.quantity}x ${item.name} (${item.price * item.quantity} €)\n`;
+        summary += `• ${item.quantity}x ${item.name} (${item.price * item.quantity} €)\n`;
         rawTotal += item.price * item.quantity;
     });
-
+    
     let finalTotal = rawTotal;
     if (appliedDiscount > 0) {
-        summary += `🏷️ Code promo appliqué : ${appliedPromoName} (-5%)\n`;
         finalTotal = rawTotal * (1 - appliedDiscount);
+        summary += `\nCode promo : ${appliedPromoName} (-${appliedDiscount * 100}%)`;
     }
 
-    summary += `💰 Total à payer : ${finalTotal.toFixed(2)} €\n`;
-    summary += `💳 Paiement effectué via PayPal (${PAYPAL_USERNAME}).`;
+    summary += `\n💰 Total : ${finalTotal.toFixed(2)} €`;
+    summary += `\n💳 Paiement effectué via PayPal (${PAYPAL_USERNAME}).`;
 
-    navigator.clipboard.writeText(summary).then(() => {
-        copyBtn.textContent = "✅ Copié ! Colle-le sur Discord";
-        setTimeout(() => {
-            copyBtn.textContent = "📋 Copier la commande pour Discord";
-        }, 3000);
-    });
-}
-
-// Filtres boutique
-function filterGame(category, btn) {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-
-    const coc = document.getElementById('cat-coc');
-    const brawl = document.getElementById('cat-brawl');
-    const royale = document.getElementById('cat-royale');
-
-    coc.classList.remove('hidden');
-    brawl.classList.remove('hidden');
-    royale.classList.remove('hidden');
-
-    if (category === 'coc') {
-        brawl.classList.add('hidden');
-        royale.classList.add('hidden');
-    } else if (category === 'brawl') {
-        coc.classList.add('hidden');
-        royale.classList.add('hidden');
-    } else if (category === 'royale') {
-        coc.classList.add('hidden');
-        brawl.classList.add('hidden');
+    if (currentUser) {
+        summary += `\n👤 Email compte : ${currentUser.email}`;
     }
+
+    navigator.clipboard.writeText(summary);
+    copyBtn.innerText = "✅ Copié avec succès !";
+    setTimeout(() => {
+        copyBtn.innerText = "📋 Copier la commande pour Discord";
+    }, 2500);
 }
 
-// FAQ Accordéon
+function openLegalModal(modalId) {
+    document.getElementById(`modal-${modalId}`).classList.add('active');
+}
+
+function closeLegalModals() {
+    document.querySelectorAll('.legal-modal').forEach(modal => modal.classList.remove('active'));
+}
+
 function toggleFaq(button) {
     const item = button.parentElement;
     const isActive = item.classList.contains('active');
-    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+    
+    document.querySelectorAll('.faq-item').forEach(faq => {
+        faq.classList.remove('active');
+    });
+
     if (!isActive) {
         item.classList.add('active');
     }
 }
 
-// Gestion Modales Légales
-function openLegalModal(type) {
-    closeLegalModals();
-    if (type === 'mentions') document.getElementById('modal-mentions').classList.add('active');
-    if (type === 'cgv') document.getElementById('modal-cgv').classList.add('active');
-    if (type === 'confidentialite') document.getElementById('modal-confidentialite').classList.add('active');
-    if (type === 'remboursement') document.getElementById('modal-remboursement').classList.add('active');
-}
+async function loginWithEmail() {
+    let email = prompt("Entre ton adresse email pour te connecter/t'inscrire :");
+    if (!email) return;
 
-function closeLegalModals() {
-    document.querySelectorAll('.legal-modal').forEach(m => m.classList.remove('active'));
-}
+    let { data, error } = await _supabase
+        .from('profiles')
+        .select('*')
+        .eq('email', email)
+        .single();
 
-// Fermeture des modales si clic en dehors du contenu
-window.addEventListener('click', (e) => {
-    document.querySelectorAll('.legal-modal').forEach(modal => {
-        if (e.target === modal) {
-            modal.classList.remove('active');
+    if (!data) {
+        let { data: newProfile, error: err } = await _supabase
+            .from('profiles')
+            .insert([{ email: email, points: 0 }])
+            .select()
+            .single();
+        
+        if (newProfile) {
+            currentUser = newProfile;
+            userPoints = newProfile.points;
         }
-    });
-});
+    } else {
+        currentUser = data;
+        userPoints = data.points;
+    }
 
-// Initialisation au chargement de la page
-window.onload = async () => {
-    updateCartUI();
-    await loadStocks();
-    await checkUserSession();
-};
+    updateAuthUI();
+    alert("Connexion réussie ! Bienvenue sur Shop Fire.");
+}
+
+function updateAuthUI() {
+    if (currentUser) {
+        document.getElementById('login-btn').style.display = 'none';
+        let badge = document.getElementById('user-badge');
+        badge.style.display = 'flex';
+        document.getElementById('user-pts').innerText = `⭐ ${userPoints} pts`;
+        
+        if (userPoints >= 10) {
+            document.getElementById('claim-btn').style.display = 'inline-block';
+        } else {
+            document.getElementById('claim-btn').style.display = 'none';
+        }
+    } else {
+        document.getElementById('login-btn').style.display = 'inline-block';
+        document.getElementById('user-badge').style.display = 'none';
+    }
+}
+
+async function claimFreePass() {
+    if (userPoints < 10) return;
+    userPoints -= 10;
+    
+    await _supabase
+        .from('profiles')
+        .update({ points: userPoints })
+        .eq('email', currentUser.email);
+
+    currentUser.points = userPoints;
+    updateAuthUI();
+    alert("🎉 Félicitations ! Ton Pass gratuit a été débloqué. Ouvre un ticket sur Discord pour le réclamer !");
+}
+
+function logout() {
+    currentUser = null;
+    userPoints = 0;
+    updateAuthUI();
+    alert("Déconnecté avec succès.");
+}
 </script>
 
 </body>
