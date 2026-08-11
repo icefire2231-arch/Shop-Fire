@@ -589,13 +589,8 @@ flex-direction:column;
 gap:10px;
 }
 
-/* SECTION PROMO CODE MODIFIÉE */
+/* SECTION PROMO CODE */
 .promo-box{
-display:flex;
-flex-direction:column;
-gap:8px;
-}
-.promo-row{
 display:flex;
 gap:8px;
 }
@@ -621,30 +616,9 @@ cursor:pointer;
 transition:.2s;
 }
 .promo-apply-btn:hover{background:#ff1744}
-
-/* Liste des choix rapides de coupons */
-.coupon-quick-list {
-display:flex;
-gap:5px;
-flex-wrap:wrap;
-}
-.coupon-tag-btn {
-font-size:11px;
-padding:5px 8px;
-background:rgba(255,255,255,.08);
-border:1px solid rgba(255,255,255,.15);
-color:#fff;
-border-radius:6px;
-cursor:pointer;
-transition:.2s;
-}
-.coupon-tag-btn:hover {
-background:rgba(255,23,68,.3);
-border-color:#ff1744;
-}
-
 .promo-msg{
 font-size:12px;
+margin-top:-4px;
 min-height:16px;
 }
 
@@ -890,7 +864,7 @@ nav a{display:none}
 <a href="#faq">FAQ</a>
 <a href="#apres-paiement">Après paiement</a>
 <a href="#securite">Sécurité</a>
-<a href="https://discord.gg/2XUNQeCU8H" target="_blank">Discord</a>
+<a href="https://discord.gg/6TJT6JjCg5" target="_blank">Discord</a>
 
 <!-- WIDGET FIDÉLITÉ -->
 <div class="auth-box">
@@ -931,7 +905,7 @@ Connecte-toi pour cumuler 1 point tous les 10 € d'achat et débloquer des Pass
 🛒 Voir la boutique
 </a>
 
-<a href="https://discord.gg/2XUNQeCU8H" target="_blank" class="btn discord">
+<a href="https://discord.gg/6TJT6JjCg5" target="_blank" class="btn discord">
 💬 Notre Discord
 </a>
 
@@ -1261,7 +1235,7 @@ pour nous transmettre les informations nécessaires
 </div>
 
 <a
-href="https://discord.gg/2XUNQeCU8H"
+href="https://discord.gg/6TJT6JjCg5"
 target="_blank"
 class="btn discord">
 💬 J'ai payé — Ouvrir Discord </a>
@@ -1337,7 +1311,7 @@ et de contacter le support.
 </main>
 
 <!-- BOUTON DISCORD FLOTTANT -->
-<a href="https://discord.gg/2XUNQeCU8H" target="_blank" class="floating-discord">
+<a href="https://discord.gg/6TJT6JjCg5" target="_blank" class="floating-discord">
     💬 <span>Discord Support</span>
 </a>
 
@@ -1352,18 +1326,10 @@ et de contacter le support.
         <p class="empty-msg">Ton panier est vide pour le moment.</p>
     </div>
     <div class="cart-footer">
-        <!-- CHAMP CODE PROMO & SÉLECTION RAPIDE -->
+        <!-- CHAMP CODE PROMO -->
         <div class="promo-box">
-            <div class="promo-row">
-                <input type="text" id="promo-input" class="promo-input" placeholder="Code promo (ex: RRENTREE)">
-                <button class="promo-apply-btn" onclick="applyCustomPromo()">Appliquer</button>
-            </div>
-            <!-- Boutons de sélection rapide de coupons -->
-            <div class="coupon-quick-list">
-                <button type="button" class="coupon-tag-btn" onclick="selectQuickPromo('RRENTREE', 0.20)">🏷️ RRENTREE (-20%)</button>
-                <button type="button" class="coupon-tag-btn" onclick="selectQuickPromo('FIRE10', 0.10)">🏷️ FIRE10 (-10%)</button>
-                <button type="button" class="coupon-tag-btn" onclick="selectQuickPromo('VIP50', 0.50)">🏷️ VIP50 (-50%)</button>
-            </div>
+            <input type="text" id="promo-input" class="promo-input" placeholder="Code promo (ex: RRENTREE)">
+            <button class="promo-apply-btn" onclick="applyPromoCode()">Appliquer</button>
         </div>
         <div class="promo-msg" id="promo-msg"></div>
 
@@ -1474,115 +1440,222 @@ const promoMsg = document.getElementById('promo-msg');
 
 const PAYPAL_USERNAME = "FireTwitch955";
 
-// LISTE DES COUPONS VALIDES GLOBALE
-const validCoupons = {
-    "RRENTREE": 0.20, // 20%
-    "FIRE10": 0.10,   // 10%
-    "VIP50": 0.50     // 50%
-};
+// CHARGEMENT DES STOCKS DEPUIS SUPABASE (AUTOMATIQUE)
+async function loadStocks() {
+    const { data: products, error } = await _supabase
+        .from('products')
+        .select('*');
 
-// SÉLECTION RAPIDE D'UN COUPON VIA LES BOUTONS DU PANIER
-function selectQuickPromo(code, discountRate) {
-    promoInput.value = code;
-    appliedDiscount = discountRate;
-    appliedPromoName = code;
-    
-    promoMsg.style.color = "#00d084";
-    promoMsg.textContent = `✅ Coupon ${code} sélectionné (-${discountRate * 100}%) !`;
-    updateCartUI();
+    if (error) {
+        console.error("Erreur lors du chargement des stocks :", error);
+        return;
+    }
+
+    products.forEach(product => {
+        const elementId = `stock-${product.title}`;
+        const stockEl = document.getElementById(elementId);
+
+        let buttonId = "";
+        if (product.title === "Pass Coc") buttonId = "btn-coc";
+        if (product.title === "Pass Brawl Stars") buttonId = "btn-brawl";
+        if (product.title === "Pass Royale") buttonId = "btn-cr";
+        const btnEl = document.getElementById(buttonId);
+
+        if (stockEl) {
+            if (product.stock > 0) {
+                stockEl.textContent = `⚡ Stock : ${product.stock} dispo`;
+                stockEl.style.color = "#00d084";
+                if (btnEl) { btnEl.disabled = false; btnEl.style.opacity = "1"; }
+            } else {
+                stockEl.textContent = "❌ Rupture de stock";
+                stockEl.style.color = "#ff1744";
+                if (btnEl) { btnEl.disabled = true; btnEl.style.opacity = "0.5"; }
+            }
+        }
+    });
 }
 
-// APPLICATION MANUELLE DU COUPON VIA LE BOUTON "Appliquer"
-function applyCustomPromo() {
+// GESTION DES CODES PROMO
+function applyPromoCode() {
     const code = promoInput.value.trim().toUpperCase();
+    const validCodes = {
+        "SUMMER20": 0.20,
+        "RENTREE10": 0.10,
+        "FIRE50": 0.50,
+        "WELCOME": 0.05
+    };
 
-    if (validCoupons[code] !== undefined) {
-        appliedDiscount = validCoupons[code];
+    if (validCodes[code] !== undefined) {
+        appliedDiscount = validCodes[code];
         appliedPromoName = code;
         promoMsg.style.color = "#00d084";
-        promoMsg.textContent = `✅ Code ${code} appliqué (-${appliedDiscount * 100}%) !`;
-    } else if (code === "") {
-        appliedDiscount = 0;
-        appliedPromoName = "";
-        promoMsg.textContent = "";
+        promoMsg.textContent = `✅ Code "${code}" appliqué (-${appliedDiscount * 100}%) !`;
+        updateCartUI();
     } else {
         appliedDiscount = 0;
         appliedPromoName = "";
         promoMsg.style.color = "#ff1744";
-        promoMsg.textContent = "❌ Ce code promo n'existe pas.";
+        promoMsg.textContent = "❌ Code promo invalide ou expiré.";
+        updateCartUI();
     }
-    updateCartUI();
 }
 
-// GESTION DE MISE À JOUR DU PANIER (FONCTION GLOBALE EXISTANTE)
-function updateCartUI() {
+// AUTHENTIFICATION PAR EMAIL
+async function loginWithEmail() {
+    const email = prompt("Entre ton adresse email :");
+    if (!email) return;
+
+    const password = prompt("Entre ton mot de passe (au moins 6 caractères) :");
+    if (!password) return;
+
+    let { data, error } = await _supabase.auth.signInWithPassword({ email, password });
+
+    if (error) {
+        let signUp = await _supabase.auth.signUp({ email, password });
+        if (signUp.error) {
+            alert("Erreur : " + signUp.error.message);
+            return;
+        }
+        
+        if (signUp.data.session) {
+            alert("🎉 Compte créé et connecté avec succès !");
+            await checkUserSession();
+        } else {
+            alert("🎉 Compte créé avec succès ! Clique à nouveau sur Se connecter si ta session ne s'affiche pas.");
+            await checkUserSession();
+        }
+        return;
+    }
+
+    if (data.session) {
+        alert("🎉 Connexion réussie !");
+        await checkUserSession();
+    }
+}
+
+async function logout() {
+    await _supabase.auth.signOut();
+    window.location.reload();
+}
+
+async function checkUserSession() {
+    const { data: { user } } = await _supabase.auth.getUser();
+    if (user) {
+        currentUser = user;
+        document.getElementById('login-btn').style.display = 'none';
+        document.getElementById('user-badge').style.display = 'flex';
+        await loadUserPoints(user.id);
+    }
+}
+
+async function loadUserPoints(userId) {
+    let { data } = await _supabase
+        .from('profiles')
+        .select('points')
+        .eq('id', userId)
+        .single();
+
+    if (data) {
+        userPoints = data.points || 0;
+        document.getElementById('user-pts').textContent = `⭐ ${userPoints} pts`;
+        if (userPoints >= 10) {
+            document.getElementById('claim-btn').style.display = 'inline-block';
+        }
+    }
+}
+
+function claimFreePass() {
+    if (userPoints < 10) return;
+    let passName = prompt("Quel Pass gratuit souhaites-tu réclamer ?\n- Pass Coc\n- Pass Brawl Stars\n- Pass Royale");
+    if (passName) {
+        alert(`🎉 Choix enregistré (${passName}) ! Ouvre un ticket sur Discord avec l'adresse ${currentUser.email} pour recevoir ton Pass gratuit !`);
+    }
+}
+
+function toggleCart() {
+    cartOverlay.classList.toggle('active');
+    cartDrawer.classList.toggle('active');
+}
+
+openCartBtn.addEventListener('click', toggleCart);
+closeCartBtn.addEventListener('click', toggleCart);
+cartOverlay.addEventListener('click', toggleCart);
+
+function saveCartToStorage() {
     localStorage.setItem('shop_fire_cart', JSON.stringify(cart));
-    
-    let totalItems = 0;
-    let totalPrice = 0;
-
-    if (cart.length === 0) {
-        cartItemsContainer.innerHTML = '<p class="empty-msg">Ton panier est vide pour le moment.</p>';
-        checkoutBtn.setAttribute('href', '#');
-        checkoutBtn.classList.add('disabled');
-    } else {
-        cartItemsContainer.innerHTML = '';
-        checkoutBtn.classList.remove('disabled');
-
-        cart.forEach((item, index) => {
-            totalItems += item.quantity;
-            totalPrice += item.price * item.quantity;
-
-            const itemEl = document.createElement('div');
-            itemEl.className = 'cart-item';
-            itemEl.innerHTML = `
-                <div class="item-info">
-                    <h4>${item.name}</h4>
-                    <p>${item.price} € x ${item.quantity}</p>
-                </div>
-                <div class="quantity-controls">
-                    <button class="qty-btn" onclick="changeQty(${index}, -1)">-</button>
-                    <span>${item.quantity}</span>
-                    <button class="qty-btn" onclick="changeQty(${index}, 1)">+</button>
-                </div>
-            `;
-            cartItemsContainer.appendChild(itemEl);
-        });
-    }
-
-    cartCount.textContent = totalItems;
-
-    // Appliquer la réduction du coupon si existante
-    let finalPrice = totalPrice - (totalPrice * appliedDiscount);
-    if (finalPrice < 0) finalPrice = 0;
-
-    cartTotalPrice.textContent = finalPrice.toFixed(2) + ' €';
-
-    // Lien de paiement PayPal dynamique
-    if (finalPrice > 0) {
-        const paypalUrl = `https://www.paypal.com/paypalme/${PAYPAL_USERNAME}/${finalPrice.toFixed(2)}EUR`;
-        checkoutBtn.setAttribute('href', paypalUrl);
-    }
 }
 
 function addToCart(name, price) {
-    const existingItem = cart.find(item => item.name === name);
+    let existingItem = cart.find(item => item.name === name);
     if (existingItem) {
         existingItem.quantity += 1;
     } else {
         cart.push({ name, price, quantity: 1 });
     }
+    saveCartToStorage();
     updateCartUI();
-    cartDrawer.classList.add('active');
-    cartOverlay.classList.add('active');
+    toggleCart();
 }
 
-function changeQty(index, delta) {
-    cart[index].quantity += delta;
-    if (cart[index].quantity <= 0) {
-        cart.splice(index, 1);
+function updateQuantity(name, change) {
+    let item = cart.find(item => item.name === name);
+    if (item) {
+        item.quantity += change;
+        if (item.quantity <= 0) {
+            cart = cart.filter(i => i.name !== name);
+        }
     }
+    saveCartToStorage();
     updateCartUI();
+}
+
+function updateCartUI() {
+    cartItemsContainer.innerHTML = '';
+    let totalCount = 0;
+    let totalPrice = 0;
+
+    if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<p class="empty-msg">Ton panier est vide pour le moment.</p>';
+    } else {
+        cart.forEach(item => {
+            totalCount += item.quantity;
+            totalPrice += item.price * item.quantity;
+
+            let div = document.createElement('div');
+            div.className = 'cart-item';
+            div.innerHTML = `
+                <div class="item-info">
+                    <h4>${item.name}</h4>
+                    <p>${item.price} € x ${item.quantity} = ${item.price * item.quantity} €</p>
+                </div>
+                <div class="quantity-controls">
+                    <button class="qty-btn" onclick="updateQuantity('${item.name}', -1)">-</button>
+                    <span>${item.quantity}</span>
+                    <button class="qty-btn" onclick="updateQuantity('${item.name}', 1)">+</button>
+                </div>
+            `;
+            cartItemsContainer.appendChild(div);
+        });
+    }
+
+    cartCount.textContent = totalCount;
+
+    // Appliquer réduction code promo si actif
+    let finalPrice = totalPrice;
+    if (appliedDiscount > 0) {
+        finalPrice = totalPrice * (1 - appliedDiscount);
+    }
+
+    cartTotalPrice.textContent = finalPrice.toFixed(2) + ' €';
+
+    // Bloquer ou autoriser le bouton de paiement selon le panier
+    if (cart.length === 0 || finalPrice <= 0) {
+        checkoutBtn.classList.add('disabled');
+        checkoutBtn.removeAttribute('href');
+    } else {
+        checkoutBtn.classList.remove('disabled');
+        checkoutBtn.href = `https://paypal.me/${PAYPAL_USERNAME}/${finalPrice.toFixed(2)}EUR`;
+    }
 }
 
 function copyCartSummary() {
@@ -1590,47 +1663,97 @@ function copyCartSummary() {
         alert("Ton panier est vide !");
         return;
     }
-    let summary = "🛒 **Récapitulatif de ma commande Shop Fire** :\n";
-    let totalPrice = 0;
+
+    let summary = "🔥 RÉCAPITULATIF DE COMMANDE - SHOP FIRE 🔥\n";
+    if (currentUser) {
+        summary += `👤 Client : ${currentUser.email}\n`;
+    }
+    let rawTotal = 0;
     cart.forEach(item => {
-        summary += `- ${item.name} (x${item.quantity}) : ${item.price * item.quantity} €\n`;
-        totalPrice += item.price * item.quantity;
+        summary += `- ${item.quantity}x ${item.name} (${item.price * item.quantity} €)\n`;
+        rawTotal += item.price * item.quantity;
     });
 
+    let finalTotal = rawTotal;
     if (appliedDiscount > 0) {
-        let discountAmount = totalPrice * appliedDiscount;
-        totalPrice -= discountAmount;
-        summary += `🏷️ Coupon appliqué : ${appliedPromoName} (-${appliedDiscount * 100}%)\n`;
+        summary += `🏷️ Code promo appliqué : ${appliedPromoName} (-${appliedDiscount * 100}%)\n`;
+        finalTotal = rawTotal * (1 - appliedDiscount);
     }
 
-    summary += `💰 **Total à régler : ${totalPrice.toFixed(2)} €**`;
+    summary += `💰 Total à payer : ${finalTotal.toFixed(2)} €\n`;
+    summary += `💳 Paiement effectué via PayPal (${PAYPAL_USERNAME}).`;
 
     navigator.clipboard.writeText(summary).then(() => {
-        copyBtn.textContent = "✅ Copié avec succès !";
+        copyBtn.textContent = "✅ Copié ! Colle-le sur Discord";
         setTimeout(() => {
             copyBtn.textContent = "📋 Copier la commande pour Discord";
-        }, 2500);
+        }, 3000);
     });
 }
 
-// Événements d'ouverture/fermeture du panier
-openCartBtn.addEventListener('click', () => {
-    cartDrawer.classList.add('active');
-    cartOverlay.classList.add('active');
-});
+// Filtres boutique
+function filterGame(category, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
 
-closeCartBtn.addEventListener('click', () => {
-    cartDrawer.classList.remove('active');
-    cartOverlay.classList.remove('active');
-});
+    const coc = document.getElementById('cat-coc');
+    const brawl = document.getElementById('cat-brawl');
+    const royale = document.getElementById('cat-royale');
 
-cartOverlay.addEventListener('click', () => {
-    cartDrawer.classList.remove('active');
-    cartOverlay.classList.remove('active');
+    coc.classList.remove('hidden');
+    brawl.classList.remove('hidden');
+    royale.classList.remove('hidden');
+
+    if (category === 'coc') {
+        brawl.classList.add('hidden');
+        royale.classList.add('hidden');
+    } else if (category === 'brawl') {
+        coc.classList.add('hidden');
+        royale.classList.add('hidden');
+    } else if (category === 'royale') {
+        coc.classList.add('hidden');
+        brawl.classList.add('hidden');
+    }
+}
+
+// FAQ Accordéon
+function toggleFaq(button) {
+    const item = button.parentElement;
+    const isActive = item.classList.contains('active');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+    if (!isActive) {
+        item.classList.add('active');
+    }
+}
+
+// Gestion Modales Légales
+function openLegalModal(type) {
+    closeLegalModals();
+    if (type === 'mentions') document.getElementById('modal-mentions').classList.add('active');
+    if (type === 'cgv') document.getElementById('modal-cgv').classList.add('active');
+    if (type === 'confidentialite') document.getElementById('modal-confidentialite').classList.add('active');
+    if (type === 'remboursement') document.getElementById('modal-remboursement').classList.add('active');
+}
+
+function closeLegalModals() {
+    document.querySelectorAll('.legal-modal').forEach(m => m.classList.remove('active'));
+}
+
+// Fermeture des modales si clic en dehors du contenu
+window.addEventListener('click', (e) => {
+    document.querySelectorAll('.legal-modal').forEach(modal => {
+        if (e.target === modal) {
+            modal.classList.remove('active');
+        }
+    });
 });
 
 // Initialisation au chargement de la page
-updateCartUI();
+window.onload = async () => {
+    updateCartUI();
+    await loadStocks();
+    await checkUserSession();
+};
 </script>
 
 </body>
