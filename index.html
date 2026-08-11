@@ -83,35 +83,12 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 }
-
-/* LOGO PLUS CLEAN ET PROFESSIONNEL */
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 22px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    color: #fff;
-    text-decoration: none;
-    font-family: system-ui, -apple-system, sans-serif;
+.logo{
+font-size:25px;
+font-weight:900;
+text-shadow:0 0 20px rgba(255,0,50,.8);
 }
-.logo-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    background: linear-gradient(135deg, #ff1744, #ff4d00);
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(255, 23, 68, 0.4);
-    font-size: 18px;
-}
-.logo span {
-    background: linear-gradient(135deg, #ff1744, #ff7700);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+.logo span{color:#ff1744}
 
 nav{
 display:flex;
@@ -798,11 +775,7 @@ nav a{display:none}
 
 <header>
 <div class="nav">
-<!-- LOGO PLUS CLEAN -->
-<a href="#" class="logo">
-    <div class="logo-icon">🔥</div>
-    SHOP <span>FIRE</span>
-</a>
+<div class="logo">SHOP <span>FIRE</span> 🔥</div>
 
 <nav>
 <a href="#boutique">Boutique</a>
@@ -1295,10 +1268,6 @@ et de contacter le support.
 
 Paiement via PayPal • Support Discord
 
-<br><br>
-
-© 2026 Shop Fire — Tous droits réservés.
-
 </footer>
 
 <script>
@@ -1309,7 +1278,7 @@ const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let currentUser = null;
 let userPoints = 0;
-let appliedDiscount = 0; // Pourcentage de réduction (ex: 0.20 pour 20%)
+let appliedDiscount = 0; 
 let appliedPromoName = "";
 
 let cart = JSON.parse(localStorage.getItem('shop_fire_cart')) || [];
@@ -1328,7 +1297,6 @@ const promoMsg = document.getElementById('promo-msg');
 
 const PAYPAL_USERNAME = "FireTwitch955";
 
-// CHARGEMENT DES STOCKS DEPUIS SUPABASE (AUTOMATIQUE)
 async function loadStocks() {
     const { data: products, error } = await _supabase
         .from('products')
@@ -1363,7 +1331,6 @@ async function loadStocks() {
     });
 }
 
-// GESTION DES CODES PROMO
 function applyPromoCode() {
     const code = promoInput.value.trim().toUpperCase();
     
@@ -1389,7 +1356,6 @@ function applyPromoCode() {
     }
 }
 
-// AUTHENTIFICATION PAR EMAIL
 async function loginWithEmail() {
     const email = prompt("Entre ton adresse email :");
     if (!email) return;
@@ -1486,102 +1452,90 @@ function addToCart(name, price) {
     toggleCart();
 }
 
-function updateQuantity(name, change) {
-    const item = cart.find(item => item.name === name);
-    if (item) {
-        item.quantity += change;
-        if (item.quantity <= 0) {
-            cart = cart.filter(i => i.name !== name);
-        }
-    }
+function removeFromCart(name) {
+    cart = cart.filter(item => item.name !== name);
     saveCartToStorage();
     updateCartUI();
 }
 
-// MISE À JOUR DE L'UI DU PANIER (AVEC SÉCURISATION DU BOUTON PAYPAL)
+function changeQuantity(name, delta) {
+    const item = cart.find(item => item.name === name);
+    if (item) {
+        item.quantity += delta;
+        if (item.quantity <= 0) {
+            removeFromCart(name);
+        } else {
+            saveCartToStorage();
+            updateCartUI();
+        }
+    }
+}
+
 function updateCartUI() {
     cartItemsContainer.innerHTML = '';
     
+    let totalItemsCount = 0;
+    let rawTotal = 0;
+
     if (cart.length === 0) {
         cartItemsContainer.innerHTML = '<p class="empty-msg">Ton panier est vide pour le moment.</p>';
-        cartTotalPrice.textContent = '0 €';
-        cartCount.textContent = '0';
-        
-        // Désactivation visuelle et fonctionnelle du bouton PayPal
-        checkoutBtn.style.opacity = '0.4';
-        checkoutBtn.style.pointerEvents = 'none';
-        checkoutBtn.href = '#';
-        return;
+    } else {
+        cart.forEach(item => {
+            totalItemsCount += item.quantity;
+            rawTotal += item.price * item.quantity;
+
+            const itemEl = document.createElement('div');
+            itemEl.className = 'cart-item';
+            itemEl.innerHTML = `
+                <div class="item-info">
+                    <h4>${item.name}</h4>
+                    <p>${item.price} € x ${item.quantity} = <strong>${item.price * item.quantity} €</strong></p>
+                </div>
+                <div class="quantity-controls">
+                    <button class="qty-btn" onclick="changeQuantity('${item.name}', -1)">-</button>
+                    <span>${item.quantity}</span>
+                    <button class="qty-btn" onclick="changeQuantity('${item.name}', 1)">+</button>
+                </div>
+            `;
+            cartItemsContainer.appendChild(itemEl);
+        });
     }
 
-    // Réactiver le bouton si le panier n'est pas vide
-    checkoutBtn.style.opacity = '1';
-    checkoutBtn.style.pointerEvents = 'auto';
+    cartCount.textContent = totalItemsCount;
 
-    let totalCount = 0;
-    let totalPrice = 0;
+    let finalTotal = rawTotal * (1 - appliedDiscount);
+    cartTotalPrice.textContent = finalTotal.toFixed(2) + ' €';
 
-    cart.forEach(item => {
-        totalCount += item.quantity;
-        totalPrice += item.price * item.quantity;
-
-        const itemDiv = document.createElement('div');
-        itemDiv.className = 'cart-item';
-        itemDiv.innerHTML = `
-            <div class="item-info">
-                <h4>${item.name}</h4>
-                <p>${item.price} € x ${item.quantity} = ${item.price * item.quantity} €</p>
-            </div>
-            <div class="quantity-controls">
-                <button class="qty-btn" onclick="updateQuantity('${item.name}', -1)">-</button>
-                <span>${item.quantity}</span>
-                <button class="qty-btn" onclick="updateQuantity('${item.name}', 1)">+</button>
-            </div>
-        `;
-        cartItemsContainer.appendChild(itemDiv);
-    });
-
-    // Appliquer la réduction du code promo si présent
-    if (appliedDiscount > 0) {
-        totalPrice = totalPrice * (1 - appliedDiscount);
-    }
-
-    cartCount.textContent = totalCount;
-    cartTotalPrice.textContent = `${totalPrice.toFixed(2)} €`;
-
-    // Lien PayPal avec montant pré-rempli
-    const paypalUrl = `https://www.paypal.com/paypalme/${PAYPAL_USERNAME}/${totalPrice.toFixed(2)}EUR`;
-    checkoutBtn.href = paypalUrl;
+    let paypalLink = `https://www.paypal.com/paypalme/${PAYPAL_USERNAME}/${finalTotal.toFixed(2)}EUR`;
+    checkoutBtn.href = paypalLink;
 }
 
-// COPIER LE RÉCAPITULATIF POUR DISCORD
 function copyCartSummary() {
     if (cart.length === 0) {
         alert("Ton panier est vide !");
         return;
     }
 
-    let summary = "🔥 COMMANDE SHOP FIRE 🔥\n\n";
-    let rawTotal = 0;
+    let rawTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    let finalTotal = rawTotal * (1 - appliedDiscount);
 
+    let summary = "🔥 **RÉCAPITULATIF DE COMMANDE - SHOP FIRE** 🔥\n\n";
     cart.forEach(item => {
-        let subtotal = item.price * item.quantity;
-        rawTotal += subtotal;
-        summary += `- ${item.quantity}x ${item.name} (${subtotal} €)\n`;
+        summary += `• ${item.quantity}x ${item.name} (${item.price * item.quantity} €)\n`;
     });
-
+    
     if (appliedDiscount > 0) {
-        let finalTotal = rawTotal * (1 - appliedDiscount);
-        summary += `\nSous-total : ${rawTotal.toFixed(2)} €`;
-        summary += `\nCode promo (${appliedPromoName}) : -${appliedDiscount * 100}%`;
-        summary += `\nTotal final : ${finalTotal.toFixed(2)} €`;
-    } else {
-        summary += `\nTotal : ${rawTotal.toFixed(2)} €`;
+        summary += `\nCode promo appliqué : ${appliedPromoName} (-${appliedDiscount * 100}%)\n`;
     }
 
+    summary += `\n💰 **Total à payer : ${finalTotal.toFixed(2)} €**\n`;
+    summary += `💳 Paiement effectué via PayPal à : ${PAYPAL_USERNAME}\n`;
+    
     if (currentUser) {
-        summary += `\nEmail client : ${currentUser.email}`;
+        summary += `📧 Email du compte : ${currentUser.email}\n`;
     }
+
+    summary += "\n👉 *Je souhaite finaliser ma commande svp !*";
 
     navigator.clipboard.writeText(summary).then(() => {
         copyBtn.textContent = "✅ Copié avec succès !";
@@ -1589,12 +1543,12 @@ function copyCartSummary() {
             copyBtn.textContent = "📋 Copier la commande pour Discord";
         }, 3000);
     }).catch(err => {
-        alert("Erreur lors de la copie : " + err);
+        console.error("Erreur lors de la copie :", err);
+        alert("Impossible de copier automatiquement.");
     });
 }
 
-// FILTRE DES JEUX
-function filterGame(game, btnElement) {
+function filterGame(category, btnElement) {
     document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
     btnElement.classList.add('active');
 
@@ -1602,39 +1556,40 @@ function filterGame(game, btnElement) {
     const catBrawl = document.getElementById('cat-brawl');
     const catRoyale = document.getElementById('cat-royale');
 
-    catCoc.classList.remove('hidden');
-    catBrawl.classList.remove('hidden');
-    catRoyale.classList.remove('hidden');
+    catCoc.classList.add('hidden');
+    catBrawl.classList.add('hidden');
+    catRoyale.classList.add('hidden');
 
-    if (game === 'coc') {
-        catBrawl.classList.add('hidden');
-        catRoyale.classList.add('hidden');
-    } else if (game === 'brawl') {
-        catCoc.classList.add('hidden');
-        catRoyale.classList.add('hidden');
-    } else if (game === 'royale') {
-        catCoc.classList.add('hidden');
-        catBrawl.classList.add('hidden');
+    if (category === 'all') {
+        catCoc.classList.remove('hidden');
+        catBrawl.classList.remove('hidden');
+        catRoyale.classList.remove('hidden');
+    } else if (category === 'coc') {
+        catCoc.classList.remove('hidden');
+    } else if (category === 'brawl') {
+        catBrawl.classList.remove('hidden');
+    } else if (category === 'royale') {
+        catRoyale.classList.remove('hidden');
     }
 }
 
-// FAQ TOGGLE
 function toggleFaq(button) {
-    const item = button.parentElement;
-    const isActive = item.classList.contains('active');
-    
-    document.querySelectorAll('.faq-item').forEach(faq => faq.classList.remove('active'));
-    
+    const faqItem = button.parentElement;
+    const isActive = faqItem.classList.contains('active');
+
+    document.querySelectorAll('.faq-item').forEach(item => {
+        item.classList.remove('active');
+    });
+
     if (!isActive) {
-        item.classList.add('active');
+        faqItem.classList.add('active');
     }
 }
 
-// INITIALISATION AU CHARGEMENT DE LA PAGE
 window.addEventListener('DOMContentLoaded', async () => {
-    loadStocks();
     updateCartUI();
     await checkUserSession();
+    await loadStocks();
 });
 </script>
 
