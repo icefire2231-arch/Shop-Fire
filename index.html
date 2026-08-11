@@ -1440,6 +1440,7 @@ const promoMsg = document.getElementById('promo-msg');
 
 const PAYPAL_USERNAME = "FireTwitch955";
 
+// CHARGEMENT DES STOCKS DEPUIS SUPABASE (AUTOMATIQUE)
 async function loadStocks() {
     const { data: products, error } = await _supabase
         .from('products')
