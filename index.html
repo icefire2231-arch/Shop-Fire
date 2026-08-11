@@ -649,6 +649,14 @@ text-align:center;
 transform:scale(1.02);
 box-shadow:0 0 30px rgba(0,140,255,.7);
 }
+.checkout-btn.disabled {
+background: rgba(255, 255, 255, 0.1);
+color: rgba(255, 255, 255, 0.3);
+box-shadow: none;
+pointer-events: none;
+cursor: not-allowed;
+transform: none !important;
+}
 
 .copy-btn{
 width:100%;
@@ -1640,8 +1648,14 @@ function updateCartUI() {
 
     cartTotalPrice.textContent = finalPrice.toFixed(2) + ' €';
 
-    // Lien Paypal dynamique avec montant total
-    checkoutBtn.href = `https://paypal.me/${PAYPAL_USERNAME}/${finalPrice.toFixed(2)}EUR`;
+    // Bloquer ou autoriser le bouton de paiement selon le panier
+    if (cart.length === 0 || finalPrice <= 0) {
+        checkoutBtn.classList.add('disabled');
+        checkoutBtn.removeAttribute('href');
+    } else {
+        checkoutBtn.classList.remove('disabled');
+        checkoutBtn.href = `https://paypal.me/${PAYPAL_USERNAME}/${finalPrice.toFixed(2)}EUR`;
+    }
 }
 
 function copyCartSummary() {
