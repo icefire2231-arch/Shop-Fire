@@ -1215,7 +1215,7 @@ et de contacter le support.
             <span id="cart-total-price">0 €</span>
         </div>
         <button class="copy-btn" id="copy-btn" onclick="copyCartSummary()">📋 Copier la commande pour Discord</button>
-        <a href="#" class="checkout-btn" id="checkout-btn" target="_blank" onclick="sendDiscordNotification()">💳 Payer via PayPal</a>
+        <a href="#" class="checkout-btn" id="checkout-btn" target="_blank">💳 Payer via PayPal</a>
     </div>
 </div>
 
@@ -1255,7 +1255,6 @@ const checkoutBtn = document.getElementById('checkout-btn');
 const copyBtn = document.getElementById('copy-btn');
 
 const PAYPAL_USERNAME = "FireTwitch955";
-const DISCORD_WEBHOOK_URL = ""; 
 
 // CHARGEMENT DES STOCKS DEPUIS SUPABASE (AUTOMATIQUE)
 async function loadStocks() {
@@ -1411,8 +1410,18 @@ function updateCartUI() {
     if (cart.length === 0) {
         cartItemsContainer.innerHTML = '<p class="empty-msg">Ton panier est vide pour le moment.</p>';
         copyBtn.style.display = 'none';
+        
+        // Bloquer le bouton PayPal quand le panier est vide
+        checkoutBtn.style.opacity = "0.5";
+        checkoutBtn.style.pointerEvents = "none";
+        checkoutBtn.href = "#";
     } else {
         copyBtn.style.display = 'block';
+        
+        // Activer le bouton PayPal quand il y a des articles
+        checkoutBtn.style.opacity = "1";
+        checkoutBtn.style.pointerEvents = "auto";
+
         cart.forEach(item => {
             total += item.price * item.quantity;
             totalCount += item.quantity;
@@ -1438,37 +1447,30 @@ function updateCartUI() {
     cartCount.textContent = totalCount;
 
     let paypalUrl = `https://www.paypal.com/paypalme/${PAYPAL_USERNAME}/${total}EUR`;
-    checkoutBtn.href = paypalUrl;
+    if (total > 0) {
+        checkoutBtn.href = paypalUrl;
+    }
 }
 
 function copyCartSummary() {
     let summary = "🔥 RÉCAPITULATIF DE COMMANDE - SHOP FIRE 🔥\n\n";
     if (currentUser) {
-        summary += `👤 Client : ${currentUser.email}\n\n`;
+        summary += `👤 Client : ${currentUser.email}\n`;
     }
-    let total = 0;
     cart.forEach(item => {
-        summary += `- ${item.quantity}x ${item.name} (${item.price * item.quantity} €)\n`;
-        total += item.price * item.quantity;
+        summary += `- ${item.name} (x${item.quantity}) : ${item.price * item.quantity} €\n`;
     });
-    summary += `\n💰 Total global : ${total} €\n`;
-    summary += "\nMerci de valider ce panier en ouvrant un ticket sur notre Discord !";
+    summary += `\n💰 Total : ${cartTotalPrice.textContent}\n`;
+    summary += "⚡ Merci de procéder au paiement puis d'envoyer ce message dans votre ticket Discord !";
 
     navigator.clipboard.writeText(summary).then(() => {
-        copyBtn.textContent = "✅ Copié avec succès !";
-        setTimeout(() => {
-            copyBtn.textContent = "📋 Copier la commande pour Discord";
-        }, 2500);
+        alert("✅ Récapitulatif copié dans le presse-papier ! Tu peux le coller dans ton ticket Discord.");
     });
 }
 
-function sendDiscordNotification() {
-    // Optionnel si webhook configuré
-}
-
-function filterGame(category, btn) {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
+function filterGame(game, btnElement) {
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    btnElement.classList.add('active');
 
     const catCoc = document.getElementById('cat-coc');
     const catBrawl = document.getElementById('cat-brawl');
@@ -1478,35 +1480,36 @@ function filterGame(category, btn) {
     catBrawl.classList.remove('hidden');
     catRoyale.classList.remove('hidden');
 
-    if (category === 'coc') {
+    if (game === 'coc') {
         catBrawl.classList.add('hidden');
         catRoyale.classList.add('hidden');
-    } else if (category === 'brawl') {
+    } else if (game === 'brawl') {
         catCoc.classList.add('hidden');
         catRoyale.classList.add('hidden');
-    } else if (category === 'royale') {
+    } else if (game === 'royale') {
         catCoc.classList.add('hidden');
         catBrawl.classList.add('hidden');
     }
 }
 
 function toggleFaq(button) {
-    const item = button.parentElement;
-    const isActive = item.classList.contains('active');
-    
-    document.querySelectorAll('.faq-item').forEach(faq => {
-        faq.classList.remove('active');
+    const faqItem = button.parentElement;
+    const isActive = faqItem.classList.contains('active');
+
+    document.querySelectorAll('.faq-item').forEach(item => {
+        item.classList.remove('active');
     });
 
     if (!isActive) {
-        item.classList.add('active');
+        faqItem.classList.add('active');
     }
 }
 
+// Initialisation au chargement de la page
 window.addEventListener('DOMContentLoaded', async () => {
-    updateCartUI();
     await checkUserSession();
     await loadStocks();
+    updateCartUI();
 });
 </script>
 
