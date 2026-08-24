@@ -1773,7 +1773,7 @@ window.onload = async () => {
     await loadStocks();
     await checkUserSession();
 };
-// 1. Tes fonctions de parrainage ici (avant window.onload)
+// 1. Validation de la commande et bonus de parrainage
         async function checkAndRewardReferral(orderTotal) {
             try {
                 if (typeof currentUser === 'undefined' || !currentUser) return;
@@ -1802,31 +1802,7 @@ window.onload = async () => {
             } catch (err) { console.error(err); }
         }
 
-        async function loadUserReferralInfo() {
-            try {
-                if (typeof currentUser === 'undefined' || !currentUser) return;
-                let { data: profile } = await _supabase.from('profiles').select('referral_code, referred_by').eq('id', currentUser.id).single();
-                if (profile) {
-                    let userCode = profile.referral_code;
-                    if (!userCode) {
-                        userCode = "FIRE_" + Math.random().toString(36).substring(2, 8).toUpperCase();
-                        await _supabase.from('profiles').update({ referral_code: userCode }).eq('id', currentUser.id);
-                    }
-                    const codeInput = document.getElementById('my-referral-code');
-                    if (codeInput) codeInput.value = userCode;
-
-                    const sponsorContainer = document.getElementById('enter-sponsor-container');
-                    if (profile.referred_by && sponsorContainer) {
-                        if (profile.referred_by.startsWith('DONE_')) {
-                            sponsorContainer.innerHTML = "<p style='color: #2ed573;'>✅ Parrainage validé avec succès !</p>";
-                        } else {
-                            sponsorContainer.innerHTML = `<p style='color: #ffa502;'>Parrain enregistré : ${profile.referred_by}</p>`;
-                        }
-                    }
-                }
-            } catch (err) { console.error(err); }
-        }
-
+        // 2. Application d'un code parrain par l'utilisateur
         async function applySponsorCode() {
             if (typeof currentUser === 'undefined' || !currentUser) { alert("Connecte-toi d'abord !"); return; }
             const inputElem = document.getElementById('sponsor-code-input');
@@ -1847,7 +1823,8 @@ window.onload = async () => {
                 setTimeout(loadUserReferralInfo, 2000);
             }
         }
-// 🤝 FONCTION DE GESTION DU PARRAINAGE DÉFINITIVE
+
+        // 3. Gestion et affichage du code personnel (VERSION DÉFINITIVE UNIQUE)
         async function loadUserReferralInfo() {
             try {
                 if (typeof currentUser === 'undefined' || !currentUser) return;
@@ -1886,6 +1863,7 @@ window.onload = async () => {
                 console.error("Erreur chargement parrainage:", err);
             }
         }
+
         // Initialisation au chargement de la page
         window.onload = async () => {
             updateCartUI();
