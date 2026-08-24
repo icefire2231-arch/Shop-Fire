@@ -1773,6 +1773,86 @@ window.onload = async () => {
     await loadStocks();
     await checkUserSession();
 };
+// FONCTION DE VALIDATION DU PARRAINAGE (1 point si >= 5€)
+async function checkAndRewardReferral(orderTotal) {
+    if (!currentUser) return;
+    if (orderTotal < 5) return;
+
+    let { data: profileData, error } = await _supabase
+        .from('profiles')
+        .select('referred_by')
+        .eq('id', currentUser.id)
+        .single();
+
+    if (profileData && profileData.referred_by && !profileData.referred_by.startsWith('DONE_')) {
+        let sponsorCode = profileData.referred_by;
+
+        let { data: sponsorData } = await _supabase
+            .from('profiles')
+            .select('id, points')
+            .eq('referral_code', sponsorCode)
+            .single();
+
+        if (sponsorData) {
+            let newSponsorPoints = (sponsorData.points || 0) + 1;
+            await _supabase
+                .from('profiles')
+                .update({ points: newSponsorPoints })
+                .eq('id', sponsorData.id);
+
+            await _supabase
+                .from('profiles')
+                .update({ referred_by: 'DONE_' + sponsorCode })
+                .eq('id', currentUser.id);
+            
+            console.log("🎁 +1 point de fidélité versé au parrain !");
+        }
+    }
+}
+
+// FONCTION DE COPIE DU RÉCAPITULATIF DE COMMANDE
+async function copyCartSummary() {
+    if (cart.length === 0) {
+        alert("Ton panier est vide !");
+        return;
+    }
+
+    let rawTotal = 0;
+    cart.forEach(item => {
+        rawTotal += item.price * item.quantity;
+    });
+
+    let finalTotal = rawTotal;
+    if (appliedDiscount > 0) {
+        finalTotal = rawTotal * (1 - appliedDiscount);
+    }
+
+    // ⚡ Vérification et attribution du point parrainage si >= 5€
+    await checkAndRewardReferral(finalTotal);
+
+    let summary = "RÉCAPITULATIF DE COMMANDE - SHOP FIRE \n";
+    if (currentUser) {
+        summary += `Client: ${currentUser.email}\n`;
+    }
+    
+    cart.forEach(item => {
+        summary += `- ${item.quantity} x ${item.name} (${item.price * item.quantity} €)\n`;
+    });
+
+    if (appliedDiscount > 0) {
+        summary += `Code promo appliqué: ${appliedPromoName} (-${appliedDiscount * 100}%)\n`;
+    }
+    
+    summary += `Total à payer: ${finalTotal.toFixed(2)} €\n`;
+    summary += `Paiement effectué via PayPal (${PAYPAL_USERNAME}).`;
+
+    navigator.clipboard.writeText(summary).then(() => {
+        copyBtn.textContent = "Copié! Colle-le sur Discord";
+        setTimeout(() => {
+            copyBtn.textContent = "Copier la commande pour Discord";
+        }, 3000);
+    });
+}    
 </script>
 
 </body>
