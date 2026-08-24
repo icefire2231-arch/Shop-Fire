@@ -1773,196 +1773,112 @@ window.onload = async () => {
     await loadStocks();
     await checkUserSession();
 };
-<!-- 🤝 BLOC VISUEL DU PARRAINAGE -->
-<div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; margin: 20px auto; max-width: 500px; text-align: center; color: white; border: 1px solid rgba(255,255,255,0.1);">
-    <h3 style="color: #ff4757; margin-bottom: 10px;">🤝 Programme Parrainage</h3>
-    <p style="font-size: 14px; margin-bottom: 15px;">Partage ton code et gagne +1 point dès que ton filleul commande pour 5€ ou plus !</p>
-    
-    <div style="margin: 15px 0;">
-        <label style="font-size: 13px; color: #aaa;">Ton code de parrainage :</label><br>
-        <input type="text" id="my-referral-code" readonly style="padding: 8px; width: 200px; text-align: center; font-weight: bold; background: #111; color: #ff4757; border: 1px solid #444; border-radius: 5px; margin-top: 5px;" value="Connecte-toi">
-    </div>
+// 1. Tes fonctions de parrainage ici (avant window.onload)
+        async function checkAndRewardReferral(orderTotal) {
+            try {
+                if (typeof currentUser === 'undefined' || !currentUser) return;
+                if (orderTotal < 5) return;
 
-    <div style="margin-top: 20px;" id="enter-sponsor-container">
-        <label style="font-size: 13px; color: #aaa;">Tu as un code de parrain ? Entre-le ici :</label><br>
-        <div style="margin-top: 5px;">
-            <input type="text" id="sponsor-code-input" placeholder="Ex: FIRE_XXXXXX" style="padding: 8px; width: 160px; text-align: center; border-radius: 5px; border: 1px solid #444; background: #222; color: white;">
-            <button onclick="applySponsorCode()" style="padding: 8px 15px; background: #ff4757; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; margin-left: 5px;">Valider</button>
-        </div>
-        <p id="sponsor-msg" style="margin-top: 8px; font-size: 13px;"></p>
-    </div>
-</div>    
-// FONCTION DE VALIDATION DU PARRAINAGE (1 point si >= 5€)
-async function checkAndRewardReferral(orderTotal) {
-    if (!currentUser) return;
-    if (orderTotal < 5) return;
+                let { data: profileData } = await _supabase
+                    .from('profiles')
+                    .select('referred_by')
+                    .eq('id', currentUser.id)
+                    .single();
 
-    let { data: profileData, error } = await _supabase
-        .from('profiles')
-        .select('referred_by')
-        .eq('id', currentUser.id)
-        .single();
+                if (profileData && profileData.referred_by && !profileData.referred_by.startsWith('DONE_')) {
+                    let sponsorCode = profileData.referred_by;
+                    let { data: sponsorData } = await _supabase
+                        .from('profiles')
+                        .select('id, points')
+                        .eq('referral_code', sponsorCode)
+                        .single();
 
-    if (profileData && profileData.referred_by && !profileData.referred_by.startsWith('DONE_')) {
-        let sponsorCode = profileData.referred_by;
-
-        let { data: sponsorData } = await _supabase
-            .from('profiles')
-            .select('id, points')
-            .eq('referral_code', sponsorCode)
-            .single();
-
-        if (sponsorData) {
-            let newSponsorPoints = (sponsorData.points || 0) + 1;
-            await _supabase
-                .from('profiles')
-                .update({ points: newSponsorPoints })
-                .eq('id', sponsorData.id);
-
-            await _supabase
-                .from('profiles')
-                .update({ referred_by: 'DONE_' + sponsorCode })
-                .eq('id', currentUser.id);
-            
-            console.log("🎁 +1 point de fidélité versé au parrain !");
-        }
-    }
-}
-
-// FONCTION DE GESTION DU PARRAINAGE (Affichage du code + Enregistrement du filleul)
-async function loadUserReferralInfo() {
-    if (!currentUser) return;
-
-    let { data: profile } = await _supabase
-        .from('profiles')
-        .select('referral_code, referred_by')
-        .eq('id', currentUser.id)
-        .single();
-
-    if (profile) {
-        let userCode = profile.referral_code;
-        if (!userCode) {
-            userCode = "FIRE_" + Math.random().toString(36).substring(2, 8).toUpperCase();
-            await _supabase
-                .from('profiles')
-                .update({ referral_code: userCode })
-                .eq('id', currentUser.id);
+                    if (sponsorData) {
+                        let newSponsorPoints = (sponsorData.points || 0) + 1;
+                        await _supabase.from('profiles').update({ points: newSponsorPoints }).eq('id', sponsorData.id);
+                        await _supabase.from('profiles').update({ referred_by: 'DONE_' + sponsorCode }).eq('id', currentUser.id);
+                    }
+                }
+            } catch (err) { console.error(err); }
         }
 
-        const codeInput = document.getElementById('my-referral-code');
-        if (codeInput) codeInput.value = userCode;
+        async function loadUserReferralInfo() {
+            try {
+                if (typeof currentUser === 'undefined' || !currentUser) return;
+                let { data: profile } = await _supabase.from('profiles').select('referral_code, referred_by').eq('id', currentUser.id).single();
+                if (profile) {
+                    let userCode = profile.referral_code;
+                    if (!userCode) {
+                        userCode = "FIRE_" + Math.random().toString(36).substring(2, 8).toUpperCase();
+                        await _supabase.from('profiles').update({ referral_code: userCode }).eq('id', currentUser.id);
+                    }
+                    const codeInput = document.getElementById('my-referral-code');
+                    if (codeInput) codeInput.value = userCode;
 
-        const sponsorContainer = document.getElementById('enter-sponsor-container');
-        if (profile.referred_by && sponsorContainer) {
-            if (profile.referred_by.startsWith('DONE_')) {
-                sponsorContainer.innerHTML = "<p style='color: #2ed573;'>✅ Parrainage validé avec succès !</p>";
+                    const sponsorContainer = document.getElementById('enter-sponsor-container');
+                    if (profile.referred_by && sponsorContainer) {
+                        if (profile.referred_by.startsWith('DONE_')) {
+                            sponsorContainer.innerHTML = "<p style='color: #2ed573;'>✅ Parrainage validé avec succès !</p>";
+                        } else {
+                            sponsorContainer.innerHTML = `<p style='color: #ffa502;'>Parrain enregistré : ${profile.referred_by}</p>`;
+                        }
+                    }
+                }
+            } catch (err) { console.error(err); }
+        }
+
+        async function applySponsorCode() {
+            if (typeof currentUser === 'undefined' || !currentUser) { alert("Connecte-toi d'abord !"); return; }
+            const inputElem = document.getElementById('sponsor-code-input');
+            const msgElem = document.getElementById('sponsor-msg');
+            if (!inputElem || !msgElem) return;
+            const inputVal = inputElem.value.trim().toUpperCase();
+            if (!inputVal) { msgElem.style.color = "#ff4757"; msgElem.textContent = "Entre un code valide."; return; }
+
+            let { data: sponsor } = await _supabase.from('profiles').select('id, referral_code').eq('referral_code', inputVal).single();
+            if (!sponsor) { msgElem.style.color = "#ff4757"; msgElem.textContent = "Ce code n'existe pas."; return; }
+            if (sponsor.id === currentUser.id) { msgElem.style.color = "#ff4757"; msgElem.textContent = "Impossible de te parrainer toi-même !"; return; }
+
+            let { error } = await _supabase.from('profiles').update({ referred_by: inputVal }).eq('id', currentUser.id);
+            if (error) {
+                msgElem.style.color = "#ff4757"; msgElem.textContent = "Erreur lors de l'enregistrement.";
             } else {
-                sponsorContainer.innerHTML = `<p style='color: #ffa502;'>Parrain enregistré : ${profile.referred_by}</p>`;
+                msgElem.style.color = "#2ed573"; msgElem.textContent = "Parrain enregistré !";
+                setTimeout(loadUserReferralInfo, 2000);
             }
         }
-    }
-}
 
-async function applySponsorCode() {
-    if (!currentUser) {
-        alert("Connecte-toi d'abord !");
-        return;
-    }
+        // Initialisation au chargement de la page
+        window.onload = async () => {
+            updateCartUI();
+            await loadStocks();
+            await checkUserSession();
+            
+            if (typeof loadUserReferralInfo === 'function') {
+                loadUserReferralInfo();
+            }
+        };
+    </script> <!-- 🛑 ICI : ON FERME LE SCRIPT JS -->
 
-    const inputVal = document.getElementById('sponsor-code-input').value.trim().toUpperCase();
-    const msgElem = document.getElementById('sponsor-msg');
+    <!-- 🤝 BLOC VISUEL DU PARRAINAGE (EN DEHORS DU SCRIPT) -->
+    <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; margin: 20px auto; max-width: 500px; text-align: center; color: white; border: 1px solid rgba(255,255,255,0.1);">
+        <h3 style="color: #ff4757; margin-bottom: 10px;">🤝 Programme Parrainage</h3>
+        <p style="font-size: 14px; margin-bottom: 15px;">Partage ton code et gagne +1 point dès que ton filleul commande pour 5€ ou plus !</p>
+        
+        <div style="margin: 15px 0;">
+            <label style="font-size: 13px; color: #aaa;">Ton code de parrainage :</label><br>
+            <input type="text" id="my-referral-code" readonly style="padding: 8px; width: 200px; text-align: center; font-weight: bold; background: #111; color: #ff4757; border: 1px solid #444; border-radius: 5px; margin-top: 5px;" value="Connecte-toi">
+        </div>
 
-    if (!inputVal) {
-        msgElem.style.color = "#ff4757";
-        msgElem.textContent = "Entre un code valide.";
-        return;
-    }
-
-    let { data: sponsor } = await _supabase
-        .from('profiles')
-        .select('id, referral_code')
-        .eq('referral_code', inputVal)
-        .single();
-
-    if (!sponsor) {
-        msgElem.style.color = "#ff4757";
-        msgElem.textContent = "Ce code de parrainage n'existe pas.";
-        return;
-    }
-
-    if (sponsor.id === currentUser.id) {
-        msgElem.style.color = "#ff4757";
-        msgElem.textContent = "Tu ne peux pas te parrainer toi-même !";
-        return;
-    }
-
-    let { error } = await _supabase
-        .from('profiles')
-        .update({ referred_by: inputVal })
-        .eq('id', currentUser.id);
-
-    if (error) {
-        msgElem.style.color = "#ff4757";
-        msgElem.textContent = "Erreur lors de l'enregistrement.";
-    } else {
-        msgElem.style.color = "#2ed573";
-        msgElem.textContent = "Parrain enregistré ! Il recevra son point lors de ta première commande de 5€ ou plus.";
-        setTimeout(loadUserReferralInfo, 2000);
-    }
-}
-
-// FONCTION DE COPIE DU RÉCAPITULATIF DE COMMANDE
-async function copyCartSummary() {
-    if (cart.length === 0) {
-        alert("Ton panier est vide !");
-        return;
-    }
-
-    let rawTotal = 0;
-    cart.forEach(item => {
-        rawTotal += item.price * item.quantity;
-    });
-
-    let finalTotal = rawTotal;
-    if (appliedDiscount > 0) {
-        finalTotal = rawTotal * (1 - appliedDiscount);
-    }
-
-    // ⚡ Vérification et attribution du point parrainage si >= 5€
-    await checkAndRewardReferral(finalTotal);
-
-    let summary = "RÉCAPITULATIF DE COMMANDE - SHOP FIRE \n";
-    if (currentUser) {
-        summary += `Client: ${currentUser.email}\n`;
-    }
-    
-    cart.forEach(item => {
-        summary += `- ${item.quantity} x ${item.name} (${item.price * item.quantity} €)\n`;
-    });
-
-    if (appliedDiscount > 0) {
-        summary += `Code promo appliqué: ${appliedPromoName} (-${appliedDiscount * 100}%)\n`;
-    }
-    
-    summary += `Total à payer: ${finalTotal.toFixed(2)} €\n`;
-    summary += `Paiement effectué via PayPal (${PAYPAL_USERNAME}).`;
-
-    navigator.clipboard.writeText(summary).then(() => {
-        copyBtn.textContent = "Copié! Colle-le sur Discord";
-        setTimeout(() => {
-            copyBtn.textContent = "Copier la commande pour Discord";
-        }, 3000);
-    });
-}
-
-// Chargement automatique du parrainage
-window.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => {
-        if (typeof loadUserReferralInfo === 'function') {
-            loadUserReferralInfo();
-        }
-    }, 1000);
-});
+        <div style="margin-top: 20px;" id="enter-sponsor-container">
+            <label style="font-size: 13px; color: #aaa;">Tu as un code de parrain ? Entre-le ici :</label><br>
+            <div style="margin-top: 5px;">
+                <input type="text" id="sponsor-code-input" placeholder="Ex: FIRE_XXXXXX" style="padding: 8px; width: 160px; text-align: center; border-radius: 5px; border: 1px solid #444; background: #222; color: white;">
+                <button onclick="applySponsorCode()" style="padding: 8px 15px; background: #ff4757; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; margin-left: 5px;">Valider</button>
+            </div>
+            <p id="sponsor-msg" style="margin-top: 8px; font-size: 13px;"></p>
+        </div>
+    </div>
 
 </body>
 </html>
