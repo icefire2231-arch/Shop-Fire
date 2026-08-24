@@ -1810,6 +1810,89 @@ async function checkAndRewardReferral(orderTotal) {
     }
 }
 
+// FONCTION DE GESTION DU PARRAINAGE (Affichage du code + Enregistrement du filleul)
+async function loadUserReferralInfo() {
+    if (!currentUser) return;
+
+    let { data: profile } = await _supabase
+        .from('profiles')
+        .select('referral_code, referred_by')
+        .eq('id', currentUser.id)
+        .single();
+
+    if (profile) {
+        // Si l'utilisateur n'a pas encore de code de parrainage, on lui en génère un automatiquement
+        let userCode = profile.referral_code;
+        if (!userCode) {
+            userCode = "FIRE_" + Math.random().toString(36).substring(2, 8).toUpperCase();
+            await _supabase
+                .from('profiles')
+                .update({ referral_code: userCode })
+                .eq('id', currentUser.id);
+        }
+
+        const codeInput = document.getElementById('my-referral-code');
+        if (codeInput) codeInput.value = userCode;
+
+        const sponsorContainer = document.getElementById('enter-sponsor-container');
+        if (profile.referred_by && sponsorContainer) {
+            if (profile.referred_by.startsWith('DONE_')) {
+                sponsorContainer.innerHTML = "<p style='color: #2ed573;'>✅ Parrainage validé avec succès !</p>";
+            } else {
+                sponsorContainer.innerHTML = `<p style='color: #ffa502;'>Parrain enregistré : ${profile.referred_by}</p>`;
+            }
+        }
+    }
+}
+
+async function applySponsorCode() {
+    if (!currentUser) {
+        alert("Connecte-toi d'abord !");
+        return;
+    }
+
+    const inputVal = document.getElementById('sponsor-code-input').value.trim().toUpperCase();
+    const msgElem = document.getElementById('sponsor-msg');
+
+    if (!inputVal) {
+        msgElem.style.color = "#ff4757";
+        msgElem.textContent = "Entre un code valide.";
+        return;
+    }
+
+    let { data: sponsor } = await _supabase
+        .from('profiles')
+        .select('id, referral_code')
+        .eq('referral_code', inputVal)
+        .single();
+
+    if (!sponsor) {
+        msgElem.style.color = "#ff4757";
+        msgElem.textContent = "Ce code de parrainage n'existe pas.";
+        return;
+    }
+
+    if (sponsor.id === currentUser.id) {
+        msgElem.style.color = "#ff4757";
+        msgElem.textContent = "Tu ne peux pas te parrainer toi-même !";
+        return;
+    }
+
+    let { error } = await _supabase
+        .from('profiles')
+        .update({ referred_by: inputVal })
+        .eq('id', currentUser.id);
+
+    if (error) {
+        msgElem.style.color = "#ff4757";
+        msgElem.textContent = "Erreur lors de l'enregistrement.";
+    } else {
+        msgElem.style.color = "#2ed573";
+        msgElem.textContent = "Parrain enregistré ! Il recevra son point lors de ta première commande de 5€ ou plus.";
+        setTimeout(loadUserReferralInfo, 2000);
+    }
+}
+
 // FONCTION DE COPIE DU RÉCAPITULATIF DE COMMANDE
 async function copyCartSummary() {
     if (cart.length === 0) {
@@ -1852,7 +1935,7 @@ async function copyCartSummary() {
             copyBtn.textContent = "Copier la commande pour Discord";
         }, 3000);
     });
-}    
+}
 </script>
 
 </body>
