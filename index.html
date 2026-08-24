@@ -1339,6 +1339,9 @@ et de contacter le support.
         </div>
         <button class="copy-btn" id="copy-btn" onclick="copyCartSummary()">📋 Copier la commande pour Discord</button>
         <a href="#" class="checkout-btn" id="checkout-btn" target="_blank">💳 Payer via PayPal</a>
+        <button id="btn-validate-order" onclick="validateMyOrder()" style="display: none; width: 100%; margin-top: 10px; background-color: #22c55e; color: white; padding: 10px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
+    ✅ J'ai payé, valider mon parrainage
+</button>
     </div>
 </div>
 
@@ -1874,6 +1877,34 @@ window.onload = async () => {
                 loadUserReferralInfo();
             }
         };
+    // ... tes autres fonctions JS ...
+    }
+
+    // Colle ta nouvelle fonction ici :
+    async function validateMyOrder() {
+        let orderTotal = 5.00;
+        try {
+            const btn = document.getElementById('btn-validate-order');
+            btn.innerText = "Validation en cours...";
+            btn.disabled = true;
+
+            if (typeof checkAndRewardReferral === 'function') {
+                await checkAndRewardReferral(orderTotal);
+            }
+
+            localStorage.removeItem('cart'); 
+            alert("🎉 Commande validée avec succès ! Ton parrain a reçu son point. Tu peux maintenant aller sur Discord ouvrir ton ticket.");
+            location.reload();
+        } catch (error) {
+            console.error("Erreur lors de la validation :", error);
+            alert("Une erreur est survenue. Contacte le support sur Discord.");
+            const btn = document.getElementById('btn-validate-order');
+            btn.innerText = "✅ J'ai payé, valider mon parrainage";
+            btn.disabled = false;
+        }
+    }
+
+</script> <!-- 🔴 ICI : ON FERME LE SCRIPT JS -->
     </script> <!-- 🛑 ICI : ON FERME LE SCRIPT JS -->
 
     <!-- 🤝 BLOC VISUEL DU PARRAINAGE (EN DEHORS DU SCRIPT) -->
