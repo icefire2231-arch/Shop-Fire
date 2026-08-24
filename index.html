@@ -1907,8 +1907,11 @@ window.onload = async () => {
             btn.innerText = "✅ J'ai payé, valider mon parrainage";
             btn.disabled = false;
         }
+// Écouteur sécurisé pour le bouton de validation du panier
 document.addEventListener('click', function(event) {
-    if (event.target && event.target.id === 'btn-validate-order') {
+    const targetButton = event.target.closest('#btn-validate-order');
+    if (targetButton) {
+        event.preventDefault();
         validateMyOrder();
     }
 });
