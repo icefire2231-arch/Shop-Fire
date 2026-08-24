@@ -1773,6 +1773,25 @@ window.onload = async () => {
     await loadStocks();
     await checkUserSession();
 };
+<!-- 🤝 BLOC VISUEL DU PARRAINAGE -->
+<div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; margin: 20px auto; max-width: 500px; text-align: center; color: white; border: 1px solid rgba(255,255,255,0.1);">
+    <h3 style="color: #ff4757; margin-bottom: 10px;">🤝 Programme Parrainage</h3>
+    <p style="font-size: 14px; margin-bottom: 15px;">Partage ton code et gagne +1 point dès que ton filleul commande pour 5€ ou plus !</p>
+    
+    <div style="margin: 15px 0;">
+        <label style="font-size: 13px; color: #aaa;">Ton code de parrainage :</label><br>
+        <input type="text" id="my-referral-code" readonly style="padding: 8px; width: 200px; text-align: center; font-weight: bold; background: #111; color: #ff4757; border: 1px solid #444; border-radius: 5px; margin-top: 5px;" value="Connecte-toi">
+    </div>
+
+    <div style="margin-top: 20px;" id="enter-sponsor-container">
+        <label style="font-size: 13px; color: #aaa;">Tu as un code de parrain ? Entre-le ici :</label><br>
+        <div style="margin-top: 5px;">
+            <input type="text" id="sponsor-code-input" placeholder="Ex: FIRE_XXXXXX" style="padding: 8px; width: 160px; text-align: center; border-radius: 5px; border: 1px solid #444; background: #222; color: white;">
+            <button onclick="applySponsorCode()" style="padding: 8px 15px; background: #ff4757; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; margin-left: 5px;">Valider</button>
+        </div>
+        <p id="sponsor-msg" style="margin-top: 8px; font-size: 13px;"></p>
+    </div>
+</div>    
 // FONCTION DE VALIDATION DU PARRAINAGE (1 point si >= 5€)
 async function checkAndRewardReferral(orderTotal) {
     if (!currentUser) return;
@@ -1821,7 +1840,6 @@ async function loadUserReferralInfo() {
         .single();
 
     if (profile) {
-        // Si l'utilisateur n'a pas encore de code de parrainage, on lui en génère un automatiquement
         let userCode = profile.referral_code;
         if (!userCode) {
             userCode = "FIRE_" + Math.random().toString(36).substring(2, 8).toUpperCase();
@@ -1936,7 +1954,15 @@ async function copyCartSummary() {
         }, 3000);
     });
 }
-</script>
+
+// Chargement automatique du parrainage
+window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        if (typeof loadUserReferralInfo === 'function') {
+            loadUserReferralInfo();
+        }
+    }, 1000);
+});
 
 </body>
 </html>
