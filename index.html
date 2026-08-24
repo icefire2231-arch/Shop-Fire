@@ -1900,14 +1900,25 @@ window.onload = async () => {
 
         alert("🎉 Commande validée avec succès ! Ton parrain a reçu son point. Tu peux maintenant aller sur Discord ouvrir ton ticket.");
         location.reload();
-        } catch (error) {
-            console.error("Erreur lors de la validation :", error);
-            alert("Une erreur est survenue. Contacte le support sur Discord.");
-            const btn = document.getElementById('btn-validate-order');
-            btn.innerText = "✅ J'ai payé, valider mon parrainage";
-            btn.disabled = false;
-        }
+     } catch (error) {
+    console.error("Erreur lors de la validation :", error);
+    alert("Une erreur est survenue. Contacte le support sur Discord.");
+    const btn = document.getElementById('btn-validate-order');
+    if(btn) {
+        btn.innerText = "✅ J'ai payé, valider mon parrainage";
+        btn.disabled = false;
+    }
+}
+} 
+
 // Écouteur sécurisé pour le bouton de validation du panier
+document.addEventListener('click', function(event) {
+    const targetButton = event.target.closest('#btn-validate-order');
+    if (targetButton) {
+        event.preventDefault();
+        validateMyOrder();
+    }
+});
 document.addEventListener('click', function(event) {
     const targetButton = event.target.closest('#btn-validate-order');
     if (targetButton) {
