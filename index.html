@@ -1907,10 +1907,13 @@ window.onload = async () => {
             btn.innerText = "✅ J'ai payé, valider mon parrainage";
             btn.disabled = false;
         }
+document.addEventListener('click', function(event) {
+    if (event.target && event.target.id === 'btn-validate-order') {
+        validateMyOrder();
     }
-
+});
 </script> <!-- 🔴 ICI : ON FERME LE SCRIPT JS -->
-    </script> <!-- 🛑 ICI : ON FERME LE SCRIPT JS -->
+
 
     <!-- 🤝 BLOC VISUEL DU PARRAINAGE (EN DEHORS DU SCRIPT) -->
     <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; margin: 20px auto; max-width: 500px; text-align: center; color: white; border: 1px solid rgba(255,255,255,0.1);">
