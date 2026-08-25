@@ -1406,27 +1406,17 @@ function saveCartToStorage() {
 localStorage.setItem('shop_fire_cart', JSON.stringify(cart));
 }
 
-async function addToCart(name, price, productId) {
-    let productStock = 1; // Valeur par défaut de sécurité
-    if (productId) {
-        try {
-            const { data } = await supabase
-                .from('products')
-                .select('stock')
-                .eq('id', productId)
-                .maybeSingle();
-            
-            if (data && data.stock !== null) {
-                productStock = data.stock;
-                if (data.stock <= 0) {
-                    alert(`❌ Désolé, le produit "${name}" est épuisé !`);
-                    return;
-                }
-            }
-        } catch (err) {
-            console.log("Erreur stock ignorée", err);
-        }
+function addToCart(name, price, productId) {
+    const existingItem = cart.find(item => item.name === name);
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cart.push({ name, price, quantity: 1, id: productId });
     }
+    saveCartToStorage();
+    updateCartUI();
+    toggleCart();
+}
     
     const existingItem = cart.find(item => item.name === name);
     const currentQtyInCart = existingItem ? existingItem.quantity : 0;
