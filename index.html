@@ -1245,10 +1245,12 @@ async function loadStocks() {
     products.forEach(product => {
         const elementId = `stock-${product.title}`;
         const stockEl = document.getElementById(elementId);
+        
         let buttonId = "";
         if (product.title === "Pass Coc") buttonId = "btn-coc";
         if (product.title === "Pass Brawl Stars") buttonId = "btn-brawl";
         if (product.title === "Pass Royale") buttonId = "btn-cr";
+        
         const btnEl = document.getElementById(buttonId);
         if (stockEl) {
             if (product.stock > 0) {
