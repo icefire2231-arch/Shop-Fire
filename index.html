@@ -1428,7 +1428,7 @@ const existingItem = cart.find(item => item.name === name);
 if (existingItem) {
 existingItem.quantity += 1;
 } else {
-cart.push({ name, price, quantity: 1, id: productId });
+cart.push({ name, price, quantity: 1, id: productId, stock: data ? data.stock : null });
 }
 saveCartToStorage();
 updateCartUI();
