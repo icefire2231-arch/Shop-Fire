@@ -1742,10 +1742,12 @@ function filterGame(category, btn) {
     const coc = document.getElementById('cat-coc');
     const brawl = document.getElementById('cat-brawl');
     const royale = document.getElementById('cat-royale');
+    const lifetime = document.getElementById('cat-lifetime');
 
     coc.classList.remove('hidden');
     brawl.classList.remove('hidden');
     royale.classList.remove('hidden');
+    if (lifetime) lifetime.classList.remove('hidden');
 
     if (category === 'coc') {
         brawl.classList.add('hidden');
@@ -1756,8 +1758,12 @@ function filterGame(category, btn) {
     } else if (category === 'royale') {
         coc.classList.add('hidden');
         brawl.classList.add('hidden');
+    } else if (category === 'lifetime') {
+        if (coc) coc.classList.add('hidden');
+        if (brawl) brawl.classList.add('hidden');
+        if (royale) royale.classList.add('hidden');
     }
-}
+}    
 
 // FAQ Accordéon
 function toggleFaq(button) {
