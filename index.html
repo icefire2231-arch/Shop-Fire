@@ -1436,15 +1436,16 @@ toggleCart();
 }
 
 function updateQuantity(name, change) {
-let item = cart.find(item => item.name === name);
-if (item) {
-item.quantity += change;
-if (item.quantity <= 0) {
-cart = cart.filter(i => i.name !== name);
-}
-}
-saveCartToStorage();
-updateCartUI();
+    if (name === 'Pass à vie garanti' && change > 0) return;
+    let item = cart.find(item => item.name === name);
+    if (item) {
+        item.quantity += change;
+        if (item.quantity <= 0) {
+            cart = cart.filter(i => i.name !== name);
+        }
+    }
+    saveCartToStorage();
+    updateCartUI();
 }
 
 function updateCartUI() {
