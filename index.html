@@ -1407,30 +1407,40 @@ localStorage.setItem('shop_fire_cart', JSON.stringify(cart));
 }
 
 async function addToCart(name, price, productId) {
-    let productStock = null;
+    let productStock = 1; // Valeur par défaut de sécurité
     if (productId) {
-        const { data, error } = await supabase
-            .from('products')
-            .select('stock')
-            .eq('id', productId)
-            .single();
+        try {
+            const { data } = await supabase
+                .from('products')
+                .select('stock')
+                .eq('id', productId)
+                .maybeSingle();
             
-        if (data && data.stock <= 0) {
-            alert(`❌ Désolé, le produit "${name}" est épuisé !`);
-            return;
-        }
-        
-        if (data) {
-            productStock = data.stock;
-        }
-        
-        const existingItem = cart.find(item => item.name === name);
-        const currentQtyInCart = existingItem ? existingItem.quantity : 0;
-        if (data && currentQtyInCart + 1 > data.stock) {
-            alert(`❌ Stock insuffisant dans ton panier (${data.stock} maximum disponible).`);
-            return;
+            if (data && data.stock !== null) {
+                productStock = data.stock;
+                if (data.stock <= 0) {
+                    alert(`❌ Désolé, le produit "${name}" est épuisé !`);
+                    return;
+                }
+            }
+        } catch (err) {
+            console.log("Erreur stock ignorée", err);
         }
     }
+    
+    const existingItem = cart.find(item => item.name === name);
+    const currentQtyInCart = existingItem ? existingItem.quantity : 0;
+    
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cart.push({ name, price, quantity: 1, id: productId, stock: productStock });
+    }
+    
+    saveCartToStorage();
+    updateCartUI();
+    toggleCart();
+}
     
     const existingItem = cart.find(item => item.name === name);
     if (existingItem) {
