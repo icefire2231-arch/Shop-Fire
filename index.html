@@ -1439,6 +1439,10 @@ function updateQuantity(name, change) {
     if (name === 'Pass à vie garanti' && change > 0) return;
     let item = cart.find(item => item.name === name);
     if (item) {
+        if (change > 0 && item.stock && item.quantity >= item.stock) {
+            alert("Stock maximum atteint pour ce produit !");
+            return;
+        }
         item.quantity += change;
         if (item.quantity <= 0) {
             cart = cart.filter(i => i.name !== name);
