@@ -1439,10 +1439,9 @@ Paiement via PayPal • Support Discord
 
 <script>
 // CONFIGURATION SUPABASE AUTOMATIQUE
-const SUPABASE_URL = "https://pxsiocyavagdalmpnbdf.supabase.co";
+const SUPABASE_URL = "https://pxsiocyavagdalmpnbdf.supabaseClient.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB4c2lvY3lhdmFnZGFsbXBuYmRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzNTQzODEsImV4cCI6MjEwMTkzMDM4MX0.0cZZgjHvrYCro2086KvUjGlgoFPQL5sRzg-JWeyLslI"; 
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
+const supabaseClient = window.supabaseClient.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 let currentUser = null;
 let userPoints = 0;
 let appliedDiscount = 0; // Pourcentage de réduction (ex: 0.20 pour 20%)
@@ -1532,10 +1531,10 @@ async function loginWithEmail() {
     const password = prompt("Entre ton mot de passe (au moins 6 caractères) :");
     if (!password) return;
 
-    let { data, error } = await _supabase.auth.signInWithPassword({ email, password });
+    let { data, error } = await _supabaseClient.auth.signInWithPassword({ email, password });
 
     if (error) {
-        let signUp = await _supabase.auth.signUp({ email, password });
+        let signUp = await _supabaseClient.auth.signUp({ email, password });
         if (signUp.error) {
             alert("Erreur : " + signUp.error.message);
             return;
@@ -1558,12 +1557,12 @@ async function loginWithEmail() {
 }
 
 async function logout() {
-    await _supabase.auth.signOut();
+    await _supabaseClient.auth.signOut();
     window.location.reload();
 }
 
 async function checkUserSession() {
-    const { data: { user } } = await _supabase.auth.getUser();
+    const { data: { user } } = await _supabaseClient.auth.getUser();
     if (user) {
         currentUser = user;
         document.getElementById('login-btn').style.display = 'none';
@@ -1825,8 +1824,8 @@ window.onload = async () => {
 
                     if (sponsorData) {
                         let newSponsorPoints = (sponsorData.points || 0) + 1;
-                        await _supabase.from('profiles').update({ points: newSponsorPoints }).eq('id', sponsorData.id);
-                        await _supabase.from('profiles').update({ referred_by: 'DONE_' + sponsorCode }).eq('id', currentUser.id);
+                        await _supabaseClient.from('profiles').update({ points: newSponsorPoints }).eq('id', sponsorData.id);
+                        await _supabaseClient.from('profiles').update({ referred_by: 'DONE_' + sponsorCode }).eq('id', currentUser.id);
                     }
                 }
             } catch (err) { console.error(err); }
@@ -1841,11 +1840,11 @@ window.onload = async () => {
             const inputVal = inputElem.value.trim().toUpperCase();
             if (!inputVal) { msgElem.style.color = "#ff4757"; msgElem.textContent = "Entre un code valide."; return; }
 
-            let { data: sponsor } = await _supabase.from('profiles').select('id, referral_code').eq('referral_code', inputVal).single();
+            let { data: sponsor } = await _supabaseClient.from('profiles').select('id, referral_code').eq('referral_code', inputVal).single();
             if (!sponsor) { msgElem.style.color = "#ff4757"; msgElem.textContent = "Ce code n'existe pas."; return; }
             if (sponsor.id === currentUser.id) { msgElem.style.color = "#ff4757"; msgElem.textContent = "Impossible de te parrainer toi-même !"; return; }
 
-            let { error } = await _supabase.from('profiles').update({ referred_by: inputVal }).eq('id', currentUser.id);
+            let { error } = await _supabaseClient.from('profiles').update({ referred_by: inputVal }).eq('id', currentUser.id);
             if (error) {
                 msgElem.style.color = "#ff4757"; msgElem.textContent = "Erreur lors de l'enregistrement.";
             } else {
