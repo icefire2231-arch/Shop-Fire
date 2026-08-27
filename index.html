@@ -60,20 +60,20 @@ to{transform:translateY(45px)}
     transition: .3s;
 }
 
-/* Voile sombre pour garder le texte et les cartes bien lisibles */
+/* 1. Le voile sombre passe TOUT EN BAS (z-index: 0) */
 .category::before {
     content: "";
     position: absolute;
     inset: 0;
-    background: rgba(8, 8, 16, 0.55); /* <-- Change 0.82 par 0.55 ici */
-    backdrop-filter: blur(5px);         /* <-- Tu peux baisser le flou de 10px à 5px aussi si tu veux */
-    z-index: 1;
+    background: rgba(8, 8, 16, 0.55);
+    backdrop-filter: blur(5px);
+    z-index: 0; /* Change -1 ou 1 par 0 */
 }
 
-/* S'assure que le contenu reste au-dessus du voile */
+/* 2. Le contenu passe PAR-DESSUS (z-index: 1) */
 .category > * {
     position: relative;
-    z-index: 2;
+    z-index: 1; /* Change -2, 2, ou rien du tout par 1 */
 }
 
 /* Association des images de fond (avec tes noms de fichiers exacts) */
