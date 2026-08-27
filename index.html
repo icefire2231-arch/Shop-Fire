@@ -46,7 +46,48 @@ to{transform:translate(5%,5%) rotate(8deg)}
 from{transform:translateY(0)}
 to{transform:translateY(45px)}
 }
+/* Style de base pour les catégories avec fond en image */
+.category {
+    margin-bottom: 70px;
+    padding: 50px 30px;
+    border-radius: 28px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    overflow: hidden;
+    transition: .3s;
+}
 
+/* Voile sombre pour garder le texte et les cartes bien lisibles */
+.category::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(8, 8, 16, 0.82);
+    backdrop-filter: blur(10px);
+    z-index: 1;
+}
+
+/* S'assure que le contenu reste au-dessus du voile */
+.category > * {
+    position: relative;
+    z-index: 2;
+}
+
+/* Association des images de fond (avec tes noms de fichiers exacts) */
+#cat-coc {
+    background-image: url('coc bg.jpg');
+}
+
+#cat-royale {
+    background-image: url('cr-bg.jpg');
+}
+
+#cat-brawl {
+    background-image: url('bs-bg.jpg');
+}
 /* BANNIÈRE D'ANNONCE */
 .announcement-bar{
 background:linear-gradient(90deg,#ff1744,#ff4d00,#5865f2);
