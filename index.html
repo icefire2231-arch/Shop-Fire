@@ -1586,7 +1586,7 @@ Paiement via PayPal • Support Discord
 const SUPABASE_URL = "https://pxsiocyavagdalmpnbdf.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB4c2lvY3lhdmFnZGFsbXBuYmRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzNTQzODEsImV4cCI6MjEwMTkzMDM4MX0.0cZZgjHvrYCro2086KvUjGlgoFPQL5sRzg-JWeyLslI"; 
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-window.supabaseClient = supabase;
+window.supabaseClient = _supabase;
 
 let currentUser = null;
 let userPoints = 0;
