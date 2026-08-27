@@ -56,7 +56,6 @@ to{transform:translateY(45px)}
     background-repeat: no-repeat;
     position: relative;
     border: 1px solid rgba(255, 255, 255, 0.15);
-    background: rgba(15, 15, 25, 0.85); /* <-- C'est ici qu'il faut le mettre ! */
     overflow: hidden;
     transition: .3s;
 }
@@ -66,9 +65,9 @@ to{transform:translateY(45px)}
     content: "";
     position: absolute;
     inset: 0;
-    background: rgba(8, 8, 16, 0.55);
-    backdrop-filter: blur(5px);
-    z-index: 0; /* Change -1 ou 1 par 0 */
+    background: rgba(8, 8, 16, 0.2); /* Plus c'est bas, plus l'image d'origine se voit */
+    backdrop-filter: blur(2px);       /* Un léger flou pour garder la lisibilité du texte */
+    z-index: 0;
 }
 
 /* 2. Le contenu passe PAR-DESSUS (z-index: 1) */
