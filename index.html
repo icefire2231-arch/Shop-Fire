@@ -133,28 +133,39 @@ to{transform:translateY(45px)}
     vertical-align: middle;
     margin-right: 10px;
 }
-/* Style et effet interactif pour le logo */
-.logo, h1:first-of-type {
+/* Style et effet interactif uniquement pour le logo du menu en haut */
+.navbar .logo, 
+header .logo, 
+nav h1, 
+.nav-brand {
     cursor: pointer;
     position: relative;
     display: inline-block;
 }
 
-.logo::after, h1:first-of-type::after {
+.navbar .logo::after, 
+header .logo::after, 
+nav h1::after, 
+.nav-brand::after {
     content: "Shop numéro 1 d'offres dédiées à Supercell";
     display: block;
-    font-size: 13px;
+    font-size: 11px;
     color: #ffaa00;
     font-weight: bold;
     max-height: 0;
     overflow: hidden;
     opacity: 0;
-    transition: all 0.4s ease-in-out;
-    margin-top: 4px;
+    transition: all 0.3s ease-in-out;
+    position: absolute;
+    left: 0;
+    white-space: nowrap;
 }
 
-.logo:hover::after, h1:first-of-type:hover::after {
-    max-height: 30px;
+.navbar .logo:hover::after, 
+header .logo:hover::after, 
+nav h1:hover::after, 
+.nav-brand:hover::after {
+    max-height: 25px;
     opacity: 1;
 }
    
