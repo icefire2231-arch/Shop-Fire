@@ -133,20 +133,19 @@ to{transform:translateY(45px)}
     vertical-align: middle;
     margin-right: 10px;
 }
-/* Style et effet interactif uniquement pour le logo du menu en haut */
-.navbar .logo, 
-header .logo, 
+/* On cible spécifiquement le logo du haut grâce à sa position dans la barre de navigation */
+nav img + span, 
 nav h1, 
-.nav-brand {
+header h1, 
+.header-content h1 {
     cursor: pointer;
     position: relative;
-    display: inline-block;
 }
 
-.navbar .logo::after, 
-header .logo::after, 
+nav img + span::after, 
 nav h1::after, 
-.nav-brand::after {
+header h1::after, 
+.header-content h1::after {
     content: "Shop numéro 1 d'offres dédiées à Supercell";
     display: block;
     font-size: 11px;
@@ -156,15 +155,12 @@ nav h1::after,
     overflow: hidden;
     opacity: 0;
     transition: all 0.3s ease-in-out;
-    position: absolute;
-    left: 0;
-    white-space: nowrap;
 }
 
-.navbar .logo:hover::after, 
-header .logo:hover::after, 
+nav img + span:hover::after, 
 nav h1:hover::after, 
-.nav-brand:hover::after {
+header h1:hover::after, 
+.header-content h1:hover::after {
     max-height: 25px;
     opacity: 1;
 }
