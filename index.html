@@ -2118,6 +2118,209 @@ document.addEventListener('click', function(event) {
             <p id="sponsor-msg" style="margin-top: 8px; font-size: 13px;"></p>
         </div>
     </div>
+<div class="reviews-section">
+    <h2 class="reviews-title">Ils nous font <span>confiance</span> 💬</h2>
+    
+    <!-- Grille où les avis vont s'afficher tout seuls -->
+    <div id="reviews-container" class="reviews-grid">
+        <!-- Les avis de la base de données s'injecteront ici -->
+    </div>
+
+    <!-- Formulaire pour laisser un avis -->
+    <div class="review-form-box">
+        <h3>Laisser un avis</h3>
+        <form id="reviewForm" onsubmit="postReview(event)">
+            <input type="text" id="reviewAuthor" placeholder="Ton pseudo" required>
+            <select id="reviewGame" required>
+                <option value="" disabled selected>Choisis ton offre/jeu</option>
+                <option value="Pass Brawl Stars">Pass Brawl Stars</option>
+                <option value="Clash of Clans">Clash of Clans</option>
+                <option value="Clash Royale">Clash Royale</option>
+                <option value="Boutique générale">Boutique générale</option>
+            </select>
+            <select id="reviewRating" required>
+                <option value="5">★★★★★ (5/5)</option>
+                <option value="4">★★★★☆ (4/5)</option>
+                <option value="3">★★★☆☆ (3/5)</option>
+            </select>
+            <textarea id="reviewComment" placeholder="Ton message..." rows="3" required></textarea>
+            <button type="submit" class="review-submit-btn">Envoyer mon avis</button>
+        </form>
+    </div>
+</div>
+
+<style>
+/* Styles pour la section et le formulaire d'avis */
+.reviews-section {
+    max-width: 1200px;
+    margin: 60px auto;
+    padding: 0 20px;
+}
+.reviews-title {
+    text-align: center;
+    font-size: 28px;
+    color: #fff;
+    margin-bottom: 30px;
+}
+.reviews-title span {
+    color: #ffaa00;
+}
+.reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+}
+.review-card {
+    background: rgba(18, 18, 25, 0.85);
+    border: 1px solid rgba(255, 170, 0, 0.2);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+}
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.review-author {
+    font-weight: bold;
+    color: #fff;
+    font-size: 16px;
+}
+.review-stars {
+    color: #ffaa00;
+    font-size: 14px;
+}
+.review-game {
+    display: inline-block;
+    background: rgba(255, 170, 0, 0.15);
+    color: #ffaa00;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+.review-text {
+    color: #ccc;
+    font-size: 13px;
+    line-height: 1.5;
+}
+.review-form-box {
+    background: rgba(18, 18, 25, 0.9);
+    border: 1px solid #ffaa00;
+    border-radius: 12px;
+    padding: 25px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+.review-form-box h3 {
+    color: #fff;
+    margin-bottom: 15px;
+    text-align: center;
+}
+#reviewForm {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+#reviewForm input, #reviewForm select, #reviewForm textarea {
+    background: rgba(10, 10, 15, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    padding: 10px;
+    color: #fff;
+    font-size: 14px;
+}
+#reviewForm input:focus, #reviewForm select:focus, #reviewForm textarea:focus {
+    border-color: #ffaa00;
+    outline: none;
+}
+.review-submit-btn {
+    background: #ffaa00;
+    color: #000;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    padding: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.review-submit-btn:hover {
+    background: #ff8800;
+}
+</style>
+
+<script>
+// Fonction pour charger les avis depuis Supabase
+async function loadReviews() {
+    const container = document.getElementById('reviews-container');
+    try {
+        const { data, error } = await window.supabaseClient
+            .from('reviews')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+            container.innerHTML = '<p style="color: #aaa; text-align: center; grid-column: 1/-1;">Aucun avis pour le moment. Sois le premier à en laisser un !</p>';
+            return;
+        }
+
+        container.innerHTML = '';
+        data.forEach(review => {
+            let stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
+            const card = document.createElement('div');
+            card.className = 'review-card';
+            card.innerHTML = `
+                <div class="review-header">
+                    <span class="review-author">${escapeHtml(review.author)}</span>
+                    <span class="review-stars">${stars}</span>
+                </div>
+                <div class="review-game">${escapeHtml(review.game)}</div>
+                <p class="review-text">${escapeHtml(review.comment)}</p>
+            `;
+            container.appendChild(card);
+        });
+    } catch (err) {
+        console.error('Erreur chargement avis:', err);
+    }
+}
+
+// Fonction pour envoyer un avis dans Supabase
+async function postReview(event) {
+    event.preventDefault();
+    const author = document.getElementById('reviewAuthor').value;
+    const game = document.getElementById('reviewGame').value;
+    const rating = parseInt(document.getElementById('reviewRating').value);
+    const comment = document.getElementById('reviewComment').value;
+
+    try {
+        const { error } = await window.supabaseClient
+            .from('reviews')
+            .insert([{ author, game, rating, comment }]);
+
+        if (error) throw error;
+
+        alert('Merci ! Ton avis a bien été publié.');
+        document.getElementById('reviewForm').reset();
+        loadReviews(); // Recharge la liste des avis instantanément
+    } catch (err) {
+        alert('Erreur lors de l\'envoi de l\'avis : ' + err.message);
+    }
+}
+
+// Petite sécurité anti-scripting basique
+function escapeHtml(text) {
+    return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+// Charger les avis dès que la page est prête
+document.addEventListener('DOMContentLoaded', loadReviews);
+</script>
 
 </body>
 </html>
