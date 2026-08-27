@@ -46,51 +46,79 @@ to{transform:translate(5%,5%) rotate(8deg)}
 from{transform:translateY(0)}
 to{transform:translateY(45px)}
 }
-/* Style de base pour les catégories avec fond en image */
+/* =========================
+   CATÉGORIES
+========================= */
+
 .category {
     margin-bottom: 70px;
     padding: 50px 30px;
     border-radius: 28px;
+
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+
     position: relative;
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.18);
     overflow: hidden;
+
     transition: .3s;
 }
 
-/* 1. Le voile sombre passe TOUT EN BAS (z-index: 0) */
+/* Voile léger au-dessus de l'image */
 .category::before {
     content: "";
     position: absolute;
     inset: 0;
-   background: rgba(12, 12, 20, 0.75);
-    backdrop-filter: blur(8px);
+
+    /* Seulement 25% de noir */
+    background: rgba(5, 5, 15, 0.25);
+
+    /* SUPPRESSION DU FLOU */
+    backdrop-filter: none;
+
     z-index: 0;
 }
 
-/* 2. Le contenu passe PAR-DESSUS (z-index: 1) */
+/* Contenu au-dessus du fond */
 .category > * {
     position: relative;
-    z-index: 1; /* Change -2, 2, ou rien du tout par 1 */
+    z-index: 1;
 }
 
-/* Association des images de fond (avec tes noms de fichiers exacts) */
+
+/* =========================
+   IMAGES DES CATÉGORIES
+========================= */
+
 #cat-coc {
     background-image: url('coc.jpg.jpeg');
+    background-size: cover;
+    background-position: center;
 }
 
 #cat-royale {
     background-image: url('cr.jpg.png');
+    background-size: cover;
+    background-position: center;
 }
 
 #cat-brawl {
     background-image: url('bs.jpg.png');
+    background-size: cover;
+    background-position: center;
 }
-/* Rend les cartes individuelles bien opaques pour que le texte reste ultra lisible */
-.product-card, .card, .item {
-    background: #0c0c14 !important;
+
+
+/* =========================
+   CARTES PRODUITS
+========================= */
+
+.product-card,
+.card,
+.item {
+    background: rgba(12, 12, 20, 0.70) !important;
     backdrop-filter: none !important;
 }
 /* BANNIÈRE D'ANNONCE */
