@@ -1582,11 +1582,10 @@ Paiement via PayPal • Support Discord
 </footer>
 
 <script>
-
 // CONFIGURATION SUPABASE AUTOMATIQUE
 const SUPABASE_URL = "https://pxsiocyavagdalmpnbdf.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_tnF45GME8hYx9vwc1rWxTw_R_JnoLzC";
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB4c2lvY3lhdmFnZGFsbXBuYmRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzNTQzODEsImV4cCI6MjEwMTkzMDM4MX0.0cZZgjHvrYCro2086KvUjGlgoFPQL5sRzg-JWeyLslI"; 
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 window.supabaseClient = supabase;
 
 let currentUser = null;
