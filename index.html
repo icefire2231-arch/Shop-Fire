@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Shop Fire 🔥</title>
+<div class="supercell-easter-egg" onclick="this.classList.toggle('active')">
+    <img src="supercell.jpg.jpeg" alt="Supercell Logo">
+    <div class="secret-message">1er site d'offre dédiée à Supercell</div>
+</div>
 
 <!-- SUPABASE CLIENT JS -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -133,35 +137,56 @@ to{transform:translateY(45px)}
     vertical-align: middle;
     margin-right: 10px;
 }
-/* On cible spécifiquement le logo du haut grâce à sa position dans la barre de navigation */
-nav img + span, 
-nav h1, 
-header h1, 
-.header-content h1 {
-    cursor: pointer;
-    position: relative;
+/* Animation de rotation continue */
+@keyframes spinLogo {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
-nav img + span::after, 
-nav h1::after, 
-header h1::after, 
-.header-content h1::after {
-    content: "Shop numéro 1 d'offres dédiées à Supercell";
-    display: block;
-    font-size: 11px;
+/* Le conteneur du logo interactif tout en haut à gauche */
+.supercell-easter-egg {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    margin-left: 15px;
+    vertical-align: middle;
+}
+
+/* Le petit logo qui tourne sur lui-même */
+.supercell-easter-egg img {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    animation: spinLogo 6s linear infinite;
+    box-shadow: 0 0 8px rgba(255, 170, 0, 0.6);
+}
+
+/* Le message caché qui s'affiche au clic */
+.supercell-easter-egg .secret-message {
+    position: absolute;
+    top: 35px;
+    left: 0;
+    background: rgba(20, 20, 20, 0.95);
+    border: 1px solid #ffaa00;
     color: #ffaa00;
+    padding: 8px 12px;
+    font-size: 12px;
     font-weight: bold;
+    border-radius: 6px;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
     max-height: 0;
     overflow: hidden;
     opacity: 0;
     transition: all 0.3s ease-in-out;
+    z-index: 9999;
 }
 
-nav img + span:hover::after, 
-nav h1:hover::after, 
-header h1:hover::after, 
-.header-content h1:hover::after {
-    max-height: 25px;
+/* Classe active déclenchée au clic pour afficher le message */
+.supercell-easter-egg.active .secret-message {
+    max-height: 50px;
     opacity: 1;
 }
    
