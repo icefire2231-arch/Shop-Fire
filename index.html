@@ -2404,7 +2404,7 @@ function updateSeasonTimer() {
 }
 function updateSeasonTimer() {
     // Date de fin de la saison actuelle (ex: 28 septembre 2026 à 23:59)
-    const targetDate = new Date(2026, 8, 28, 23, 59, 0).getTime();
+    const targetDate = new Date(2026, 0, 1, 0, 0, 0).getTime();
     
     const now = new Date().getTime();
     const distance = targetDate - now;
