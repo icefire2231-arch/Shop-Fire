@@ -2403,27 +2403,31 @@ function updateSeasonTimer() {
   }, 1000);
 }
 function updateSeasonTimer() {
-  const timerElement = document.getElementById('season-timer');
-  if(!timerElement) return;
-  const endDate = new Date().getTime() + (14 * 24 * 60 * 60 * 1000);
-  
-  const interval = setInterval(() => {
+    // Date de fin de la saison actuelle (ex: 28 septembre 2026 à 23:59)
+    const targetDate = new Date(2026, 8, 28, 23, 59, 0).getTime();
+    
     const now = new Date().getTime();
-    const distance = endDate - now;
-    
-    if (distance <= 0) {
-      clearInterval(interval);
-      timerElement.textContent = "⏰ Prochaine saison bientôt...";
-      return;
+    const distance = targetDate - now;
+
+    const timerSpan = document.getElementById("season-timer");
+    if (!timerSpan) return;
+
+    if (distance < 0) {
+      // Quand le temps est écoulé, on affiche le message de transition
+      timerSpan.innerHTML = "La prochaine saison arrive...";
+      
+      // Optionnel: si tu veux aussi changer dynamiquement le texte "SAISON 2" en "SAISON 3" par exemple, 
+      // tu peux cibler l'élément de la bannière si besoin.
+    } else {
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      
+      timerSpan.innerHTML = `${days}J ${hours}H`;
     }
-    
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    timerElement.textContent = `Fin dans : ${days}j ${hours}h`;
-  }, 1000);
-}
-updateSeasonTimer();
-</script>
+  }
+
+  updateSeasonTimer();
+  setInterval(updateSeasonTimer, 1000);</script>
 
 </body>
 </html>
