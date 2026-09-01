@@ -2402,6 +2402,26 @@ function updateSeasonTimer() {
     timerElement.textContent = `Fin dans : ${days}j ${hours}h`;
   }, 1000);
 }
+function updateSeasonTimer() {
+  const timerElement = document.getElementById('season-timer');
+  if(!timerElement) return;
+  const endDate = new Date().getTime() + (14 * 24 * 60 * 60 * 1000);
+  
+  const interval = setInterval(() => {
+    const now = new Date().getTime();
+    const distance = endDate - now;
+    
+    if (distance <= 0) {
+      clearInterval(interval);
+      timerElement.textContent = "⏰ Prochaine saison bientôt...";
+      return;
+    }
+    
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    timerElement.textContent = `Fin dans : ${days}j ${hours}h`;
+  }, 1000);
+}
 updateSeasonTimer();
 </script>
 
