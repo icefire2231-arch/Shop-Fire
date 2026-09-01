@@ -983,12 +983,72 @@ nav a{display:none}
 .after-payment{padding:30px 18px}
 .floating-discord span{display:none}
 }
+/* Style pour la bannière Saison 2 */
+.supercell-season-banner {
+background: linear-gradient(135deg, #ff0055, #7800ff, #00c6ff);
+background-size: 200% 200%;
+animation: seasonGlow 6s ease infinite;
+padding: 10px 20px;
+text-align: center;
+font-weight: 900;
+font-size: 14px;
+text-transform: uppercase;
+box-shadow: 0 4px 20px rgba(120, 0, 255, 0.5);
+position: relative;
+z-index: 102;
+display: flex;
+justify-content: center;
+align-items: center;
+gap: 15px;
+flex-wrap: wrap;
+border-bottom: 2px solid rgba(255,255,255,0.3);
+}
+.season-badge {
+background: #ffaa00;
+color: #000;
+padding: 3px 10px;
+border-radius: 6px;
+font-size: 12px;
+}
+@keyframes seasonGlow {
+0% { background-position: 0% 50%; }
+50% { background-position: 100% 50%; }
+100% { background-position: 0% 50%; }
+}
+
+/* Styles pour les badges Android / Windows */
+.compatibility-box {
+display: flex;
+gap: 8px;
+margin: 10px 0;
+flex-wrap: wrap;
+}
+.platform-tag {
+display: inline-flex;
+align-items: center;
+gap: 5px;
+background: rgba(255, 255, 255, 0.08);
+border: 1px solid rgba(255, 255, 255, 0.15);
+padding: 4px 10px;
+border-radius: 20px;
+font-size: 11px;
+font-weight: bold;
+color: #ddd;
+}
+.platform-tag.android { border-color: rgba(0, 208, 132, 0.4); color: #00d084; }
+.platform-tag.windows { border-color: rgba(0, 140, 255, 0.4); color: #00a8ff; }
 </style>
 
 </head>
 
 <body>
 
+<div class="supercell-season-banner">
+  <span>⚡ ÉVÉNEMENT :</span>
+  <span class="season-badge">SAISON 2</span>
+  <span id="season-timer" style="color: #ffd700;">Fin dans : 14j 06h</span>
+</div>
+   
 <!-- BANNIÈRE D'ANNONCE -->
 <div class="announcement-bar">
     ⚡ LIVRAISON RAPIDE • Support client ouvert 7j/7 sur Discord • 5 € = 1 point de fidélité !
@@ -1094,7 +1154,10 @@ alt="Pass Clash of Clans">
 Profite de notre offre dédiée au Pass Clash of Clans.
 </p>
 <p id="stock-Pass Coc" style="font-weight: bold; font-size: 13px; margin: 10px 0;"></p>
-
+<div class="compatibility-box">
+  <span class="platform-tag android">📱 Android</span>
+  <span class="platform-tag windows">💻 Windows</span>
+</div>
 <div class="price-row">
 
 <div class="price">5 €</div>
@@ -2321,6 +2384,19 @@ function escapeHtml(text) {
 
 // Charger les avis dès que la page est prête
 document.addEventListener('DOMContentLoaded', loadReviews);
+function updateSeasonTimer() {
+  const timerElement = document.getElementById('season-timer');
+  if(!timerElement) return;
+  const endDate = new Date().getTime() + (14 * 24 * 60 * 60 * 1000);
+  setInterval(() => {
+    const now = new Date().getTime();
+    const distance = endDate - now;
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    timerElement.textContent = `Fin dans : ${days}j ${hours}h`;
+  }, 1000);
+}
+updateSeasonTimer();
 </script>
 
 </body>
