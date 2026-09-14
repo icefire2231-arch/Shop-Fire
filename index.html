@@ -114,9 +114,10 @@ to{transform:translateY(45px)}
 /* Image de fond de la nouvelle catégorie */
 #cat-creator {
     background-image: url('creator-tier3.png');
-    background-size: contain; /* Affiche l'image en entier sans la couper */
+    background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    position: relative;
 }
 
 /* Style pour intégrer le logo Twitch au centre de la carte */
@@ -1385,14 +1386,14 @@ Profite de notre offre dédiée au Pass Royale.
 <!-- Catégorie Tier 3 Supercell Creator -->
 <div class="category" id="cat-creator">
     <h2>
-        <img src="creator-tier3.png" alt="Logo" class="creator-logo">
+        <img src="twitch-logo.avif.png" alt="Logo" class="creator-logo">
         Tier 3 Supercell Creator
     </h2>
     <div class="products">
         <div class="card">
-            <!-- Logo Twitch au centre de la carte -->
-            <div class="twitch-product-icon">
-                <img src="twitch-logo.avif" alt="Logo Twitch" style="width: 50px; height: 50px; object-fit: contain;">
+            <!-- Logo Twitch au centre -->
+            <div class="twitch-product-icon" style="text-align: center; margin-bottom: 15px;">
+                <img src="twitch-logo.avif" alt="Logo Twitch" style="width: 45px; height: 45px; object-fit: contain;">
             </div>
             
             <h3>3k Follows Twitch</h3>
