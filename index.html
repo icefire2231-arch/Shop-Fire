@@ -111,21 +111,45 @@ to{transform:translateY(45px)}
     background-repeat: no-repeat;
 }
 
+/* --- Conteneur général de la catégorie --- */
 #cat-creator {
     background-image: url('Loot-key-supercell1.png');
-    background-size: contain; /* Affiche l'image en entier sans rien couper */
-    background-position: center;
+    background-size: contain;
+    background-position: top center;
     background-repeat: no-repeat;
     
-    /* Format grand rectangle horizontal identique au Pass Clash Royale */
     width: 100%;
-    max-width: 1000px; /* Largeur de ton bloc Clash Royale */
-    min-height: 550px; /* Hauteur suffisante pour tout voir */
+    max-width: 1000px;
+    min-height: 650px;
     margin: 40px auto;
-    padding: 40px;
+    padding: 30px;
     border-radius: 25px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+
+/* --- Style de la barre de titre (identique au style Clash Royale) --- */
+#cat-creator h2 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 700;
+    padding: 15px 25px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02));
+    border-radius: 15px;
+    border-bottom: 2px solid rgba(255, 75, 75, 0.5); /* Rappel de la couleur rouge */
+    margin-bottom: 30px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* --- Style de l'icône à côté du titre --- */
+#cat-creator h2 img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
 }
 
 @keyframes pulseGlow {
