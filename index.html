@@ -98,11 +98,32 @@ to{transform:translateY(45px)}
     background-position: center;
 }
 
+#cat-royale {
+    position: relative;
+    /* Applique une couleur de fond avec 50% d'opacité */
+    background-color: rgba(0, 0, 0, 0.5); 
+    overflow: hidden;
+}
+
 #cat-royale::before {
-    background-image: url('cr.jpg.png');
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('cr.jpg.jpeg');
     background-size: cover;
-    background-position: center 75%; /* Centre horizontalement, descend la vue de 75% vers le bas */
+    /* Ajuste le cadrage comme tu le souhaitais */
+    background-position: center 75%; 
     background-repeat: no-repeat;
+    /* Place l'image derrière le fond semi-transparent de la carte */
+    z-index: -1; 
+}
+
+/* Assure-toi que le rectangle noir central reste opaque */
+#cat-royale .black-rectangle {
+    background-color: #000000; /* Noir totalement opaque */
 }
 
 #cat-brawl::before {
