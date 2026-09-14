@@ -114,14 +114,16 @@ to{transform:translateY(45px)}
 /* Arrière-plan rouge ajusté et redimensionné */
 #cat-creator {
     background-image: url('Loot-key-supercell1.png');
-    background-size: contain; /* Affiche l'image rouge entière sans la couper */
+    background-size: 100% 100%; /* Étire l'image pour remplir tout le rectangle */
     background-position: center;
     background-repeat: no-repeat;
     
-    /* Dimensions pour éviter que l'image ne devienne géante */
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 40px 20px;
+    /* Garde un beau format rectangulaire bien propre */
+    width: 100%;
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 30px;
+    border-radius: 20px;
 }
 
 @keyframes pulseGlow {
