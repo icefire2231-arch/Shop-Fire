@@ -98,32 +98,18 @@ to{transform:translateY(45px)}
     background-position: center;
 }
 
-#cat-royale {
-    position: relative;
-    /* Applique une couleur de fond avec 50% d'opacité */
-    background-color: rgba(0, 0, 0, 0.5); 
-    overflow: hidden;
-}
-
 #cat-royale::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
     background-image: url('cr.jpg.png');
     background-size: cover;
-    /* Ajuste le cadrage comme tu le souhaitais */
-    background-position: center 75%; 
+    background-position: center 75%;
     background-repeat: no-repeat;
-    /* Place l'image derrière le fond semi-transparent de la carte */
-    z-index: -1; 
 }
 
-/* Assure-toi que le rectangle noir central reste opaque */
-#cat-royale .black-rectangle {
-    background-color: #000000; /* Noir totalement opaque */
+/* Colle le nouveau code juste ici : */
+#cat-royale .card, 
+#cat-royale .product-card, 
+#cat-royale div[style*="background"] {
+    background-color: rgba(12, 12, 20, 0.4) !important;
 }
 
 #cat-brawl::before {
