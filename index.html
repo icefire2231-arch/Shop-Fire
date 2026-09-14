@@ -111,11 +111,31 @@ to{transform:translateY(45px)}
     background-repeat: no-repeat;
 }
 
+/* Image de fond de la nouvelle catégorie */
 #cat-creator {
-    background-image: url('Rank=Trusted.png');
+    background-image: url('ton-autre-fond.jpg'); /* Remplace par le nom de ton image de fond */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+}
+
+/* Style et effet de brillance pour le logo */
+.creator-logo {
+    width: 36px;
+    height: 36px;
+    vertical-align: middle;
+    margin-right: 10px;
+    filter: drop-shadow(0 0 8px rgba(0, 255, 170, 0.7)); /* Effet de lueur lumineux vert/turquoise */
+    animation: pulseGlow 3s ease-in-out infinite alternate; /* pulsation douce de la brillance */
+}
+
+@keyframes pulseGlow {
+    from {
+        filter: drop-shadow(0 0 4px rgba(0, 255, 170, 0.4));
+    }
+    to {
+        filter: drop-shadow(0 0 12px rgba(0, 255, 170, 0.9));
+    }
 }
    
 /* =========================
@@ -1362,7 +1382,7 @@ Profite de notre offre dédiée au Pass Royale.
 <!-- Catégorie Tier 3 Supercell Creator -->
 <div class="category" id="cat-creator">
     <h2>
-        <img src="Rank=Trusted.png" alt="Tier 3" style="width: 32px; height: 32px; vertical-align: middle; margin-right: 10px;">
+        <img src="Rank=Trusted.png" alt="Logo" class="creator-logo">
         Tier 3 Supercell Creator
     </h2>
     <div class="products">
