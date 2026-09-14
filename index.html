@@ -113,20 +113,19 @@ to{transform:translateY(45px)}
 
 #cat-creator {
     background-image: url('Loot-key-supercell1.png');
-    background-size: contain; /* Garde l'image entière sans la rogner */
-    background-position: top center; /* Alle l'image tout en haut du bloc pour qu'on voie le sommet */
+    background-size: contain; /* Affiche l'image en entier sans rien couper */
+    background-position: center;
     background-repeat: no-repeat;
     
-    /* Format grand rectangle horizontal */
+    /* Format grand rectangle horizontal identique au Pass Clash Royale */
     width: 100%;
-    max-width: 1000px;
-    min-height: 650px; /* Assez grand pour afficher toute l'image rouge de haut en bas */
+    max-width: 1000px; /* Largeur de ton bloc Clash Royale */
+    min-height: 550px; /* Hauteur suffisante pour tout voir */
     margin: 40px auto;
     padding: 40px;
     border-radius: 25px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    position: relative;
 }
 
 @keyframes pulseGlow {
