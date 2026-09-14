@@ -99,9 +99,10 @@ to{transform:translateY(45px)}
 }
 
 #cat-royale::before {
-    background-image: url('cr.jpg.png');
-    background-size: cover;
+    background-image: url('cr.jpg.jpg');
+    background-size: contain; /* Affiche l'image entière sans la couper */
     background-position: center;
+    background-repeat: no-repeat; /* Évite que l'image ne se répète en mosaïque */
 }
 
 #cat-brawl::before {
