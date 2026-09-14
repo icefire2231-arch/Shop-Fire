@@ -111,26 +111,17 @@ to{transform:translateY(45px)}
     background-repeat: no-repeat;
 }
 
-/* Image de fond de la nouvelle catégorie */
+/* Arrière-plan rouge ajusté et redimensionné */
 #cat-creator {
     background-image: url('Loot-key-supercell1.png');
-    background-size: cover;
+    background-size: contain; /* Affiche l'image rouge entière sans la couper */
     background-position: center;
     background-repeat: no-repeat;
-    position: relative;
-}
-
-/* Style pour intégrer le logo Twitch au centre de la carte */
-.twitch-product-icon {
-    text-align: center;
-    margin-bottom: 15px;
-}
-
-.twitch-product-icon img {
-    width: 60px;
-    height: 60px;
-    object-fit: contain;
-    filter: drop-shadow(0 0 8px rgba(145, 70, 255, 0.7)); /* Lueur violette Twitch */
+    
+    /* Dimensions pour éviter que l'image ne devienne géante */
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 40px 20px;
 }
 
 @keyframes pulseGlow {
