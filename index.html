@@ -113,17 +113,19 @@ to{transform:translateY(45px)}
 
 #cat-creator {
     background-image: url('Loot-key-supercell1.png');
-    background-size: 100% 100%; /* Force l'image à remplir exactement le rectangle */
+    background-size: cover; /* Remplit tout le grand rectangle */
     background-position: center;
-    background-repeat: no-repeat; /* Empêche l'image de se dupliquer en hauteur/largeur */
+    background-repeat: no-repeat;
     
-    /* Format rectangle propre et bien centré */
+    /* Format rectangle horizontal identique à Clash Royale */
     width: 100%;
-    max-width: 450px;
-    margin: 30px auto;
+    max-width: 1000px; /* Largeur d'une section normale de ton site */
+    min-height: 400px;
+    margin: 40px auto;
     padding: 30px;
-    border-radius: 20px;
-    overflow: hidden; /* Empêche les éléments de dépasser du cadre */
+    border-radius: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 @keyframes pulseGlow {
