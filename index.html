@@ -113,20 +113,23 @@ to{transform:translateY(45px)}
 
 /* Image de fond de la nouvelle catégorie */
 #cat-creator {
-    background-image: url('creator-tier3.png'); /* Mets ici le vrai nom de ton image de fond */
-    background-size: cover;
+    background-image: url('creator-tier3.png');
+    background-size: contain; /* Affiche l'image en entier sans la couper */
     background-position: center;
     background-repeat: no-repeat;
 }
 
-/* Style et effet de brillance pour le logo */
-.creator-logo {
-    width: 36px;
-    height: 36px;
-    vertical-align: middle;
-    margin-right: 10px;
-    filter: drop-shadow(0 0 8px rgba(0, 255, 170, 0.7)); /* Effet de lueur lumineux vert/turquoise */
-    animation: pulseGlow 3s ease-in-out infinite alternate; /* pulsation douce de la brillance */
+/* Style pour intégrer le logo Twitch au centre de la carte */
+.twitch-product-icon {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.twitch-product-icon img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 8px rgba(145, 70, 255, 0.7)); /* Lueur violette Twitch */
 }
 
 @keyframes pulseGlow {
@@ -1387,6 +1390,11 @@ Profite de notre offre dédiée au Pass Royale.
     </h2>
     <div class="products">
         <div class="card">
+            <!-- Logo Twitch au centre de la carte -->
+            <div class="twitch-product-icon">
+                <img src="twitch-logo.avif" alt="Logo Twitch">
+            </div>
+            
             <h3>3k Follows Twitch</h3>
             <p>Profite de notre offre dédiée aux follows Twitch.</p>
             <div class="price-row">
