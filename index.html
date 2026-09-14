@@ -111,19 +111,19 @@ to{transform:translateY(45px)}
     background-repeat: no-repeat;
 }
 
-/* Arrière-plan rouge ajusté et redimensionné */
 #cat-creator {
     background-image: url('Loot-key-supercell1.png');
-    background-size: 100% 100%; /* Étire l'image pour remplir tout le rectangle */
+    background-size: 100% 100%; /* Force l'image à remplir exactement le rectangle */
     background-position: center;
-    background-repeat: no-repeat;
+    background-repeat: no-repeat; /* Empêche l'image de se dupliquer en hauteur/largeur */
     
-    /* Garde un beau format rectangulaire bien propre */
+    /* Format rectangle propre et bien centré */
     width: 100%;
-    max-width: 500px;
-    margin: 20px auto;
+    max-width: 450px;
+    margin: 30px auto;
     padding: 30px;
     border-radius: 20px;
+    overflow: hidden; /* Empêche les éléments de dépasser du cadre */
 }
 
 @keyframes pulseGlow {
